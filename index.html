@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mousetrap Racer Project Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Calm Neutrals with Indigo Accent -->
+    <!-- Application Structure Plan: This SPA abandons the linear document structure for a task-oriented design, which is better for a student's workflow. A persistent sidebar navigation (Overview, The Car, The Report, Physics & Math, Grading Rubric) controls the main content view. This structure mirrors the student's process: Understand the project, learn the build rules, learn the writing rules, get help with analysis, and finally check the grade. This is far more usable than scrolling. Key interactions include the SPA navigation itself, an interactive "Performance Grade Calculator" in the Rubric section, and a "Data Visualizer" tool in The Report section. This tool allows students to input their trial data and see it visualized on a Chart.js bar chart, turning the static handout into a dynamic and useful tool. -->
+    <!-- Visualization & Content Choices: 
+        1. Report Info: Grading formula for distance. -> Goal: Allow students to self-assess their performance grade. -> Viz/Method: Interactive HTML form (dropdown for group size, number input for distance) with a "Calculate" button. -> Interaction: User inputs data, JS calculates the score based on the handout's formula (Score = (Distance / Goal) * 50) and displays it in a text element. -> Justification: Makes a static rule interactive, engaging, and provides instant feedback. -> Library: Vanilla JS.
+        2. Report Info: Data collection (10 trials of d1, t1, d_total, t_total). -> Goal: Help students visualize and analyze their own data as required by the report. -> Viz/Method: A "Data Visualizer" tool with an HTML form to add trial data and a Chart.js Bar Chart in a canvas. -> Interaction: User enters data for a trial, clicks "Add Trial," and the JS adds the data to an array and updates the Chart.js chart, plotting "Total Distance" for each trial. -> Justification: Directly supports the data analysis task of the lab report and fulfills the Chart.js requirement. -> Library: Chart.js (on Canvas), Vanilla JS.
+        3. Report Info: Physics formulas. -> Goal: Make complex formulas easy to find and read. -> Viz/Method: Formatted text blocks using HTML/Tailwind classes to create "callout" boxes. -> Interaction: Static display, but easy to navigate to via the "Physics & Math" tab. -> Justification: Enhances readability and isolates complex information for easy reference. -> Library: HTML/Tailwind. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-link {
+            display: block;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            color: #374151;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .nav-link:hover {
+            background-color: #f3f4f6;
+            color: #111827;
+        }
+        .nav-link.active {
+            background-color: #4f46e5;
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .page-content {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800">
+    <div class="flex h-screen bg-white">
+        
+        <nav class="w-64 h-full bg-slate-100 p-5 shadow-lg flex flex-col gap-4">
+            <h1 class="text-2xl font-bold text-indigo-700">Racer Hub</h1>
+            <div class="flex flex-col gap-2">
+                <a id="nav-overview" class="nav-link active" data-target="page-overview">Overview</a>
+                <a id="nav-car" class="nav-link" data-target="page-car">The Car</a>
+                <a id="nav-report" class="nav-link" data-target="page-report">The Report</a>
+                <a id="nav-physics" class="nav-link" data-target="page-physics">Physics & Math</a>
+                <a id="nav-rubric" class="nav-link" data-target="page-rubric">Grading Rubric</a>
+            </div>
+        </nav>
+        
+        <main class="flex-1 h-full overflow-y-auto p-8 md:p-12">
+            
+            <div id="page-overview" class="page-content prose max-w-none">
+                <h1 class="text-indigo-600">🚀 The Mousetrap Racer Challenge</h1>
+                
+                <p class="text-xl">This application is your interactive guide to the Mousetrap Racer project. Use the navigation on the left to explore the project requirements, calculation hints, and grading. We've also included tools to help you calculate your grade and visualize your data.</p>
+                
+                <h2>Project Objective</h2>
+                <p>Your challenge is to design, build, and test a vehicle powered *only* by the energy stored in one or two standard mousetraps. You will then analyze the physics of your car's motion in a formal lab report. This project will test your understanding of <strong>kinematics, Newton's laws, energy, and friction.</strong></p>
+                
+                <h2>Project Components & Grade</h2>
+                <p>Your total project grade is worth <strong>145 points</strong>, broken down as follows:</p>
+                <ul class="list-disc pl-5">
+                    <li>
+                        <strong>The Car (65 points):</strong>
+                        <ul class="list-circle pl-5">
+                            <li>In-Class Work (15 points)</li>
+                            <li>Performance/Distance (50 points)</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>The Lab Report (80 points):</strong>
+                        <ul class="list-circle pl-5">
+                            <li>Data analysis and write-up.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="page-car" class="page-content hidden prose max-w-none">
+                <h1 class="text-indigo-600">The Car: Rules & Performance</h1>
+                <p>This section covers the requirements for your car's construction and the performance goals you need to meet.</p>
+                
+                <h2>Group Size & Distance Goal</h2>
+                <ul class="list-disc pl-5">
+                    <li><strong>Groups of 1-2 students:</strong> Your car must travel a minimum distance of <strong>10.0 meters</strong>.</li>
+                    <li><strong>Groups of 3 students:</strong> Your car must travel a minimum distance of <strong>15.0 meters</strong>.</li>
+                </ul>
+                
+                <h2>Car Construction Rules</h2>
+                <ol class="list-decimal pl-5">
+                    <li><strong>Power:</strong> The car must be powered by <strong>1 or 2 standard mousetraps</strong> (provided). You may not use any other energy source (e.g., batteries, CO2, rubber bands not part of the trap).</li>
+                    <li><strong>Materials:</strong> The car must be <strong>completely homemade</strong>.
+                        <ul class="list-disc pl-5">
+                            <li><strong>NO</strong> pre-made kits, Legos, K'nex, Erector sets, etc.</li>
+                            <li>You <strong>MAY</strong> use raw materials like wood, metal, plastic, glue, string, and bottle caps/CDs for wheels.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Wheels:</strong> The car must have at least <strong>3 wheels</strong>.</li>
+                    <li><strong>Launch:</strong> The car must start from a stationary position. You may hold it, but not push it, to start.</li>
+                </ol>
+            </div>
+
+            <div id="page-report" class="page-content hidden prose max-w-none">
+                <h1 class="text-indigo-600">The Lab Report Requirements</h1>
+                <p>Your lab report must be formatted professionally and include the following 8 sections. All data should be clearly presented and calculations shown.</p>
+
+                <ol class="list-decimal pl-5">
+                    <li><strong>Title Page:</strong> Project title, your name(s), course name, and date.</li>
+                    <li><strong>Introduction:</strong> What is the purpose of this project? What are the engineering challenges? What physics principles govern the car's motion? (Discuss potential & kinetic energy, work, friction, and Newton's Laws).</li>
+                    <li><strong>Materials List & Drawings:</strong> A bulleted list of all materials used. A clear, labeled drawing (a "blueprint" or schematic) of your car's design.</li>
+                    <li><strong>Data (10 Trials):</strong>
+                        <ul class="list-disc pl-5">
+                            <li>You must measure and record the <strong>mass of your car</strong> (in kg).</li>
+                            <li>Create a neat data table for <strong>10 official trials</strong>.</li>
+                            <li>Data to collect for each trial:
+                                <ul class="list-circle pl-5">
+                                    <li>Distance to "Snap" (<i>d</i><sub>1</sub>) (m)</li>
+                                    <li>Time to "Snap" (<i>t</i><sub>1</sub>) (s)</li>
+                                    <li>Total Distance (Stop) (<i>d</i><sub>total</sub>) (m)</li>
+                                    <li>Total Time (Stop) (<i>t</i><sub>total</sub>) (s)</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><strong>Calculations:</strong>
+                        <ul class="list-disc pl-5">
+                            <li>Include a table of your calculated values for all 10 trials, plus the averages.</li>
+                            <li>Show <strong>one complete sample calculation</strong> for each:
+                                <ul class="list-circle pl-5">
+                                    <li>Average Velocity at Snap (<i>v</i><sub>snap</sub>)</li>
+                                    <li>Acceleration *during* Snap (<i>a</i><sub>1</sub>)</li>
+                                    <li>Acceleration *after* Snap (<i>a</i><sub>2</sub>)</li>
+                                    <li>Frictional Force (<i>F</i><sub>f</sub>)</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><strong>Calculations:</strong>
+                        <ul class="list-disc pl-5">
+                            <li>Include a table of your calculated values for all 10 trials, plus the averages.</li>
+                            <li>Show <strong>one complete sample calculation</strong> for each:
+                                <ul class="list-circle pl-5">
+                                    <li>Average Velocity at Snap ($v_{snap}$)</li>
+                                    <li>Acceleration *during* Snap ($a_1$)</li>
+                                    <li>Acceleration *after* Snap ($a_2$)</li>
+                                    <li>Frictional Force ($F_f$)</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><strong>Results & Discussion:</strong> Discuss your results. Was your data consistent? Reference the physics: How did your design try to maximize $a_1$ and minimize $a_2$? Where did $F_f$ come from? Discuss energy transformations. What were the sources of error?</li>
+                    <li><strong>Conclusion:</strong> Summarize your key findings. If you could rebuild, what specific changes would you make? Why?</li>
+                    <li><strong>Sources:</strong> Cite a minimum of <strong>3 sources</strong> in a standard science paper format.</li>
+                </ol>
+
+                <hr class="my-8">
+                
+                <div class="not-prose">
+                    <h2 class="text-2xl font-bold mb-4 text-indigo-600">Data Visualizer Tool</h2>
+                    <p class="mb-4 text-slate-700">Use this tool to visualize your trial data. Enter the "Total Distance" for each trial and click "Add Trial" to update the chart. This can help you spot trends or outliers for your "Results & Discussion" section.</p>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                        <div class="chart-container mb-6">
+                            <canvas id="trialChart"></canvas>
+                        </div>
+                        
+                        <form id="dataForm" class="flex flex-col md:flex-row gap-4 items-end">
+                            <div class="flex-1 w-full">
+                                <label for="trialDistance" class="block text-sm font-medium text-slate-700">Total Distance (m)</label>
+                                <input type="number" id="trialDistance" name="trialDistance" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g., 10.5">
+                            </div>
+                            <button type="submit" class="w-full md:w-auto px-4 py-2 bg-indigo-600 text-white font-medium rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Add Trial</button>
+                            <button type="button" id="resetChartBtn" class="w-full md:w-auto px-4 py-2 bg-slate-500 text-white font-medium rounded-md shadow-sm hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2">Reset Chart</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="page-physics" class="page-content hidden prose max-w-none">
+                <h1 class="text-indigo-600">Physics & Math Hints</h1>
+                <p>Model your car's motion in two separate phases. Use these formulas for your "Calculations" section.</p>
+                
+                <div class="bg-indigo-50 border-l-4 border-indigo-500 p-6 rounded-r-lg not-prose">
+                    <h2 class="text-xl font-bold text-indigo-800 mb-2">Phase 1: Acceleration (From <i>t</i>=0 to <i>t</i><sub>1</sub>)</h2>
+                    <p class="text-indigo-700 mb-4">The trap is actively pulling the car.</p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>The car starts from rest, so <strong><i>v</i><sub>i</sub> = 0</strong>.</li>
+                        <li>It travels a distance <i>d</i><sub>1</sub> in a time <i>t</i><sub>1</sub>.</li>
+                        <li><strong>Find Acceleration (<i>a</i><sub>1</sub>):</strong>
+                            <code class="block bg-white p-2 rounded"><i>d</i><sub>1</sub> = <i>v</i><sub>i</sub> <i>t</i><sub>1</sub> + &frac12; <i>a</i><sub>1</sub> <i>t</i><sub>1</sub><sup>2</sup></code>
+                            <span class="block mt-1">Since <i>v</i><sub>i</sub> = 0, this simplifies to: <strong><i>a</i><sub>1</sub> = (2<i>d</i><sub>1</sub>) / <i>t</i><sub>1</sub><sup>2</sup></strong></span>
+                        </li>
+                        <li><strong>Find Velocity at Snap (<i>v</i><sub>snap</sub>):</strong>
+                            <code class="block bg-white p-2 rounded"><i>v</i><sub>snap</sub> = <i>v</i><sub>i</sub> + <i>a</i><sub>1</sub> <i>t</i><sub>1</sub></code>
+                            <span class="block mt-1">This simplifies to: <strong><i>v</i><sub>snap</sub> = <i>a</i><sub>1</sub> <i>t</i><sub>1</sub></strong></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-sky-50 border-l-4 border-sky-500 p-6 rounded-r-lg not-prose mt-6">
+                    <h2 class="text-xl font-bold text-sky-800 mb-2">Phase 2: Coasting (From <i>t</i><sub>1</sub> to <i>t</i><sub>total</sub>)</h2>
+                    <p class="text-sky-700 mb-4">The trap has finished pulling, and the car is coasting to a stop due to friction.</p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>The car's "initial velocity" for this phase is <strong><i>v</i><sub>snap</sub></strong> from Phase 1.</li>
+                        <li>The car's "final velocity" is <strong><i>v</i><sub>f</sub> = 0</strong> (it stops).</li>
+                        <li>The time for this phase is <strong><i>t</i><sub>2</sub> = <i>t</i><sub>total</sub> - <i>t</i><sub>1</sub></strong>.</li>
+                        <li><strong>Find Coasting Acceleration (<i>a</i><sub>2</sub>):</strong>
+                            <code class="block bg-white p-2 rounded"><i>v</i><sub>f</sub> = <i>v</i><sub>snap</sub> + <i>a</i><sub>2</sub> <i>t</i><sub>2</sub></code>
+                            <span class="block mt-1">This simplifies to: <strong><i>a</i><sub>2</sub> = (-<i>v</i><sub>snap</sub>) / <i>t</i><sub>2</sub></strong> (This value should be negative!)</span>
+                        </li>
+                        <li><strong>Find Frictional Force (<i>F</i><sub>f</sub>):</strong>
+                            <code class="block bg-white p-2 rounded"><i>F</i><sub>net</sub> = <i>ma</i></code>
+                            <span class="block mt-1">This simplifies to: <strong><i>F</i><sub>f</sub> = <i>m</i> &middot; <i>a</i><sub>2</sub></strong></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-sky-50 border-l-4 border-sky-500 p-6 rounded-r-lg not-prose mt-6">
+                    <h2 class="text-xl font-bold text-sky-800 mb-2">Phase 2: Coasting (From $t_1$ to $t_{total}$)</h2>
+                    <p class="text-sky-700 mb-4">The trap has finished pulling, and the car is coasting to a stop due to friction.</p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>The car's "initial velocity" for this phase is <strong>$v_{snap}$</strong> from Phase 1.</li>
+                        <li>The car's "final velocity" is <strong>$v_f = 0$</strong> (it stops).</li>
+                        <li>The time for this phase is <strong>$t_2 = t_{total} - t_1$</strong>.</li>
+                        <li><strong>Find Coasting Acceleration ($a_2$):</strong>
+                            <code class="block bg-white p-2 rounded">$v_f = v_{snap} + a_2 t_2$</code>
+                            <span class="block mt-1">This simplifies to: <strong>$a_2 = \frac{-v_{snap}}{t_2}$</strong> (This value should be negative!)</span>
+                        </li>
+                        <li><strong>Find Frictional Force ($F_f$):</strong>
+                            <code class="block bg-white p-2 rounded">$F_{net} = ma$</code>
+                            <span class="block mt-1">This simplifies to: <strong>$F_f = m \cdot a_2$</strong></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="page-rubric" class="page-content hidden prose max-w-none">
+                <h1 class="text-indigo-600">Grading Rubric</h1>
+                <p>Your project will be graded based on the car's performance and the quality of your lab report.</p>
+
+                <div class="not-prose">
+                    <h2 class="text-2xl font-bold mb-4 text-slate-700">Performance Grade Calculator</h2>
+                    <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                        <p class="mb-4">Select your group size and enter your car's best distance to see your Performance score.</p>
+                        <form id="gradeCalculator" class="flex flex-col md:flex-row gap-4 items-end">
+                            <div class="flex-1 w-full">
+                                <label for="groupSize" class="block text-sm font-medium text-slate-700">Group Size</label>
+                                <select id="groupSize" name="groupSize" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                    <option value="1-2">1-2 Students (10m Goal)</option>
+                                    <option value="3">3 Students (15m Goal)</option>
+                                </select>
+                            </div>
+                            <div class="flex-1 w-full">
+                                <label for="carDistance" class="block text-sm font-medium text-slate-700">Your Car's Distance (m)</label>
+                                <input type="number" id="carDistance" name="carDistance" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g., 8.9">
+                            </div>
+                            <button type="submit" class="w-full md:w-auto px-4 py-2 bg-indigo-600 text-white font-medium rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Calculate Score</button>
+                        </form>
+                        <div id="gradeResult" class="mt-4 text-xl font-bold text-indigo-700 h-8"></div>
+                    </div>
+                </div>
+
+                <h2 class="mt-8">Part 1: The Car (Total: 65 points)</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-slate-300 border border-slate-300">
+                        <thead class="bg-slate-100">
+                            <tr>
+                                <th class="px-4 py-2 text-left text-sm font-semibold text-slate-700">Category</th>
+                                <th class="px-4 py-2 text-left text-sm font-semibold text-slate-700">Max Points</th>
+                                <th class="px-4 py-2 text-left text-sm font-semibold text-slate-700">Criteria</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 bg-white">
+                            <tr>
+                                <td class="px-4 py-2 align-top"><strong>In-Class Work</strong></td>
+                                <td class="px-4 py-2 align-top">15</td>
+                                <td class="px-4 py-2 align-top"><strong>15:</strong> Consistently on-task, collaborative, used building time effectively, safe, clean workspace. <br> <strong>10:</strong> Mostly on-task, some redirection needed. <br> <strong>5:</strong> Often off-task, minimal progress.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2 align-top"><strong>Performance</strong></td>
+                                <td class="px-4 py-2 align-top">50</td>
+                                <td class="px-4 py-2 align-top"><strong>Points are calculated as a direct percentage of the goal.</strong> <br> <strong>Formula:</strong> (Your Car's Distance / Goal Distance) $\times$ 50 = Your Score <br> <em>Any distance *over* the goal = 50 points (max).</em></td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2 align-top"><strong>Construction</strong></td>
+                                <td class="px-4 py-2 align-top">N/A</td>
+                                <td class="px-4 py-2 align-top"><strong>Note:</strong> Car *must* meet all constraints (homemade, 3+ wheels, mousetrap-powered) to be eligible for performance points. A car that does not meet constraints will receive a 0 for Performance.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 class="mt-8">Part 2: The Lab Report (Total: 80 points)</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-slate-300 border border-slate-300">
+                        <thead class="bg-slate-100">
+                            <tr>
+                                <th class="px-4 py-2 text-left text-sm font-semibold text-slate-700">Section</th>
+                                <th class="px-4 py-2 text-left text-sm font-semibold text-slate-700">Max Points</th>
+                                <th class="px-4 py-2 text-left text-sm font-semibold text-slate-700">Criteria</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 bg-white">
+                            <tr>
+                                <td class="px-4 py-2 align-top"><strong>Format & Sections</strong></td>
+                                <td class="px-4 py-2 align-top">15</td>
+                                <td class="px-4 py-2 align-top"><strong>Title Page (3):</strong> Complete and professional. <br> <strong>Introduction (5):</strong> Clearly states purpose and discusses physics. <br> <strong>Materials & Drawing (5):</strong> Detailed list and a clear, labeled drawing. <br> <strong>Sources (2):</strong> <strong>3+ sources</strong> in standard format.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2 align-top"><strong>Data Collection</strong></td>
+                                <td class="px-4 py-2 align-top">20</td>
+                                <td class="px-4 py-2 align-top"><strong>Car Mass (3):</strong> Mass measured and recorded with units (kg). <br> <strong>Data Table (12):</strong> Neat, complete table with all 10 trials and units. <br> <strong>Average Data (5):</strong> Averages for all data columns are correct.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2 align-top"><strong>Calculations</strong></td>
+                                <td class="px-4 py-2 align-top">25</td>
+                                <td class="px-4 py-2 align-top"><strong>Sample Calculations (12):</strong> Shows one clear example for all 4 required calculations. <br> <strong>Calculated Values (13):</strong> Table lists all 4 calculated values for all 10 trials, plus averages. Accurate.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2 align-top"><strong>Analysis & Conclusion</strong></td>
+                                <td class="px-4 py-2 align-top">20</td>
+                                <td class="px-4 py-2 align-top"><strong>Results & Discussion (15):</strong> Thoughtfully discusses data, error, and makes strong, specific connections to physics. <br> <strong>Conclusion (5):</strong> Summarizes findings and proposes specific, physics-based improvements.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page-content');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('data-target');
+                    
+                    pages.forEach(page => {
+                        if (page.id === targetId) {
+                            page.classList.remove('hidden');
+                        } else {
+                            page.classList.add('hidden');
+                        }
+                    });
+                    
+                    navLinks.forEach(navLink => {
+                        navLink.classList.remove('active');
+                    });
+                    
+                    link.classList.add('active');
+                });
+            });
+
+            const gradeCalculator = document.getElementById('gradeCalculator');
+            const gradeResult = document.getElementById('gradeResult');
+            
+            if (gradeCalculator) {
+                gradeCalculator.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const groupSize = document.getElementById('groupSize').value;
+                    const carDistance = parseFloat(document.getElementById('carDistance').value);
+                    
+                    if (isNaN(carDistance)) {
+                        gradeResult.textContent = 'Please enter a valid distance.';
+                        gradeResult.classList.remove('text-indigo-700');
+                        gradeResult.classList.add('text-red-600');
+                        return;
+                    }
+                    
+                    const goalDistance = (groupSize === '1-2') ? 10 : 15;
+                    let score = (carDistance / goalDistance) * 50;
+                    score = Math.min(Math.max(score, 0), 50); 
+                    
+                    gradeResult.textContent = `Your Performance Score: ${score.toFixed(1)} / 50`;
+                    gradeResult.classList.add('text-indigo-700');
+                    gradeResult.classList.remove('text-red-600');
+                });
+            }
+
+            const ctx = document.getElementById('trialChart');
+            if (ctx) {
+                const trialData = {
+                    labels: [],
+                    datasets: [{
+                        label: 'Total Distance (m)',
+                        data: [],
+                        backgroundColor: 'rgba(79, 70, 229, 0.6)',
+                        borderColor: 'rgba(79, 70, 229, 1)',
+                        borderWidth: 1
+                    }]
+                };
+
+                const trialChart = new Chart(ctx.getContext('2d'), {
+                    type: 'bar',
+                    data: trialData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Distance (m)'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Trial Number'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `Distance: ${context.parsed.y} m`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                const dataForm = document.getElementById('dataForm');
+                const resetChartBtn = document.getElementById('resetChartBtn');
+
+                dataForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const distanceInput = document.getElementById('trialDistance');
+                    const distance = parseFloat(distanceInput.value);
+                    
+                    if (!isNaN(distance)) {
+                        const trialNum = trialData.labels.length + 1;
+                        trialData.labels.push(`Trial ${trialNum}`);
+                        trialData.datasets[0].data.push(distance);
+                        trialChart.update();
+                        distanceInput.value = '';
+                    }
+                });
+
+                resetChartBtn.addEventListener('click', () => {
+                    trialData.labels = [];
+                    trialData.datasets[0].data = [];
+                    trialChart.update();
+                });
+            }
+
+        });
+    </script>
+</body>
+</html>
