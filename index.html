@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Physics 1: Algebra-Based | Course Hub</title>
+    <style>
+        :root {
+            --primary: #0077da; /* College Board Blue-ish */
+            --secondary: #004d80;
+            --accent: #ffcc00;
+            --light: #f4f4f4;
+            --dark: #333;
+            --white: #fff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+        }
+
+        /* --- Navigation --- */
+        nav {
+            background-color: var(--secondary);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--white);
+            min-width: 280px;
+            box-shadow: var(--shadow);
+            border-radius: 4px;
+            top: 100%;
+            left: 0;
+            overflow: hidden;
+            z-index: 1001;
+        }
+
+        .dropdown-content a {
+            color: var(--dark);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--light);
+            color: var(--primary);
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* --- Hero Section --- */
+        header {
+            background: linear-gradient(rgba(0, 77, 128, 0.8), rgba(0, 77, 128, 0.8)), url('https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            background-color: var(--accent);
+            color: var(--dark);
+            padding: 15px 30px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            background-color: #e6b800;
+        }
+
+        /* --- Content Sections --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--secondary);
+            font-size: 2rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            margin: 10px auto 0;
+        }
+
+        /* Grid for Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--dark);
+            color: var(--white);
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        /* --- Responsive Tweaks --- */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.5rem; }
+            .nav-links { display: none; } /* Mobile menu implementation usually goes here */
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">AP Physics 1</div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="syllabus.pdf" target="_blank">Syllabus</a></li>
+            
+            <li class="dropdown">
+                <span>Course Units &#9662;</span>
+                <div class="dropdown-content">
+                    <a href="unit1.html">Unit 1: Kinematics</a>
+                    <a href="unit2.html">Unit 2: Force & Translational Dynamics</a>
+                    <a href="unit3.html">Unit 3: Work, Energy, & Power</a>
+                    <a href="unit4.html">Unit 4: Linear Momentum</a>
+                    <a href="unit5.html">Unit 5: Torque & Rotational Dynamics</a>
+                    <a href="unit6.html">Unit 6: Energy & Momentum of Rotating Systems</a>
+                    <a href="unit7.html">Unit 7: Oscillations</a>
+                    <a href="unit8.html">Unit 8: Fluids</a>
+                </div>
+            </li>
+            <li><a href="#about">About</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Master the Laws of Physics</h1>
+        <p>An interactive guide to the AP Physics 1 Algebra-Based curriculum. Explore motion, force, energy, and the new fluids mechanics module.</p>
+        <br>
+        <a href="#units-preview" class="cta-button">Start Learning</a>
+    </header>
+
+    <section id="about" class="container">
+        <h2 class="section-title">Course Overview</h2>
+        <div class="card" style="border-left: 5px solid var(--accent);">
+            <p>
+                AP Physics 1 is an algebra-based, introductory college-level physics course. 
+                Students cultivate their understanding of physics through inquiry-based investigations 
+                as they explore these topics. The course is built around "Big Ideas" which provide a broad way of thinking about the physical world:
+            </p>
+            <ul style="margin: 20px 0 0 20px;">
+                <li><strong>Systems:</strong> Objects and internal structures.</li>
+                <li><strong>Fields:</strong> How objects interact over distances.</li>
+                <li><strong>Force Interactions:</strong> Changes in an object's motion.</li>
+                <li><strong>Conservation:</strong> Fundamental laws of mass, energy, and momentum.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="units-preview" class="container">
+        <h2 class="section-title">Curriculum Units</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Unit 1: Kinematics</h3>
+                <p><strong>10–15% of Exam Score</strong></p>
+                <p>Study motion in one and two dimensions, including vectors, velocity, acceleration, and projectile motion.</p>
+            </div>
+
+            <div class="card">
+                <h3>Unit 2: Force & Translational Dynamics</h3>
+                <p><strong>18–23% of Exam Score</strong></p>
+                <p>Understand Newton's Laws, free-body diagrams, friction, and the causes of motion.</p>
+            </div>
+
+            <div class="card">
+                <h3>Unit 3: Work, Energy, & Power</h3>
+                <p><strong>18–23% of Exam Score</strong></p>
+                <p>Analyze energy transfer, conservation laws, potential energy, and mechanical power.</p>
+            </div>
+
+            <div class="card">
+                <h3>Unit 4: Linear Momentum</h3>
+                <p><strong>10–15% of Exam Score</strong></p>
+                <p>Explore impulse, momentum conservation, and collisions (elastic vs inelastic).</p>
+            </div>
+
+            <div class="card">
+                <h3>Unit 5: Torque & Rotational Dynamics</h3>
+                <p><strong>10–15% of Exam Score</strong></p>
+                <p>Transition from linear to rotational motion. Learn about torque, rotational inertia, and equilibrium.</p>
+            </div>
+
+            <div class="card">
+                <h3>Unit 6: Rotating Systems</h3>
+                <p><strong>5–8% of Exam Score</strong></p>
+                <p>Deep dive into rotational kinetic energy and the conservation of angular momentum.</p>
+            </div>
+
+            <div class="card">
+                <h3>Unit 7: Oscillations</h3>
+                <p><strong>5–8% of Exam Score</strong></p>
+                <p>Investigate Simple Harmonic Motion (SHM) in springs and pendulums.</p>
+            </div>
+
+            <div class="card">
+                <h3>Unit 8: Fluids</h3>
+                <p><strong>10–15% of Exam Score</strong></p>
+                <p>The newest addition. Cover density, pressure, buoyancy, and fluid dynamics.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 AP Physics 1 Study Hub. Designed for Student Success.</p>
+        <p style="font-size: 0.8rem; color: #aaa;">Not affiliated with The College Board.</p>
+    </footer>
+
+</body>
+</html>
