@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water Rocket Challenge | AP Physics 1</title>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <title>Water Rocket Hub | AP Physics 1</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* --- GLOBAL THEME (Matching Previous Pages) --- */
+        /* --- GLOBAL VARIABLES (Matching your site theme) --- */
         :root {
             --primary: #0077da;
             --secondary: #004d80;
@@ -16,13 +15,14 @@
             --dark: #333;
             --white: #fff;
             --shadow: 0 4px 6px rgba(0,0,0,0.1);
-            --blueprint-blue: #2c3e50; 
+            --danger: #e74c3c;
+            --success: #27ae60;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background-color: var(--light); color: var(--dark); line-height: 1.6; }
 
-        /* --- NAVIGATION --- */
+        /* --- TOP NAVIGATION --- */
         nav {
             background-color: var(--secondary);
             color: var(--white);
@@ -48,63 +48,119 @@
 
         /* --- HERO HEADER --- */
         header {
-            /* Rocket Launch Image */
-            background: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.8)), url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Water_rocket_launch.jpg/1200px-Water_rocket_launch.jpg');
+            /* Using a rocket-themed placeholder image */
+            background: linear-gradient(rgba(0, 77, 128, 0.9), rgba(0, 77, 128, 0.9)), url('https://images.unsplash.com/photo-1517976487492-5750f3195933?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
             background-size: cover;
             background-position: center;
             color: var(--white);
-            padding: 60px 20px;
+            padding: 40px 20px;
             text-align: center;
         }
-        header h1 { font-size: 2.8rem; margin-bottom: 10px; text-shadow: 2px 2px 4px #000; }
-        header p { font-size: 1.2rem; max-width: 800px; margin: 0 auto; color: #ddd; }
+        header h1 { font-size: 2.5rem; margin-bottom: 10px; }
 
+        /* --- LAYOUT CONTAINER --- */
         .container { max-width: 1100px; margin: 0 auto; padding: 30px 20px; }
 
-        /* --- TABS --- */
+        /* --- INTERNAL TAB NAVIGATION --- */
         .tabs-container {
-            display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 30px;
-            background: var(--white); padding: 15px; border-radius: 8px; box-shadow: var(--shadow);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: var(--white);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
         }
         .nav-link {
-            padding: 10px 20px; border: 2px solid transparent; border-radius: 5px; cursor: pointer;
-            font-weight: 600; color: var(--secondary); transition: all 0.3s;
+            padding: 10px 20px;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--secondary);
+            transition: all 0.3s;
         }
         .nav-link:hover { background-color: #eee; }
         .nav-link.active {
-            background-color: var(--primary); color: var(--white); border-color: var(--primary);
+            background-color: var(--secondary);
+            color: var(--white);
+            border-color: var(--secondary);
         }
 
-        /* --- CONTENT --- */
+        /* --- CONTENT SECTIONS --- */
         .page-content { display: none; animation: fadeIn 0.4s ease-in-out; }
         .page-content.active { display: block; }
+        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        h2 { color: var(--secondary); border-bottom: 3px solid var(--accent); display: inline-block; margin: 20px 0; padding-bottom: 5px; }
-        h3 { color: var(--primary); margin: 20px 0 10px 0; font-size: 1.3rem; }
-        
+        h2 { color: var(--secondary); border-bottom: 3px solid var(--accent); display: inline-block; margin: 30px 0 15px 0; padding-bottom: 5px; }
+        h3 { color: var(--primary); margin: 20px 0 10px 0; }
+        ul, ol { margin-left: 20px; margin-bottom: 15px; }
+        li { margin-bottom: 8px; }
+
+        /* --- CARD STYLES --- */
         .card {
-            background: var(--white); padding: 25px; border-radius: 8px; box-shadow: var(--shadow);
-            border-left: 5px solid var(--primary); margin-bottom: 25px;
+            background: var(--white);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary);
+            margin-bottom: 25px;
+        }
+        .card.warning { border-left-color: var(--danger); }
+        .card.success { border-left-color: var(--success); }
+
+        /* --- FORMS & INPUTS --- */
+        .form-row { display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap; }
+        .form-group { flex: 1; min-width: 200px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem; }
+        input, select {
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;
+        }
+        button.action-btn {
+            background-color: var(--secondary); color: white; border: none; padding: 10px 20px;
+            border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background 0.2s;
+        }
+        button.action-btn:hover { background-color: var(--primary); }
+        button.reset-btn { background-color: #777; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
+
+        /* --- SAMPLE PAPER STYLE --- */
+        .sample-paper {
+            background: white;
+            padding: 50px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.15);
+            max-width: 850px;
+            margin: 0 auto;
+            font-family: 'Times New Roman', Times, serif;
+            color: black;
+            border: 1px solid #ddd;
+        }
+        .sample-paper h2, .sample-paper h3 { font-family: 'Times New Roman', Times, serif; color: black; border-bottom: 1px solid black; }
+        .eq-block { 
+            background: #f9f9f9; padding: 10px; border: 1px solid #ddd; display: block; 
+            font-family: 'Times New Roman', serif; font-style: italic; margin: 10px 0; text-align: center;
         }
 
-        /* --- RUBRIC TABLE STYLING --- */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        /* --- TABLE STYLES --- */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; }
         th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
         th { background-color: var(--secondary); color: white; }
-        tr:nth-child(even) { background-color: #f8f9fa; }
-        .points-col { width: 80px; text-align: center; font-weight: bold; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        
+        /* --- CHART --- */
+        .chart-container { position: relative; height: 350px; width: 100%; max-width: 700px; margin: 0 auto; }
 
-        /* --- CALCULATION BOXES --- */
-        .calc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .calc-box {
-            background: #f0f7fb; border: 1px solid #cce5ff; padding: 20px; border-radius: 8px;
+        /* Utility for math font */
+        .eq { font-family: 'Times New Roman', serif; font-style: italic; }
+
+        @media (max-width: 768px) {
+            .tabs-container { flex-direction: column; }
+            .nav-link { text-align: center; }
+            .form-row { flex-direction: column; }
+            .sample-paper { padding: 20px; }
         }
-        .calc-box strong { display: block; color: var(--secondary); margin-bottom: 10px; font-size: 1.1rem; }
-        .hint { font-size: 0.9rem; color: #666; font-style: italic; margin-top: 10px; }
-
-        /* --- FOOTER --- */
-        footer { text-align: center; padding: 20px; color: #777; font-size: 0.9rem; margin-top: 40px; }
     </style>
 </head>
 <body>
@@ -115,194 +171,253 @@
     </nav>
 
     <header>
-        <h1>Project: Water Rocketry</h1>
-        <p>Apply Newton's 3rd Law and kinematics to design a pressurized launch vehicle. Maximize height and analyze the initial thrust phase.</p>
+        <h1>AP Water Rocket Challenge</h1>
+        <p>Newton's Laws, Projectile Motion, and Aerodynamic Design.</p>
     </header>
 
     <div class="container">
 
         <div class="tabs-container">
-            <div id="nav-overview" class="nav-link active" onclick="switchTab('page-overview', this)">Overview & Theory</div>
-            <div id="nav-procedure" class="nav-link" onclick="switchTab('page-procedure', this)">Procedure & Design</div>
-            <div id="nav-math" class="nav-link" onclick="switchTab('page-math', this)">Calculations (23 pts)</div>
+            <div id="nav-overview" class="nav-link active" onclick="switchTab('page-overview', this)">Overview</div>
+            <div id="nav-rules" class="nav-link" onclick="switchTab('page-rules', this)">Design Rules</div>
+            <div id="nav-report" class="nav-link" onclick="switchTab('page-report', this)">Report Guidelines</div>
+            <div id="nav-physics" class="nav-link" onclick="switchTab('page-physics', this)">Math & Hints</div>
             <div id="nav-rubric" class="nav-link" onclick="switchTab('page-rubric', this)">Grading Rubric</div>
         </div>
-
-        <div id="page-overview" class="page-content active">
-            <div class="card">
-                <h2>Project Introduction</h2>
-                <p>The objective of this project is to design and build a water rocket that achieves stable flight and maximum altitude. You will not only construct the rocket but also perform a detailed physics analysis of its motion during the first 0.2 seconds of launch (the thrust phase).</p>
+        
+        <main>
+            
+            <div id="page-overview" class="page-content active">
+                <div class="card">
+                    <h2>🚀 The Challenge</h2>
+                    [cite_start]<p class="text-xl">The objective of this lab is to build a working rocket out of a 2.0 L bottle[cite: 5]. The rocket must be capable of carrying a fragile payload (an egg) and achieving significant altitude.</p>
+                </div>
                 
-
-[Image of Water rocket free body diagram]
-
-            </div>
-
-            <div class="card" style="border-left-color: var(--accent);">
-                <h3>Physics Theory</h3>
-                <ul>
-                    <li><strong>Newton's 3rd Law:</strong> The rocket pushes water down; the water pushes the rocket up.</li>
-                    <li><strong>Impulse & Momentum:</strong> The change in momentum of the water ($\Delta p$) creates the impulse ($J$) on the rocket.</li>
-                    <li><strong>Projectile Motion:</strong> Once the water is exhausted, the rocket enters free fall (neglecting air resistance).</li>
-                </ul>
-            </div>
-        </div>
-
-        <div id="page-procedure" class="page-content">
-            <div class="card">
-                <h2>Procedure & Report Requirements</h2>
-                <p>Your lab report must include a dedicated <strong>Procedure Section (7 pts)</strong> covering the following:</p>
-                
-                <h3>1. Materials List</h3>
-                <p>List everything used (e.g., 2L bottles, cardboard fins, tape, clay for nose cone ballast).</p>
-
-                <h3>2. Design Diagram</h3>
-                <p>Include a clear, labeled diagram of your rocket. Label the:</p>
-                <ul>
-                    <li>Pressure Chamber (Bottle)</li>
-                    <li>Fin placement (Center of Pressure)</li>
-                    <li>Nose Cone (Center of Mass)</li>
-                    <li>Nozzle diameter</li>
-                </ul>
-
-                <h3>3. Construction Log</h3>
-                <p>Briefly describe how you designed and built the rocket. What modifications did you make after test launches?</p>
-            </div>
-        </div>
-
-        <div id="page-math" class="page-content">
-            <div class="card">
-                <h2>Mathematical Analysis (23 pts)</h2>
-                <p>This is the core physics component. You must analyze the motion during the <strong>first 0.2 seconds</strong> (approximate thrust phase) and the total flight.</p>
-                <p><em>Requirement: Present data in a table, show equations, and provide a sample calculation for each.</em></p>
-            </div>
-
-            <div class="calc-grid">
-                <div class="calc-box">
-                    <strong>1. Maximum Height ($y_{max}$)</strong>
-                    <p>Method: Timed Flight</p>
-                    <p>$$y_{max} = \frac{1}{2} g \left( \frac{t_{total}}{2} \right)^2$$</p>
-                    <p class="hint">Assumption: Time up equals time down (if landing on flat ground).</p>
+                <div class="card warning">
+                    <h3>Success Criteria</h3>
+                    <ul>
+                        [cite_start]<li><strong>Target Height:</strong> The rocket needs to reach a height of at least 45.0 meters[cite: 6].</li>
+                        [cite_start]<li><strong>Payload Safety:</strong> The rocket must contain an egg inside during launch without cracking it[cite: 6].</li>
+                        [cite_start]<li><strong>Propulsion:</strong> Rockets are filled with water and pressurized air (~115 psi) to force projectile motion[cite: 7, 8].</li>
+                    </ul>
                 </div>
 
-                <div class="calc-box">
-                    <strong>2. Acceleration ($a_y$)</strong>
-                    <p>Find average acceleration during the first 0.2s.</p>
-                    <p>$$y = y_0 + v_{iy}t + \frac{1}{2}a_y t^2$$</p>
-                    <p class="hint">If you can measure height at t=0.2s using video analysis, solve for $a$. Otherwise, estimate using force analysis.</p>
-                </div>
-
-                <div class="calc-box">
-                    <strong>3. Velocity at t = 0.2s</strong>
-                    <p>This is the "Initial Velocity" of the coasting phase.</p>
-                    <p>$$v_f = v_i + a_y t$$</p>
-                    <p class="hint">Use the acceleration calculated in Step 2 and $t=0.2$.</p>
-                </div>
-
-                <div class="calc-box">
-                    <strong>4. Force Exerted ($F_{thrust}$)</strong>
-                    <p>Average force during the first 0.2s.</p>
-                    <p>$$\sum F = F_{thrust} - mg = ma$$</p>
-                    <p>$$F_{thrust} = m(a + g)$$</p>
-                </div>
-
-                 <div class="calc-box">
-                    <strong>5. Impact Velocity</strong>
-                    <p>Final velocity before striking the ground.</p>
-                    <p>$$v_f^2 = v_i^2 + 2g(y_{max})$$</p>
-                    <p class="hint">Fall from max height. $v_i$ at peak is 0.</p>
+                <div class="card">
+                    <h3>Core Physics Principle</h3>
+                    [cite_start]<p>The operation of the rocket relies on <strong>Newton's Third Law of Motion</strong>: Actions trigger equal and opposite reactions[cite: 9]. [cite_start]As pressurized water is forced out of the nozzle (Action), the rocket is propelled upward (Reaction)[cite: 8].</p>
                 </div>
             </div>
-        </div>
 
-        <div id="page-rubric" class="page-content">
-            <div class="card">
-                <h2>Grading Rubric</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Criteria</th>
-                            <th class="points-col">Points</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Working Rocket</strong></td>
-                            <td class="points-col">45</td>
-                            <td>Rocket launches and maintains stable flight.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Working In Class</strong></td>
-                            <td class="points-col">5</td>
-                            <td>Rocket is ready to launch on the designated day. (0 pts if cracked/broken).</td>
-                        </tr>
-                        <tr>
-                            <td><strong>On Time</strong></td>
-                            <td class="points-col">0</td>
-                            <td>-5 pts per day late. -10 pts max.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Title Page</strong></td>
-                            <td class="points-col">5</td>
-                            <td>Name, Partner Name, Date, Title.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Introduction</strong></td>
-                            <td class="points-col">5</td>
-                            <td>Objective, project discussion, and physics theory (propulsion).</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Procedure</strong></td>
-                            <td class="points-col">7</td>
-                            <td>Includes diagram, materials list, and build process.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Calculations</strong></td>
-                            <td class="points-col">23</td>
-                            <td>
-                                <ul>
-                                    <li>Max Height</li>
-                                    <li>Velocity @ 0.2s</li>
-                                    <li>Acceleration (0 to 0.2s)</li>
-                                    <li>Final Velocity (Impact)</li>
-                                    <li>Force Exerted (0 to 0.2s)</li>
-                                </ul>
-                                <em>Must include data table, equations, and sample calculations.</em>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>Results & Discussion</strong></td>
-                            <td class="points-col">10</td>
-                            <td>Discuss findings and error analysis.</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div id="page-rules" class="page-content">
+                <div class="card">
+                    <h2>Construction & Materials</h2>
+                    
+                    <h3>Required Materials</h3>
+                    <ul>
+                        [cite_start]<li>Two 2-liter plastic bottles (one for pressure chamber, one for nose cone/payload)[cite: 17].</li>
+                        [cite_start]<li>Duct Tape[cite: 18].</li>
+                        [cite_start]<li>Cardboard (for fins/stability)[cite: 19].</li>
+                        [cite_start]<li>Packaging foam (for egg protection)[cite: 20].</li>
+                    </ul>
+                    
+                    <h3>Design Considerations</h3>
+                    <ol>
+                        [cite_start]<li><strong>The Engine:</strong> The bottom bottle remains unaltered to serve as the pressure vessel[cite: 11].</li>
+                        [cite_start]<li><strong>The Payload:</strong> The top section should contain a hatch or "cubby" filled with foam to secure the egg[cite: 12].</li>
+                        [cite_start]<li><strong>Stability:</strong> Attach fins (e.g., 3 cardboard wings) near the bottom to ensure balance and straight flight[cite: 13].</li>
+                        [cite_start]<li><strong>Center of Mass:</strong> A weighted cone-shaped top helps the rocket land on its nose rather than its side, which aids in aerodynamic stability[cite: 14].</li>
+                        [cite_start]<li><strong>Fuel:</strong> Rockets are typically filled with ~750ml of water (approx 1/3 of the bottle)[cite: 15].</li>
+                    </ol>
+                </div>
             </div>
-        </div>
 
+            <div id="page-report" class="page-content">
+                <div class="card">
+                    <h2>AP Report Structure</h2>
+                    <p>Your report must document the engineering process and the physical analysis of the flight.</p>
+
+                    <h3>Required Sections</h3>
+                    <ol>
+                        <li><strong>Title Page:</strong> Student Name, Partner Name, Date, Title.</li>
+                        [cite_start]<li><strong>Introduction:</strong> State the objective and discuss the theory (Newton's Laws)[cite: 5, 9].</li>
+                        [cite_start]<li><strong>Procedure:</strong> Detail the design choices, materials used, and construction methods[cite: 10].</li>
+                        <li><strong>Data:</strong> Record flight metrics. You must include a table with:
+                            <ul>
+                                <li>Trial Number</li>
+                                <li>Altimeter Reading (if available)</li>
+                                [cite_start]<li>Hang Time (measured by stopwatch) [cite: 31]</li>
+                                [cite_start]<li>Thrust Time (approx 0.2s - 0.3s) [cite: 31]</li>
+                            </ul>
+                        </li>
+                        <li><strong>Calculations:</strong> See the "Math & Hints" tab for required derivations.</li>
+                        [cite_start]<li><strong>Results & Discussion:</strong> Discuss max height achieved, egg survival, and sources of error (e.g., thin protective layers)[cite: 38].</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <h3>Flight Calculator</h3>
+                    <p>Estimate your rocket's height based on its total hang time (assuming launch and landing at same elevation).</p>
+                    
+                    <form id="heightCalculator" class="form-row" style="margin-top: 20px;">
+                        <div class="form-group">
+                            <label for="hangTime">Total Hang Time (seconds)</label>
+                            <input type="number" id="hangTime" step="0.01" placeholder="e.g., 7.05">
+                        </div>
+                        <div class="form-group">
+                            <label for="calculatedHeight">Estimated Height (meters)</label>
+                            <input type="text" id="calculatedHeight" readonly placeholder="Result...">
+                        </div>
+                        <button type="submit" class="action-btn">Calculate</button>
+                    </form>
+                    <p style="font-size: 0.8rem; margin-top: 10px; color: #666;">*Uses formula: y = 1/2 * g * (t/2)²</p>
+                </div>
+            </div>
+
+            <div id="page-physics" class="page-content">
+                <div class="card">
+                    <h2>Physics Analysis Hints</h2>
+                    [cite_start]<p>You must show equations, work, and answers for the following variables[cite: 33]. Do not just copy numbers; derive them.</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    
+                    <div class="card" style="border-left-color: #3b82f6;">
+                        <h3>1. Max Height (<span class="eq">y</span>)</h3>
+                        <p><strong>Goal:</strong> Determine how high the rocket went based on hang time.</p>
+                        <ul>
+                            <li><strong>Given:</strong> Total hang time (<span class="eq">t</span>). Gravity (<span class="eq">g = 9.8 m/s²</span>).</li>
+                            <li><strong>Hint:</strong> If the rocket goes up and comes down in total time <span class="eq">t</span>, how long did it take to reach the peak?</li>
+                            <li><strong>Equation:</strong> Use a kinematic equation for displacement <span class="eq">(&Delta;y)</span> where <span class="eq">v<sub>top</sub> = 0</span>.</li>
+                            <li><span class="eq-block">y = &frac12; g (t<sub>up</sub>)<sup>2</sup></span></li>
+                        </ul>
+                    </div>
+
+                    <div class="card" style="border-left-color: #8e44ad;">
+                        <h3>2. Initial Velocity (<span class="eq">v<sub>0</sub></span>)</h3>
+                        <p><strong>Goal:</strong> Find the speed of the rocket the moment it left the launch pad.</p>
+                        <ul>
+                            <li><strong>Hint:</strong> Use the time it took to reach the peak (<span class="eq">t<sub>up</sub></span>).</li>
+                            <li><strong>Equation:</strong> <span class="eq">v<sub>f</sub> = v<sub>0</sub> + at</span></li>
+                            <li>At the peak, velocity is zero. Solve for <span class="eq">v<sub>0</sub></span>.</li>
+                        </ul>
+                    </div>
+
+                    <div class="card" style="border-left-color: #e67e22;">
+                        <h3>3. Thrust Phase Analysis</h3>
+                        [cite_start]<p><strong>Goal:</strong> Analyze the short period (approx 0.2s) where water is ejecting[cite: 31].</p>
+                        <ul>
+                            <li><strong>Thrust Time (<span class="eq">t<sub>thrust</sub></span>):</strong> Usually ~0.2s to 0.3s.</li>
+                            <li><strong>Acceleration during thrust:</strong> How quickly did it go from 0 to <span class="eq">v<sub>0</sub></span> (calculated in step 2)?</li>
+                            <li><strong>Force of Thrust:</strong> Use Newton's 2nd Law (<span class="eq">F=ma</span>). Remember gravity is also acting on the rocket!</li>
+                        </ul>
+                    </div>
+
+                    <div class="card" style="border-left-color: #27ae60;">
+                        <h3>4. Final Velocity (<span class="eq">v<sub>f</sub></span>)</h3>
+                        <p><strong>Goal:</strong> How fast was it going when it hit the ground?</p>
+                        <ul>
+                            <li><strong>Hint:</strong> Symmetry of freefall. If it starts at <span class="eq">v<sub>0</sub></span> and lands at the same height, what is <span class="eq">v<sub>f</sub></span>?</li>
+                            <li>Check your signs! Velocity downward is negative.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="page-rubric" class="page-content">
+                <div class="card">
+                    <h2>AP Grading Rubric</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th style="text-align: center;">Points</th>
+                                <th>Criteria</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Working Rocket</strong></td>
+                                <td style="text-align: center; font-weight: bold; color: var(--success);">45</td>
+                                <td>Rocket launches successfully. Satisfactory flight.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Mathematical Calculations</strong></td>
+                                <td style="text-align: center; font-weight: bold; color: var(--primary);">23</td>
+                                <td>
+                                    Must include: Max Height, Initial Velocity, Acceleration (thrust), Final Velocity, Force (thrust). <br>
+                                    <em>Data presented in table, equations shown, sample calcs included.</em>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Results and Discussion</strong></td>
+                                <td style="text-align: center; font-weight: bold;">10</td>
+                                <td>Discuss findings, error (e.g., egg survival), and physics.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Procedure</strong></td>
+                                <td style="text-align: center; font-weight: bold;">7</td>
+                                <td>Include diagrams, materials list, and design explanation.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Working In Class</strong></td>
+                                <td style="text-align: center; font-weight: bold;">5</td>
+                                <td>Rocket ready for launch. (0 pts if cracked/broken).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Title Page</strong></td>
+                                <td style="text-align: center; font-weight: bold;">5</td>
+                                <td>Name, Partner, Date, Title.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Introduction</strong></td>
+                                <td style="text-align: center; font-weight: bold;">5</td>
+                                <td>Objective and Theory included.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>On Time</strong></td>
+                                <td style="text-align: center; font-weight: bold;">0</td>
+                                <td><span style="color: var(--danger);">-5 pts per day late.</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
     </div>
 
-    <footer>
-        <p>AP Physics 1 Rocketry Module</p>
-    </footer>
-
     <script>
+        // Tab Switching Logic
         function switchTab(targetId, element) {
-            // Hide all pages
             document.querySelectorAll('.page-content').forEach(page => {
                 page.classList.remove('active');
             });
-            // Show target page
             document.getElementById(targetId).classList.add('active');
             
-            // Update Tab Styling
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active');
             });
             element.classList.add('active');
         }
-    </script>
 
+        document.addEventListener('DOMContentLoaded', () => {
+            // Height Calculator Logic
+            const heightCalc = document.getElementById('heightCalculator');
+            if (heightCalc) {
+                heightCalc.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const t = parseFloat(document.getElementById('hangTime').value);
+                    if (!isNaN(t)) {
+                        // Formula: y = 1/2 * g * (t/2)^2
+                        // t/2 is time to peak
+                        const timeToPeak = t / 2;
+                        const gravity = 9.8;
+                        const height = 0.5 * gravity * Math.pow(timeToPeak, 2);
+                        document.getElementById('calculatedHeight').value = height.toFixed(2);
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
