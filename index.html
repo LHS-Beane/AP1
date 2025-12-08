@@ -9,6 +9,7 @@
             --primary: #0077da; /* College Board Blue-ish */
             --secondary: #004d80;
             --accent: #ffcc00;
+            --engineering: #e67e22; /* Orange for projects distinction */
             --light: #f4f4f4;
             --dark: #333;
             --white: #fff;
@@ -193,6 +194,65 @@
             color: var(--secondary);
         }
 
+        /* --- PROJECTS BANNER SECTION --- */
+        .projects-banner {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 60px 20px;
+            margin-top: 60px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .projects-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .projects-banner h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .project-icons {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .p-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+        }
+
+        .p-icon span {
+            font-size: 2rem;
+        }
+
+        .project-btn {
+            background-color: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .project-btn:hover {
+            background-color: var(--accent);
+            color: var(--dark);
+        }
+
+
         /* --- Footer --- */
         footer {
             background-color: var(--dark);
@@ -205,7 +265,8 @@
         /* --- Responsive Tweaks --- */
         @media (max-width: 768px) {
             header h1 { font-size: 2.5rem; }
-            .nav-links { display: none; } /* Mobile menu implementation usually goes here */
+            .nav-links { display: none; }
+            .project-icons { gap: 20px; }
         }
     </style>
 </head>
@@ -230,6 +291,9 @@
                     <a href="unit8.html">Unit 8: Fluids</a>
                 </div>
             </li>
+            
+            <li><a href="/AP1/projects/" style="color: var(--accent);">Projects</a></li>
+            
             <li><a href="#about">About</a></li>
         </ul>
     </nav>
@@ -307,6 +371,24 @@
                 <h3>Unit 8: Fluids</h3>
                 <p><strong>10–15% of Exam Score</strong></p>
                 <p>The newest addition. Cover density, pressure, buoyancy, and fluid dynamics.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="projects-banner">
+            <div class="projects-content">
+                <h2>Student Engineering & Design</h2>
+                <p>Physics isn't just theory. Apply your knowledge to real-world challenges. Design, build, test, and compete.</p>
+                
+                <div class="project-icons">
+                    <div class="p-icon"><span>🚀</span> Water Rockets</div>
+                    <div class="p-icon"><span>🏎️</span> Mousetrap Cars</div>
+                    <div class="p-icon"><span>🥚</span> Egg Drop</div>
+                    <div class="p-icon"><span>⚖️</span> Mobiles</div>
+                </div>
+
+                <a href="/AP1/projects/" class="project-btn">View Projects Hub</a>
             </div>
         </div>
     </section>
