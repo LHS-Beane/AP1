@@ -20,7 +20,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background-color: var(--light); color: var(--dark); line-height: 1.6; }
 
-        /* Navigation (Consistent with Home) */
+        /* Navigation */
         nav {
             background-color: var(--secondary);
             color: var(--white);
@@ -111,31 +111,6 @@
             margin-bottom: 40px;
         }
         
-        /* Water Rocket Special Feature */
-        .rocket-feature {
-            background: linear-gradient(135deg, #0077da 0%, #005fa3 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 8px;
-            margin-top: 30px;
-        }
-        .rocket-feature h3 { color: var(--accent); margin-bottom: 15px; }
-        .rocket-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .rocket-text { flex: 2; min-width: 300px; }
-        .rocket-data { 
-            flex: 1; 
-            background: rgba(255,255,255,0.1); 
-            padding: 20px; 
-            border-radius: 8px;
-            min-width: 250px;
-        }
-        .rocket-data ul { list-style: none; }
-        .rocket-data li { margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; }
-
         /* Accordion for Lab Procedures */
         details {
             background-color: #f1f1f1;
@@ -146,11 +121,36 @@
         summary { cursor: pointer; font-weight: bold; color: var(--secondary); outline: none; }
         .details-content { padding: 15px; background: white; margin-top: 10px; border-radius: 4px; }
 
+        /* Projects Link Styling */
+        .projects-link-card {
+            background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: var(--shadow);
+        }
+        .projects-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 25px;
+            background-color: var(--accent);
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        .projects-btn:hover {
+            transform: scale(1.05);
+            background-color: #e6b800;
+        }
+
         footer { text-align: center; padding: 20px; color: #777; font-size: 0.9rem; margin-top: 40px; }
 
         @media (max-width: 768px) {
             .nav-links { display: none; }
-            .rocket-content { flex-direction: column; }
         }
     </style>
 </head>
@@ -241,32 +241,10 @@
                 </div>
             </details>
 
-            <div class="rocket-feature" id="water-rocket">
-                <h3>🚀 Featured Project: Water Rocket Launch</h3>
-                <div class="rocket-content">
-                    <div class="rocket-text">
-                        <p><strong>Overview:</strong> Design and launch a water bottle rocket to analyze 2D projectile motion. This project applies kinematics to calculate initial velocity and maximum height.</p>
-                        <br>
-                        <h4>Physics Connections:</h4>
-                        <ul style="margin-left: 20px; margin-bottom: 20px;">
-                            <li><strong>Launch Angle ($\theta$):</strong> Optimal angle for range vs. height.</li>
-                            <li><strong>Time of Flight ($t$):</strong> Used to calculate vertical velocity component.</li>
-                            <li><strong>Independent Motion:</strong> Analyze vertical ($y$) and horizontal ($x$) components separately.</li>
-                        </ul>
-                        
-                        <a href="https://www.nasa.gov/stem-ed-resources/water-rockets.html" target="_blank" style="color: var(--accent); font-weight: bold;">View NASA Construction Guide &rarr;</a>
-                    </div>
-
-                    <div class="rocket-data">
-                        <h4>Calculations Required</h4>
-                        <ul>
-                            <li><strong>Total Time ($t_{total}$):</strong> Measure from launch to land.</li>
-                            <li><strong>Time to Peak ($t_{up}$):</strong> $t_{total} / 2$ (assuming flat ground).</li>
-                            <li><strong>Initial Vertical Velocity ($v_{iy}$):</strong><br> Use $v_y = v_{iy} + gt$ <br> (at peak $v_y=0$, so $v_{iy} = g \cdot t_{up}$).</li>
-                            <li><strong>Max Height ($\Delta y$):</strong><br> $\Delta y = v_{iy}t_{up} + \frac{1}{2}gt_{up}^2$</li>
-                        </ul>
-                    </div>
-                </div>
+            <div class="projects-link-card">
+                <h3>Engineering & Design Projects</h3>
+                <p>Access the full repository of unit projects, including the <strong>Mousetrap Car</strong> challenge.</p>
+                <a href="/AP1/projects/" class="projects-btn">View Projects Folder</a>
             </div>
 
         </div>
