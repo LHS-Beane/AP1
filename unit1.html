@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unit 1: Kinematics | AP Physics 1</title>
     
+    <!-- MathJax -->
     <script>
     window.MathJax = {
       tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']] 
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
       }
     };
     </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <style>
         :root {
@@ -44,9 +45,9 @@
         .nav-links a { color: var(--white); text-decoration: none; font-weight: 500; transition: color 0.3s; }
         .nav-links a:hover { color: var(--accent); }
 
-        /* Header */
         header {
-            background: linear-gradient(rgba(0, 77, 128, 0.9), rgba(0, 77, 128, 0.8)), url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background: linear-gradient(rgba(0, 77, 128, 0.9), rgba(0, 77, 128, 0.8)),
+                        url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1950&q=80');
             background-size: cover;
             background-position: center;
             color: var(--white);
@@ -66,7 +67,7 @@
             padding-bottom: 5px;
         }
 
-        /* Concepts Grid with Images */
+        /* Topics Grid */
         .topics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -79,15 +80,220 @@
             box-shadow: var(--shadow);
             overflow: hidden;
         }
-        .topic-content { padding: 20px; }
         .topic-img {
             width: 100%;
             height: 180px;
             object-fit: cover;
-            background-color: #eee;
             border-bottom: 3px solid var(--primary);
         }
-        .topic-item strong { color: var(--primary); font-size: 1.1rem; display: block; margin-bottom: 8px; }
+        .topic-content { padding: 20px; }
+        .topic-content strong { color: var(--primary); font-size: 1.1rem; display: block; margin-bottom: 8px; }
+
+        /* Formula card remains below (in part 2) */
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">AP Physics 1</div>
+    <ul class="nav-links">
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="#">Syllabus</a></li>
+        <li><a href="#formulas">Formulas</a></li>
+        <li><a href="#labs">Labs</a></li>
+    </ul>
+</nav>
+
+<header>
+    <h1>Unit 1: Kinematics</h1>
+    <p>Describing motion in one and two dimensions using multiple representations: graphs, vectors, diagrams, and mathematical models.</p>
+</header>
+
+<div class="container">
+
+    <h2 class="section-title">AP Physics 1 Alignment</h2>
+    <p><strong>Big Ideas:</strong> Systems, Force Interactions, Change, Conservation</p>
+    <p><strong>Science Practices:</strong> Representations, Mathematical Routines, Argumentation, Data Analysis, Experimental Methods</p>
+
+    <h2 class="section-title">Core Representations of Motion</h2>
+
+    <div class="topics-grid">
+
+        <!-- 1. Position-Time -->
+        <div class="topic-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Starry_Night_at_La_Silla.jpg/640px-Starry_Night_at_La_Silla.jpg"
+                 class="topic-img" style="object-position: bottom;">
+            <div class="topic-content">
+                <strong>1. Position vs Time ($x$–$t$ graphs)</strong>
+                <p>Shows where an object is at each moment in time.</p>
+                <ul style="margin-left:20px;">
+                    <li>Slope = velocity</li>
+                    <li>Curved graph = acceleration</li>
+                    <li>Steeper line = faster motion</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 2. Velocity-Time -->
+        <div class="topic-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Velocity-Time_graph.png/640px-Velocity-Time_graph.png"
+                 class="topic-img">
+            <div class="topic-content">
+                <strong>2. Velocity vs Time ($v$–$t$ graphs)</strong>
+                <p>Critical for AP FRQs.</p>
+                <ul style="margin-left:20px;">
+                    <li>Slope = acceleration</li>
+                    <li>Area under curve = displacement</li>
+                    <li>Constant acceleration → straight line</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 3. Motion Maps -->
+        <div class="topic-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Motion_map_example.png/640px-Motion_map_example.png"
+                 class="topic-img">
+            <div class="topic-content">
+                <strong>3. Motion Maps</strong>
+                <p>Dots represent position at equal time intervals.</p>
+                <ul style="margin-left:20px;">
+                    <li>Equal spacing → constant velocity</li>
+                    <li>Increasing spacing → speeding up</li>
+                    <li>Decreasing spacing → slowing down</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 4. Vector Components -->
+        <div class="topic-item">
+            <div class="topic-img" style="background:#ddd; display:flex; justify-content:center; align-items:center;">
+                (Vector Diagram)
+            </div>
+            <div class="topic-content">
+                <strong>4. Vectors & Components</strong>
+                <p>All motion in 2D breaks into independent x and y components.</p>
+                <p>$v_x = v\cos\theta$ &nbsp; | &nbsp; $v_y = v\sin\theta$</p>
+            </div>
+        </div>
+
+        <!-- 5. Projectile Motion -->
+        <div class="topic-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Projectile_motion_angles.svg/640px-Projectile_motion_angles.svg.png"
+                 class="topic-img">
+            <div class="topic-content">
+                <strong>5. Projectile Motion (AP Essential)</strong>
+                <p>Horizontal motion is constant velocity. Vertical motion is constant acceleration ($-g$).</p>
+                <p><strong>Key AP reasoning:</strong></p>
+                <ul style="margin-left:20px;">
+                    <li>Time of flight determined by <em>vertical</em> motion</li>
+                    <li>Range depends on both components</li>
+                    <li>Peak occurs when $v_y = 0$</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 6. Relative Motion -->
+        <div class="topic-item">
+            <div class="topic-img" style="background:#ccc; display:flex; justify-content:center; align-items:center;">
+                (Reference Frames)
+            </div>
+            <div class="topic-content">
+                <strong>6. Relative Motion & Reference Frames</strong>
+                <p>AP expects qualitative reasoning with reference frames.</p>
+                <p>Example:<br>$\vec{v}_{A/B} = \vec{v}_{A/E} - \vec{v}_{B/E}$</p>
+            </div>
+        </div>
+
+    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 1: Kinematics | AP Physics 1</title>
+    
+    <!-- MathJax -->
+    <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+    };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --primary: #0077da;
+            --secondary: #004d80;
+            --accent: #ffcc00;
+            --light: #f4f4f4;
+            --dark: #333;
+            --white: #fff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--light); color: var(--dark); line-height: 1.6; }
+
+        /* Navigation */
+        nav {
+            background-color: var(--secondary);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0; z-index: 1000; box-shadow: var(--shadow);
+        }
+        .logo { font-size: 1.5rem; font-weight: bold; letter-spacing: 1px; }
+        .nav-links { list-style: none; display: flex; gap: 20px; }
+        .nav-links a { color: var(--white); text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--accent); }
+
+        header {
+            background: linear-gradient(rgba(0, 77, 128, 0.9), rgba(0, 77, 128, 0.8)),
+                        url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 60px 20px;
+            text-align: center;
+        }
+        header h1 { font-size: 3rem; margin-bottom: 10px; }
+        header p { font-size: 1.2rem; max-width: 800px; margin: 0 auto; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+
+        .section-title {
+            color: var(--secondary);
+            border-bottom: 3px solid var(--accent);
+            display: inline-block;
+            margin-bottom: 20px;
+            padding-bottom: 5px;
+        }
+
+        /* Topics Grid */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .topic-item {
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        .topic-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--primary);
+        }
+        .topic-content { padding: 20px; }
+        .topic-content strong { color: var(--primary); font-size: 1.1rem; display: block; margin-bottom: 8px; }
 
         /* Formula Card */
         .formula-card {
@@ -100,36 +306,92 @@
             overflow-x: auto;
         }
         .formula-row {
-            display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; margin-top: 15px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 15px;
         }
         .formula-item {
-            text-align: center; background: #f9f9f9; padding: 15px; border-radius: 5px; min-width: 220px;
+            text-align: center;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            min-width: 220px;
         }
-        /* Specific Fix for Formula Text */
         .mjx-chtml { font-size: 110% !important; }
 
         /* Labs Section */
         .lab-section {
-            background-color: var(--white); padding: 30px; border-radius: 8px; box-shadow: var(--shadow); margin-bottom: 40px;
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
         }
-        details { background-color: #f1f1f1; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
-        summary { cursor: pointer; font-weight: bold; color: var(--secondary); outline: none; }
-        .details-content { padding: 15px; background: white; margin-top: 10px; border-radius: 4px; }
+        details {
+            background-color: #f1f1f1;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--secondary);
+            outline: none;
+        }
+        .details-content {
+            padding: 15px;
+            background: white;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
 
         /* Projects Link Styling */
         .projects-link-card {
             background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
-            color: white; padding: 30px; border-radius: 8px; text-align: center; margin-top: 30px; box-shadow: var(--shadow);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: var(--shadow);
         }
         .projects-btn {
-            display: inline-block; margin-top: 15px; padding: 12px 25px; background-color: var(--accent); color: var(--dark);
-            text-decoration: none; font-weight: bold; border-radius: 5px; transition: transform 0.2s, background-color 0.2s;
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 25px;
+            background-color: var(--accent);
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: transform 0.2s, background-color 0.2s;
         }
-        .projects-btn:hover { transform: scale(1.05); background-color: #e6b800; }
+        .projects-btn:hover {
+            transform: scale(1.05);
+            background-color: #e6b800;
+        }
 
-        footer { text-align: center; padding: 20px; color: #777; font-size: 0.9rem; margin-top: 40px; }
+        /* Quick check list styling */
+        .checklist {
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+        .checklist li { margin-bottom: 4px; }
 
-        @media (max-width: 768px) { .nav-links { display: none; } }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+        }
     </style>
 </head>
 <body>
@@ -137,8 +399,8 @@
     <nav>
         <div class="logo">AP Physics 1</div>
         <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="#">Syllabus</a></li>
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="syllabus.pdf" target="_blank">Syllabus</a></li>
             <li><a href="#formulas">Formulas</a></li>
             <li><a href="#labs">Labs</a></li>
         </ul>
@@ -146,108 +408,196 @@
 
     <header>
         <h1>Unit 1: Kinematics</h1>
-        <p>Mastering the description of motion: position, velocity, and acceleration in 1D and 2D space.</p>
+        <p>Describing motion in one and two dimensions using multiple representations: graphs, vectors, diagrams, and mathematical models.</p>
     </header>
 
     <div class="container">
 
-        <h2 class="section-title">Key Visual Concepts</h2>
+        <h2 class="section-title">AP Physics 1 Alignment</h2>
+        <p><strong>Big Ideas:</strong> Systems, Force Interactions, Change, Conservation</p>
+        <p><strong>Science Practices:</strong> Representations (SP1), Mathematical Routines (SP2), Argumentation (SP6), Data Analysis (SP5), Experimental Methods (SP3)</p>
+
+        <h2 class="section-title">Core Representations of Motion</h2>
+
         <div class="topics-grid">
+
+            <!-- 1. Position-Time -->
             <div class="topic-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Starry_Night_at_La_Silla.jpg/640px-Starry_Night_at_La_Silla.jpg" alt="Motion" class="topic-img" style="object-position: bottom;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Starry_Night_at_La_Silla.jpg/640px-Starry_Night_at_La_Silla.jpg"
+                     alt="Position vs Time" class="topic-img" style="object-position: bottom;">
                 <div class="topic-content">
-                    <strong>1. Position vs. Time ($x$ vs $t$)</strong>
-                    <p>The <strong>slope</strong> of this graph represents velocity ($v$).</p>
-                    <ul style="margin-left:20px; font-size:0.9rem; margin-top:5px;">
-                        <li>Straight line = Constant Velocity</li>
-                        <li>Curved line = Acceleration</li>
+                    <strong>1. Position vs Time ($x$–$t$)</strong>
+                    <p>Shows where an object is at each moment.</p>
+                    <ul style="margin-left:20px;">
+                        <li>Slope = velocity</li>
+                        <li>Curved graph → changing velocity (acceleration)</li>
+                        <li>Flat line → object at rest</li>
                     </ul>
                 </div>
             </div>
 
+            <!-- 2. Velocity-Time -->
             <div class="topic-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Projectile_motion_angles.svg/640px-Projectile_motion_angles.svg.png" alt="Projectile Motion Trajectories" class="topic-img">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Velocity-Time_graph.png/640px-Velocity-Time_graph.png"
+                     alt="Velocity vs Time graph" class="topic-img">
                 <div class="topic-content">
-                    <strong>2. Projectile Motion</strong>
-                    <p>Motion in 2 dimensions is independent.</p>
-                    <ul style="margin-left:20px; font-size:0.9rem; margin-top:5px;">
-                        <li><strong>x-axis:</strong> Constant velocity ($a_x = 0$)</li>
-                        <li><strong>y-axis:</strong> Accelerated by gravity ($a_y = -g$)</li>
+                    <strong>2. Velocity vs Time ($v$–$t$)</strong>
+                    <p>One of the most tested graph types.</p>
+                    <ul style="margin-left:20px;">
+                        <li>Slope = acceleration</li>
+                        <li>Area under curve = displacement</li>
+                        <li>Line below time axis → motion in negative direction</li>
                     </ul>
                 </div>
             </div>
 
+            <!-- 3. Motion Maps -->
             <div class="topic-item">
-                 <div class="topic-img" style="background:#ddd; display:flex; align-items:center; justify-content:center; color:#777;">
-                    (Vector Components Diagram)
+                <div class="topic-img" style="background:#eee; display:flex; align-items:center; justify-content:center; color:#777;">
+                    Motion Map Dots
                 </div>
                 <div class="topic-content">
-                    <strong>3. Vectors & Scalars</strong>
-                    <p>Displacement ($\Delta x$) is a vector; Distance ($d$) is a scalar.</p>
-                    <p>Split vectors into components:</p>
-                    <p>$v_x = v \cos(\theta)$ | $v_y = v \sin(\theta)$</p>
+                    <strong>3. Motion Maps</strong>
+                    <p>Dots show the object's position at equal time intervals.</p>
+                    <ul style="margin-left:20px;">
+                        <li>Equal spacing → constant velocity</li>
+                        <li>Increasing spacing → speeding up</li>
+                        <li>Decreasing spacing → slowing down</li>
+                    </ul>
                 </div>
             </div>
+
+            <!-- 4. Vector Components -->
+            <div class="topic-item">
+                <div class="topic-img" style="background:#ddd; display:flex; align-items:center; justify-content:center;">
+                    Vector Components
+                </div>
+                <div class="topic-content">
+                    <strong>4. Vectors & Components</strong>
+                    <p>Displacement and velocity are vectors. Distance and speed are scalars.</p>
+                    <p>Break a vector into components:</p>
+                    <p>$v_x = v\cos\theta$ &nbsp;&nbsp; $v_y = v\sin\theta$</p>
+                </div>
+            </div>
+
+            <!-- 5. Projectile Motion -->
+            <div class="topic-item">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Projectile_motion_angles.svg/640px-Projectile_motion_angles.svg.png"
+                     alt="Projectile Motion" class="topic-img">
+                <div class="topic-content">
+                    <strong>5. Projectile Motion</strong>
+                    <p>Horizontal and vertical motions are independent.</p>
+                    <ul style="margin-left:20px;">
+                        <li>$a_x = 0$ (no air resistance)</li>
+                        <li>$a_y = -g$ downward</li>
+                        <li>Time of flight controlled by vertical motion</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 6. Reference Frames -->
+            <div class="topic-item">
+                <div class="topic-img" style="background:#ccc; display:flex; align-items:center; justify-content:center;">
+                    Reference Frames
+                </div>
+                <div class="topic-content">
+                    <strong>6. Relative Motion & Reference Frames</strong>
+                    <p>Velocity depends on the observer's frame.</p>
+                    <p>Example relationship:</p>
+                    <p>$\vec{v}_{A/B} = \vec{v}_{A/E} - \vec{v}_{B/E}$</p>
+                </div>
+            </div>
+
         </div>
 
-        <h2 id="formulas" class="section-title">The "Big 3" Kinematic Equations</h2>
+        <h2 id="formulas" class="section-title">Constant-Acceleration Kinematics</h2>
+
         <div class="formula-card">
-            <p><strong>Note:</strong> These are only valid when acceleration ($a$) is <em>constant</em>.</p>
-            
+            <p><strong>These equations only apply when acceleration is constant.</strong></p>
             <div class="formula-row">
                 <div class="formula-item">
-                    <h4>Velocity as a function of time</h4>
-                    $$v_x = v_{x0} + a_x t$$
-                    <p style="font-size:0.85rem; color:#666; margin-top:5px;">Use when missing $\Delta x$</p>
+                    <h4>1. Velocity–Time</h4>
+                    $$v = v_0 + at$$
+                    <p style="font-size:0.85rem; color:#666;">Use when you know acceleration and time.</p>
                 </div>
-                
                 <div class="formula-item">
-                    <h4>Position as a function of time</h4>
-                    $$x = x_0 + v_{x0} t + \frac{1}{2}a_x t^2$$
-                    <p style="font-size:0.85rem; color:#666; margin-top:5px;">Use when missing $v_f$</p>
+                    <h4>2. Position–Time</h4>
+                    $$x = x_0 + v_0 t + \frac{1}{2}at^2$$
+                    <p style="font-size:0.85rem; color:#666;">Use when you know displacement over time.</p>
                 </div>
-                
                 <div class="formula-item">
-                    <h4>Velocity independent of time</h4>
-                    $$v_x^2 = v_{x0}^2 + 2a_x(x - x_0)$$
-                    <p style="font-size:0.85rem; color:#666; margin-top:5px;">Use when missing time ($t$)</p>
+                    <h4>3. Velocity–Position</h4>
+                    $$v^2 = v_0^2 + 2a(x - x_0)$$
+                    <p style="font-size:0.85rem; color:#666;">Use when time is not given.</p>
                 </div>
             </div>
+
+            <h4 style="margin-top:20px;">Quick Check (Self-Quiz):</h4>
+            <ul class="checklist">
+                <li>Can you explain what each symbol means (units + direction)?</li>
+                <li>Can you decide which equation to use based on the givens?</li>
+                <li>Can you sketch a $v$–$t$ graph for an object that starts at rest and speeds up?</li>
+            </ul>
         </div>
 
-        <h2 id="labs" class="section-title">Unit Labs & Investigations</h2>
+        <h2 class="section-title">Example: Car Accelerating from Rest</h2>
+        <p>A car starts from rest and accelerates at $2.0\ \text{m/s}^2$ for $5.0\ \text{s}$.</p>
+        <ul class="checklist">
+            <li>Find the final velocity.</li>
+            <li>Find how far the car travels.</li>
+            <li>Sketch the $v$–$t$ graph and shade the area under the graph. How does this area compare to your displacement?</li>
+        </ul>
+        <p style="font-size:0.9rem; color:#555;"><em>(You can turn this into a worked example or leave it as practice.)</em></p>
+
+        <h2 id="labs" class="section-title">Unit 1 Labs & Investigations</h2>
+
         <div class="lab-section">
-            
+
             <details open>
-                <summary>1. The Buggy Lab (Constant Velocity)</summary>
+                <summary>1. Constant Velocity Buggy Lab</summary>
                 <div class="details-content">
-                    <p><strong>Objective:</strong> Establish the relationship between position and time for an object with zero acceleration.</p>
-                    <p><strong>Data Analysis:</strong></p>
+                    <p><strong>Objective:</strong> Develop a mathematical model for constant velocity motion using experimental data.</p>
+                    <p><strong>Data Collection:</strong> Measure position of the buggy at equal time intervals.</p>
                     <ul>
-                        <li>Plot $x$ (y-axis) vs $t$ (x-axis).</li>
-                        <li>Equation of the line: $x = mt + b$.</li>
-                        <li>Slope ($m$) corresponds to velocity ($v$).</li>
-                        <li>Y-intercept ($b$) corresponds to initial position ($x_0$).</li>
+                        <li>Plot $x$ (vertical) vs. $t$ (horizontal).</li>
+                        <li>Fit a best-fit line: $x = mt + b$.</li>
+                        <li>Interpret slope ($m$) as velocity and intercept ($b$) as initial position.</li>
                     </ul>
+                    <p><strong>CER Prompt:</strong> Write a Claim–Evidence–Reasoning paragraph answering: “Is the buggy truly moving at a constant velocity?”</p>
                 </div>
             </details>
 
             <details>
                 <summary>2. Cart on a Ramp (Uniform Acceleration)</summary>
                 <div class="details-content">
-                    <p><strong>Objective:</strong> Determine the acceleration due to gravity on an incline.</p>
-                    <p><strong>Linearization:</strong></p>
-                    <p>Since $x \propto t^2$, plotting $x$ vs $t$ yields a curve. To linearize:</p>
+                    <p><strong>Objective:</strong> Use motion data to determine acceleration down an incline and connect to kinematic equations.</p>
                     <ul>
-                        <li>Plot $x$ on y-axis and $t^2$ on x-axis.</li>
-                        <li>Slope $= \frac{1}{2}a$. Therefore, $a = 2 \times \text{slope}$.</li>
+                        <li>Measure position at different times as the cart rolls down.</li>
+                        <li>Plot $x$ vs. $t$ (curve expected).</li>
+                        <li>Linearize by plotting $x$ vs. $t^2$.</li>
+                        <li>Slope of $x$ vs. $t^2$ graph $\approx \frac{1}{2}a$.</li>
                     </ul>
+                    <p><strong>Extensions:</strong> Compare $a$ from graph to $a$ predicted from $a = g\sin\theta$.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>3. Projectile Motion Video / Tracker Lab</summary>
+                <div class="details-content">
+                    <p><strong>Objective:</strong> Analyze a 2D projectile’s motion and show independence of horizontal and vertical components.</p>
+                    <ul>
+                        <li>Use video analysis or frame-by-frame screenshots of a launched projectile.</li>
+                        <li>Create $x$ vs. $t$ and $y$ vs. $t$ graphs.</li>
+                        <li>Show that horizontal velocity is (approximately) constant.</li>
+                        <li>Show that vertical motion has constant acceleration downward.</li>
+                    </ul>
+                    <p><strong>CER Prompt:</strong> “Does the experimental data support the model that horizontal and vertical motions are independent?”</p>
                 </div>
             </details>
 
             <div class="projects-link-card">
-                <h3>Engineering & Design Projects</h3>
-                <p>Apply your kinematic knowledge in the <strong>Mousetrap Car</strong> and other challenges.</p>
+                <h3>Apply It: Engineering & Design</h3>
+                <p>Use kinematics to predict and test performance in the <strong>Mousetrap Car</strong> and other design challenges.</p>
                 <a href="/AP1/projects/" class="projects-btn">View Projects Folder</a>
             </div>
 
@@ -256,8 +606,9 @@
     </div>
 
     <footer>
-        <p>AP Physics 1 Unit 1 Module | Designed for Student Success</p>
+        <p>AP Physics 1 — Unit 1: Kinematics | Designed for Student Success</p>
     </footer>
 
 </body>
 </html>
+
