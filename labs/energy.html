@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AP Physics 1 Lab: Conservation of Mechanical Energy — PhET Skate Park</title>
-    
+
     <!-- MathJax -->
     <script>
     window.MathJax = {
       tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
     };
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <style>
         :root {
@@ -24,34 +24,22 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--light);
             color: var(--dark);
             max-width: 900px;
             margin: 0 auto;
             padding: 0;
-            background-color: var(--light);
+            line-height: 1.6;
         }
+
 @media print {
-    /* Hide simulation */
-    .sim-container,
-    .sim-container iframe {
-        display: none !important;
-        visibility: hidden !important;
-    }
-
-    /* Optional: hide buttons */
-    .btn-print {
-        display: none !important;
-    }
-
-    /* Remove extra whitespace left behind */
-    body {
-        margin-top: 0 !important;
-    }
+    .sim-container, .sim-container iframe { display: none !important; }
+    .btn-print { display: none !important; }
+    body { margin-top: 0 !important; }
 }
 
-        /* Minimalist Header */
+        /* Header */
         .header-bar {
             width: 100%;
             background: var(--secondary);
@@ -68,275 +56,353 @@
             margin-left: 15px;
             font-weight: 500;
         }
-        .header-bar a:hover {
-            color: var(--accent);
-        }
+        .header-bar a:hover { color: var(--accent); }
 
+        /* Container */
         .container {
-            background-color: white;
+            background: var(--white);
             margin-top: 20px;
             padding: 40px;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
+        h1 { text-align:center; color:#2c3e50; }
         h2 {
-            color: #2980b9;
-            border-bottom: 2px solid #2980b9;
-            padding-bottom: 10px;
-            margin-top: 40px;
-            font-size: 1.3rem;
+            color:#2980b9;
+            border-bottom:2px solid #2980b9;
+            padding-bottom:6px;
+            margin-top:40px;
+            font-size:1.35rem;
         }
-        h3 {
-            color: #444;
-            margin-top: 25px;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
+        h3 { margin-top:25px; color:#444; font-size:1.1rem; }
 
-        .header-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            margin-top: 30px;
-        }
-        .header-field {
-            width: 45%;
-        }
+        .header-info { display:flex; justify-content:space-between; margin:25px 0; }
+        .header-field { width:45%; }
 
-        /* PhET responsive container */
-        .sim-container {
-            width: 100%;
-            margin: 20px auto;
-            text-align: center;
+        /* TEXT INPUTS */
+        textarea, input[type="text"], input[type="number"] {
+            width:100%; padding:8px; border-radius:4px;
+            border:1px solid #ccc; background:#fafafa;
+            margin-top:4px; margin-bottom:15px;
         }
+        textarea { resize:vertical; height:100px; }
+
+        .inline-input { width:120px; display:inline-block; }
+
+        /* SIM */
         .sim-container iframe {
-            width: 100%;
-            height: 500px;
-            border: none;
-            border-radius: 6px;
+            width:100%; height:500px; border:none;
+            border-radius:6px;
         }
 
         .instructions-box {
-            background-color: #e8f4fc;
-            border-left: 5px solid #2980b9;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-
-        input[type="text"], input[type="number"], textarea {
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 8px;
-            background-color: #fafafa;
-            width: 100%;
-            margin-top: 5px;
-            margin-bottom: 15px;
-        }
-        textarea {
-            resize: vertical;
-            height: 100px;
-        }
-
-        .inline-input {
-            width: 120px;
-            display: inline-block;
-            margin-left: 5px;
+            background:#e8f4fc;
+            border-left:5px solid #2980b9;
+            padding:15px;
+            margin:20px 0;
+            border-radius:4px;
         }
 
         /* Tables */
         .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            margin-bottom: 20px;
+            border-collapse:collapse;
+            width:100%; margin:15px 0 25px 0;
         }
         .data-table th, .data-table td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            vertical-align: top;
+            border:1px solid #ccc; padding:10px; text-align:center;
         }
-        .data-table th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
+        .data-table th { background:#f2f2f2; font-weight:bold; }
 
         .btn-print {
-            background-color: #34495e;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 16px;
-            display: block;
-            margin: 40px auto;
+            background:#34495e; color:white;
+            padding:12px 24px;
+            border:none; border-radius:4px;
+            margin:40px auto; display:block;
+            cursor:pointer; font-size:1.1rem;
         }
+        .btn-print:hover { background:#2c3e50; }
+
+        .activity-box {
+            background:#eef6ff;
+            border-left:4px solid var(--primary);
+            padding:15px; margin:20px 0;
+            border-radius:5px;
+        }
+        .step {
+            margin-bottom:12px;
+            padding-left:10px;
+            border-left:3px solid var(--secondary);
+        }
+
     </style>
 </head>
 
 <body>
 
-<!-- Minimal Header -->
+<!-- Header -->
 <div class="header-bar">
     <div><strong>AP Physics 1</strong></div>
     <div>
         <a href="/AP1/index.html">Home</a>
         <a href="/AP1/labs/">Labs</a>
-        <a style="color: var(--accent); font-weight: 600;">Energy Skate Park</a>
+        <a style="color:var(--accent); font-weight:600;">Energy Skate Park</a>
     </div>
 </div>
 
 <div class="container">
 
-    <h1>AP Physics 1 Lab: Conservation of Mechanical Energy</h1>
-    <p style="text-align:center; font-style:italic;">Using the PhET “Energy Skate Park” Simulation</p>
+<h1>AP Physics 1 Lab: Conservation of Mechanical Energy</h1>
+<p style="text-align:center; font-style:italic;">Using the PhET “Energy Skate Park” Simulation</p>
 
-    <div class="header-info">
-        <div class="header-field">
-            <label><strong>Student Name:</strong></label>
-            <input type="text">
-        </div>
-        <div class="header-field">
-            <label><strong>Date:</strong></label>
-            <input type="text">
-        </div>
-    </div>
-
-    <!-- Embedded PhET Simulation -->
-    <div class="sim-container">
-        <iframe 
-            src="https://phet.colorado.edu/sims/html/energy-skate-park/latest/energy-skate-park_en.html"
-            allowfullscreen>
-        </iframe>
-    </div>
-
-    <div class="instructions-box">
-        <strong>AP Physics 1 Reference Equations:</strong>
-        <ul>
-            <li>$K = \frac{1}{2}mv^2$</li>
-            <li>$U_g = mgh$</li>
-            <li>$E_{\text{mech}} = K + U_g$</li>
-            <li>$\Delta E = W_{\text{ext}}$</li>
-        </ul>
-    </div>
-
-    <!-- PART 1 -->
-    <section>
-        <h2>Part 1 — Defining the System (Systems & Interactions)</h2>
-
-        <p><strong>System A: Skater + Earth</strong></p>
-        <label>Is gravity internal or external? Explain.</label>
-        <textarea></textarea>
-
-        <label>Does total mechanical energy change with friction OFF? Explain using AP system language.</label>
-        <textarea></textarea>
-
-        <p><strong>System B: Skater Only</strong></p>
-        <label>Is gravity internal or external in this system?</label>
-        <textarea></textarea>
-
-        <label>Does “Skater Only” have gravitational potential energy? Why or why not?</label>
-        <textarea></textarea>
-    </section>
-
-    <!-- PART 2 -->
-    <section>
-        <h2>Part 2 — Energy Bar Charts (LOL Diagrams)</h2>
-        <p>Turn <strong>Friction OFF</strong>. Set height to 6 m.</p>
-
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Energy Type</th>
-                    <th>Position A (Top)</th>
-                    <th>+ Work</th>
-                    <th>Position B (Bottom)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Kinetic</td>
-                    <td><input type="number"></td>
-                    <td rowspan="3"><input type="number"><br><small>$W_{\text{ext}}$</small></td>
-                    <td><input type="number"></td>
-                </tr>
-                <tr>
-                    <td>Potential</td>
-                    <td><input type="number"></td>
-                    <td><input type="number"></td>
-                </tr>
-                <tr>
-                    <td>Total Mechanical</td>
-                    <td><input type="number"></td>
-                    <td><input type="number"></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <label>Write the mechanical energy conservation equation for this event:</label>
+<div class="header-info">
+    <div class="header-field">
+        <label><strong>Student Name:</strong></label>
         <input type="text">
-    </section>
-
-    <!-- PART 3 -->
-    <section>
-        <h2>Part 3 — Mathematical Model & Verification</h2>
-
-        <h3>1. Derivation</h3>
-        <label>Derive an equation for $v_f$ at the bottom assuming $v_i = 0$.</label>
-        <textarea placeholder="Hint: mgh = 1/2 mv^2"></textarea>
-
-        <label>Does mass cancel? What does this imply?</label>
-        <textarea></textarea>
-
-        <h3>2. Compare to Simulation Data</h3>
-
-        <div style="background:#f8f8f8; padding:10px;">
-            Mass: <input type="number" class="inline-input"> kg  
-            Height: <input type="number" class="inline-input"> m
-        </div>
-
-        <table class="data-table">
-            <tr>
-                <th>Theory</th>
-                <th>Measured (PhET)</th>
-            </tr>
-            <tr>
-                <td>
-                    $v_f = \sqrt{2gh}$  
-                    <textarea placeholder="Show work"></textarea>
-                    <strong>v (theory):</strong> <input type="number" class="inline-input"> m/s
-                </td>
-                <td>
-                    <strong>v (measured):</strong> <input type="number" class="inline-input"> m/s
-                </td>
-            </tr>
-        </table>
-
-        <label>Percent Error:</label>
+    </div>
+    <div class="header-field">
+        <label><strong>Date:</strong></label>
         <input type="text">
-    </section>
-
-    <!-- PART 4 -->
-    <section>
-        <h2>Part 4 — Friction, Thermal Energy, & The Work-Energy Theorem</h2>
-
-        <label>1. When friction is ON, relate $W_f$ to $\Delta E_{\text{mech}}$:</label>
-        <input type="text">
-
-        <label>2. A student claims “energy is lost.” Write a correct AP-style explanation (5–7 sentences).</label>
-        <textarea style="height:150px;"></textarea>
-    </section>
-
-    <button onclick="window.print()" class="btn-print">Print / Save as PDF</button>
-
+    </div>
 </div>
 
+<!-- Simulation -->
+<div class="sim-container">
+    <iframe src="https://phet.colorado.edu/sims/html/energy-skate-park/latest/energy-skate-park_en.html" allowfullscreen></iframe>
+</div>
+
+<!-- EQUATION BOX -->
+<div class="instructions-box">
+    <strong>AP Physics 1 Reference Equations</strong>
+    <ul>
+        <li>$K = \tfrac{1}{2}mv^2$</li>
+        <li>$U_g = mgh$</li>
+        <li>$E_\text{mech} = K + U_g$</li>
+        <li>$\Delta E = W_\text{ext}$</li>
+    </ul>
+</div>
+
+<!-- 0. WARM-UP -->
+<h2>0 — Warm-Up (Conceptual Activation)</h2>
+
+<p><strong>Before using the simulation, answer:</strong></p>
+
+<label>1. What factors determine how fast the skater moves down a hill?</label>
+<textarea></textarea>
+
+<label>2. If friction is increased, where does the “lost” energy go?</label>
+<textarea></textarea>
+
+<label>3. When does an object have the most gravitational potential energy? Least?</label>
+<textarea></textarea>
+
+<!-- 1. GET SIM READY -->
+<h2>1 — Preparing the Simulation</h2>
+
+<div class="activity-box">
+    <strong>Follow these setup steps:</strong>
+    <div class="step">• Switch to the <em>Bar Graph</em> display.</div>
+    <div class="step">• Turn <strong>Friction OFF</strong>.</div>
+    <div class="step">• Turn on <em>Grid</em> for easier height positioning.</div>
+    <div class="step">• Leave skater mass at default.</div>
+    <div class="step">• Drag the skater to exactly <strong>6.0 m height</strong>.</div>
+</div>
+
+<label>What do you expect to happen to KE and PE when the skater is released?</label>
+<textarea placeholder="Prediction..."></textarea>
+
+<!-- 2. QUALITATIVE -->
+<h2>2 — Predict → Observe → Explain: Energy Transfers</h2>
+
+<h3>A. Measure Energy at Key Positions</h3>
+
+<p>Release the skater, pause at each point, and record the energy values.</p>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Position</th>
+            <th>KE (J)</th>
+            <th>PE (J)</th>
+            <th>Total Energy (J)</th>
+            <th>Observations</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Top (6 m)</td><td><input></td><td><input></td><td><input></td><td><input></td>
+        </tr>
+        <tr>
+            <td>Midway</td><td><input></td><td><input></td><td><input></td><td><input></td>
+        </tr>
+        <tr>
+            <td>Bottom</td><td><input></td><td><input></td><td><input></td><td><input></td>
+        </tr>
+    </tbody>
+</table>
+
+<label><strong>Explain:</strong> What changes? What stays constant? Why?</label>
+<textarea></textarea>
+
+<!-- 3. SYSTEM DEFINITION -->
+<h2>3 — Defining the System (AP Essential Skill)</h2>
+
+<h3>System A: Skater + Earth</h3>
+<label>Is gravity internal or external to this system? Explain.</label>
+<textarea></textarea>
+
+<label>Does mechanical energy stay constant with friction OFF? Explain using system reasoning.</label>
+<textarea></textarea>
+
+<h3>System B: Skater Only</h3>
+<label>Is gravity internal or external now?</label>
+<textarea></textarea>
+
+<label>Does this system have gravitational potential energy? Why or why not?</label>
+<textarea></textarea>
+
+<!-- 4. REPRESENTATIONS -->
+<h2>4 — LOL Diagram + Energy Bar Representation</h2>
+
+<p>Construct a LOL Diagram for the skater starting at 6 m and ending at the bottom.</p>
+
+<label><strong>Initial (L):</strong> Which energies exist?</label>
+<textarea></textarea>
+
+<label><strong>Interaction (O):</strong> What forces act? Which are internal/external?</label>
+<textarea></textarea>
+
+<label><strong>Final (L):</strong> Which energies exist?</label>
+<textarea></textarea>
+
+<p>Now complete the formal energy table:</p>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Energy Type</th>
+            <th>Position A</th>
+            <th>+ Work</th>
+            <th>Position B</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Kinetic</td><td><input></td><td rowspan="3"><input><br><small>$W_{\text{ext}}$</small></td><td><input></td>
+        </tr>
+        <tr>
+            <td>Potential</td><td><input></td><td><input></td>
+        </tr>
+        <tr>
+            <td>Total</td><td><input></td><td><input></td>
+        </tr>
+    </tbody>
+</table>
+
+<label>Write the energy conservation equation for this situation:</label>
+<input type="text">
+
+<!-- 5. MODEL DERIVATION -->
+<h2>5 — Deriving the Energy Model (Symbolic Reasoning)</h2>
+
+<p><strong>Step-by-step guide:</strong></p>
+
+<div class="step">1. Write $E_i = E_f$ for the system.</div>
+<div class="step">2. Substitute $mgh$ for $U_g$ and $\frac12 mv^2$ for $K$.</div>
+<div class="step">3. Assume $v_i = 0$.</div>
+<div class="step">4. Solve for $v_f$.</div>
+
+<label>Show your derivation:</label>
+<textarea></textarea>
+
+<label>Does mass cancel? What physical meaning does this have?</label>
+<textarea></textarea>
+
+<!-- 6. VERIFICATION -->
+<h2>6 — Quantitative Verification with Measurement Tools</h2>
+
+<div class="activity-box">
+    <strong>Instructions:</strong>
+    <div class="step">• Turn on the <em>Speed Meter</em>.</div>
+    <div class="step">• Drag the skater back to 6 m.</div>
+    <div class="step">• Release and record measured $v_f$ at the bottom.</div>
+</div>
+
+<div style="background:#f8f8f8; padding:10px;">
+    Mass: <input class="inline-input"> kg  
+    Height: <input class="inline-input"> m
+</div>
+
+<table class="data-table">
+<tr>
+    <th>Theoretical</th>
+    <th>Measured</th>
+</tr>
+<tr>
+    <td>
+        $v_f = \sqrt{2gh}$  
+        <textarea placeholder="Show work..."></textarea>
+        <strong>Theoretical $v_f$:</strong> <input class="inline-input"> m/s
+    </td>
+    <td>
+        <strong>Measured $v_f$:</strong> <input class="inline-input"> m/s
+    </td>
+</tr>
+</table>
+
+<label>Percent Error:</label>
+<input type="text">
+
+<!-- 7. FRICTION -->
+<h2>7 — Friction, Thermal Energy, & Work</h2>
+
+<h3>A. Predict</h3>
+<label>What will happen to total mechanical energy when friction is turned on?</label>
+<textarea></textarea>
+
+<h3>B. Observe</h3>
+
+<div class="activity-box">
+    <strong>Turn ON friction (medium).</strong><br>
+    Run the simulation and complete the table.
+</div>
+
+<table class="data-table">
+<thead>
+<tr>
+    <th>Position</th><th>KE</th><th>PE</th><th>Thermal</th><th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Top</td><td><input></td><td><input></td><td><input></td><td><input></td></tr>
+<tr><td>Bottom</td><td><input></td><td><input></td><td><input></td><td><input></td></tr>
+</tbody>
+</table>
+
+<h3>C. Explain</h3>
+
+<label>Use the Work-Energy Theorem to explain your results.</label>
+<textarea></textarea>
+
+<label>Write a 5–7 sentence explanation responding to the claim:  
+<strong>“When friction is present, energy is lost.”</strong></label>
+<textarea style="height:150px;"></textarea>
+
+<!-- 8. CER -->
+<h2>8 — CER Reflection (AP Argumentation)</h2>
+
+<label><strong>Claim:</strong> What does this investigation demonstrate about conservation of energy?</label>
+<textarea></textarea>
+
+<label><strong>Evidence:</strong> Use specific numerical results from your tables.</label>
+<textarea></textarea>
+
+<label><strong>Reasoning:</strong> Connect your claim and evidence to conservation laws and system definitions.</label>
+<textarea></textarea>
+
+<button onclick="window.print()" class="btn-print">Print / Save as PDF</button>
+
+</div>
 </body>
 </html>
+
