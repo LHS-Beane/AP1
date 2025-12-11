@@ -5,426 +5,264 @@
   <title>Unit 3 | AP Physics 1 – Work, Energy, and Power</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Tailwind CDN -->
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Inter font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 
   <!-- MathJax -->
   <script>
     window.MathJax = {
-      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$','$$']] },
       svg: { fontCache: 'global' }
     };
   </script>
   <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
   <style>
-    body {
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont,
-        'Segoe UI', sans-serif;
+    body { font-family: 'Inter', sans-serif; }
+
+    .collapsible-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
     }
 
-    /* simple fade-in for answers */
-    .answer-hidden {
-      display: none;
+    .rotate-90 {
+      transform: rotate(90deg);
     }
   </style>
 </head>
+
 <body class="bg-slate-100 text-slate-900">
-  <!-- Page Wrapper -->
-  <div class="min-h-screen">
-    <!-- Header -->
-    <header class="bg-gradient-to-r from-sky-700 via-sky-600 to-slate-900 text-white shadow-lg">
-      <div class="max-w-5xl mx-auto px-4 py-5 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-        <div>
-          <p class="text-xs uppercase tracking-widest text-sky-100/80">AP Physics 1</p>
-          <h1 class="text-2xl md:text-3xl font-bold">Unit 3 – Work, Energy, and Power</h1>
-          <p class="text-sm md:text-base text-sky-100/90 mt-1">
-            Review page – use this to study before quizzes and tests.
-          </p>
-        </div>
-        <div class="text-xs md:text-sm text-right space-y-1">
-          <p><span class="font-semibold">Exam Weight:</span> ~18–23%</p>
-          <p><span class="font-semibold">CED Topics:</span> 3.1–3.5</p>
-        </div>
-      </div>
-    </header>
 
-    <!-- Breadcrumb -->
-    <nav class="bg-slate-900/90 text-slate-100 text-xs">
-      <div class="max-w-5xl mx-auto px-4 py-2 flex flex-wrap gap-1 items-center">
-        <a href="/AP/index.html" class="hover:underline">Home</a>
-        <span class="mx-1">/</span>
-        <span class="font-semibold">Unit 3 – Work &amp; Energy</span>
-      </div>
-    </nav>
+<header class="bg-gradient-to-r from-sky-700 via-sky-600 to-slate-900 text-white shadow-lg">
+  <div class="max-w-4xl mx-auto px-4 py-6">
+    <h1 class="text-3xl font-bold">AP Physics 1 – Unit 3 Review</h1>
+    <p class="text-sky-100 mt-1">Work, Energy, and Power (CED Topics 3.1–3.5)</p>
+  </div>
+</header>
 
-    <!-- Main Content -->
-    <main class="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-8">
-      <!-- Overview -->
-      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
-        <h2 class="text-xl md:text-2xl font-semibold mb-3">1. Big Picture</h2>
-        <p class="text-sm md:text-base mb-3">
-          In Unit 3, we switch from “forces cause acceleration” to “energy explains what’s possible.”
-          You should be able to:
-        </p>
-        <ul class="list-disc list-inside text-sm md:text-base space-y-1">
-          <li>Use <span class="font-semibold">kinetic, potential, and thermal energy</span> to analyze a system.</li>
-          <li>Connect <span class="font-semibold">work</span> to changes in energy and to the <span class="font-semibold">area under a force–displacement graph</span>.</li>
-          <li>Apply <span class="font-semibold">conservation of energy</span> to explain motion without doing full-blown Newton’s law calculations.</li>
-          <li>Explain real situations (ramps, springs, roller coasters, people climbing stairs) in terms of energy transfers.</li>
-          <li>Compute and compare <span class="font-semibold">power</span> as the rate of doing work or the rate of energy transfer.</li>
-        </ul>
-        <p class="mt-3 text-sm italic text-slate-600">
-          Reminder: Always start by defining the <span class="font-semibold">system</span> and listing energy
-          <span class="font-semibold">stores</span> (kinetic, gravitational, elastic, etc.) and
-          <span class="font-semibold">transfers</span> (work, heating).
-        </p>
-      </section>
+<main class="max-w-4xl mx-auto px-4 py-6 space-y-6">
 
-      <!-- 3.1 Translational Kinetic Energy -->
-      <section id="kinetic" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
-        <h2 class="text-xl md:text-2xl font-semibold mb-2">2. Translational Kinetic Energy (3.1)</h2>
-        <p class="text-sm md:text-base mb-3">
-          Kinetic energy is the energy of motion of the center of mass of an object or system.
-        </p>
+  <!-- Utility: Collapsible Section Component -->
+  <!-- Each section follows same structure -->
+  <!-- ====================================== -->
 
-        <div class="grid md:grid-cols-2 gap-4">
-          <!-- Key Ideas -->
-          <div class="space-y-2">
-            <h3 class="text-lg font-semibold">Key Ideas</h3>
-            <ul class="list-disc list-inside text-sm md:text-base space-y-1">
-              <li>Translational kinetic energy (for straight-line motion) is
-                $$K = \tfrac{1}{2}mv^2.$$
-              </li>
-              <li>$m$ is mass; $v$ is <span class="font-semibold">speed</span> (not velocity vector).</li>
-              <li>Doubling speed $\Rightarrow$ kinetic energy becomes <span class="font-semibold">4 times bigger</span>.</li>
-              <li>Kinetic energy is a <span class="font-semibold">scalar</span> (no direction).</li>
-            </ul>
-          </div>
+  <!-- Section Template -->
+  <!-- <div class="bg-white border rounded-xl shadow-sm">
+        <button class="collapsible-btn ...">...</button>
+        <div class="collapsible-content ...">...</div>
+       </div>
+  -->
 
-          <!-- Common Mistakes -->
-          <div class="space-y-2">
-            <h3 class="text-lg font-semibold">Common Mistakes</h3>
-            <ul class="list-disc list-inside text-sm md:text-base space-y-1">
-              <li>Thinking “double speed → double $K$.” Remember $K \propto v^2$, not $v$.</li>
-              <li>Forgetting that <span class="font-semibold">all kinetic energy is $0$ when an object is momentarily at rest</span>, even if it’s about to move.</li>
-              <li>Mixing up speed and velocity. A negative velocity still gives a positive $K$.</li>
-            </ul>
-          </div>
-        </div>
+  <!-- 1. Big Picture -->
+  <div class="bg-white border border-slate-200 rounded-xl shadow-sm">
+    <button class="w-full flex justify-between items-center px-4 py-3 text-left text-lg font-semibold collapsible-btn">
+      1. Big Picture Overview
+      <span class="transition-transform chevron">▶</span>
+    </button>
 
-        <!-- Quick Check -->
-        <div class="mt-4 border-t border-slate-200 pt-4">
-          <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-2">Quick Check</h3>
-          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 md:p-4 text-sm md:text-base">
-            <p class="font-medium">
-              A car increases its speed from 10 m/s to 20 m/s. By what factor does its kinetic energy change?
-            </p>
-            <button
-              class="mt-2 inline-flex items-center px-3 py-1.5 rounded-lg border border-sky-600 text-sky-700 text-xs md:text-sm font-semibold hover:bg-sky-50 show-answer-btn"
-              data-target="ke-factor-answer"
-            >
-              Show Answer
-            </button>
-            <div id="ke-factor-answer" class="answer-hidden mt-2 text-sm md:text-base">
-              <span class="font-semibold">Answer:</span> The speed doubles, so $v^2$ becomes 4 times larger.
-              Kinetic energy increases by a factor of <span class="font-semibold">4</span>.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 3.2 Work -->
-      <section id="work" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
-        <h2 class="text-xl md:text-2xl font-semibold mb-2">3. Work (3.2)</h2>
-        <p class="text-sm md:text-base mb-3">
-          Work is a way that energy gets transferred into or out of a system when a force acts through a displacement.
-        </p>
-
-        <div class="grid md:grid-cols-2 gap-4">
-          <!-- Definitions -->
-          <div class="space-y-2">
-            <h3 class="text-lg font-semibold">Definitions & Equations</h3>
-            <ul class="list-disc list-inside text-sm md:text-base space-y-1">
-              <li>
-                For a constant force in 1D:
-                $$W = Fd \cos\theta,$$
-                where $\theta$ is the angle between the force and displacement.
-              </li>
-              <li>
-                For a varying force along $x$:
-                $$W = \text{area under the } F\text{ vs }x\text{ graph}.$$
-              </li>
-              <li>
-                If work done on a system is positive, it gains energy; if work done by a system is positive,
-                it loses energy.
-              </li>
-            </ul>
-          </div>
-
-          <!-- Signs & Interpretation -->
-          <div class="space-y-2">
-            <h3 class="text-lg font-semibold">Interpreting Sign</h3>
-            <ul class="list-disc list-inside text-sm md:text-base space-y-1">
-              <li>$W &gt; 0$: force component is in the <span class="font-semibold">same direction</span> as motion (speeding up or energy increase).</li>
-              <li>$W &lt; 0$: force component is <span class="font-semibold">opposite</span> motion (slowing down or energy removed).</li>
-              <li>If force is perpendicular to motion ($\theta = 90^\circ$), then $W = 0$.</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Graph Quick Check -->
-        <div class="mt-4 border-t border-slate-200 pt-4">
-          <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-2">Quick Check – Graph</h3>
-          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 md:p-4 text-sm md:text-base space-y-2">
-            <p>
-              A block is pulled along a rough surface. The horizontal pulling force increases linearly
-              from 0 N to 10 N as the block moves from $x = 0$ m to $x = 2$ m.
-            </p>
-            <p class="font-medium">
-              What is the work done by the pulling force on the block over this interval?
-            </p>
-            <button
-              class="mt-1 inline-flex items-center px-3 py-1.5 rounded-lg border border-sky-600 text-sky-700 text-xs md:text-sm font-semibold hover:bg-sky-50 show-answer-btn"
-              data-target="work-graph-answer"
-            >
-              Show Answer
-            </button>
-            <div id="work-graph-answer" class="answer-hidden mt-2">
-              Think of a triangle under the $F$ vs $x$ graph.<br />
-              Base = 2 m, height = 10 N, so
-              $$W = \tfrac{1}{2} \cdot (2\ \text{m}) \cdot (10\ \text{N}) = 10\ \text{J}.$$
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 3.3 Potential Energy -->
-      <section id="potential" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
-        <h2 class="text-xl md:text-2xl font-semibold mb-2">4. Potential Energy (3.3)</h2>
-        <p class="text-sm md:text-base mb-3">
-          Potential energy is stored in interactions (like gravity or springs) and can be converted into kinetic or other forms.
-        </p>
-
-        <div class="grid md:grid-cols-2 gap-4">
-          <!-- Gravitational -->
-          <div class="space-y-2">
-            <h3 class="text-lg font-semibold">Gravitational Potential Energy</h3>
-            <ul class="list-disc list-inside text-sm md:text-base space-y-1">
-              <li>Near Earth’s surface:
-                $$U_g = mgh,$$
-                where $h$ is vertical height relative to a chosen zero level.
-              </li>
-              <li>The zero of $U_g$ is chosen for convenience and does not affect physics as long as you’re consistent.</li>
-              <li>Raising an object increases $U_g$; lowering it decreases $U_g$.</li>
-            </ul>
-          </div>
-
-          <!-- Spring -->
-          <div class="space-y-2">
-            <h3 class="text-lg font-semibold">Elastic Potential Energy</h3>
-            <ul class="list-disc list-inside text-sm md:text-base space-y-1">
-              <li>For an ideal spring:
-                $$U_s = \tfrac{1}{2}kx^2,$$
-                where $x$ is stretch/compression from equilibrium.</li>
-              <li>Graph of $U_s$ vs $x$ is a parabola; the slope gives the spring force: $F = -kx$.</li>
-              <li>More stretch/compression $\Rightarrow$ rapidly increasing stored energy.</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Quick Check -->
-        <div class="mt-4 border-t border-slate-200 pt-4">
-          <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-2">Quick Check – Gravitational PE</h3>
-          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 md:p-4 text-sm md:text-base">
-            <p class="font-medium">
-              A 2.0 kg object is lifted from a table (chosen as $h = 0$) to a shelf 1.5 m above the table.
-              How much gravitational potential energy does it gain?
-            </p>
-            <button
-              class="mt-2 inline-flex items-center px-3 py-1.5 rounded-lg border border-sky-600 text-sky-700 text-xs md:text-sm font-semibold hover:bg-sky-50 show-answer-btn"
-              data-target="ug-answer"
-            >
-              Show Answer
-            </button>
-            <div id="ug-answer" class="answer-hidden mt-2">
-              $$\Delta U_g = mgh = (2.0\ \text{kg})(9.8\ \text{m/s}^2)(1.5\ \text{m})
-              \approx 29\ \text{J}.$$
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 3.4 Conservation of Energy -->
-      <section id="conservation" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
-        <h2 class="text-xl md:text-2xl font-semibold mb-2">5. Conservation of Energy (3.4)</h2>
-        <p class="text-sm md:text-base mb-3">
-          When only conservative forces (gravity, ideal springs) do work, the total mechanical energy of a system is constant.
-        </p>
-
-        <div class="grid md:grid-cols-2 gap-4">
-          <!-- Equation + Bars -->
-          <div class="space-y-2">
-            <h3 class="text-lg font-semibold">Energy Equation</h3>
-            <p class="text-sm md:text-base">
-              For a system with gravitational and elastic potential energies:
-            </p>
-            <p class="text-sm md:text-base">
-              $$K_i + U_{g,i} + U_{s,i} = K_f + U_{g,f} + U_{s,f}$$
-            </p>
-            <p class="text-sm md:text-base">
-              If nonconservative work (like friction) is present:
-              $$K_i + U_i + W_\text{nc} = K_f + U_f.$$
-            </p>
-            <p class="text-sm md:text-base">
-              <span class="font-semibold">$W_\text{nc}$</span> is negative if nonconservative forces remove mechanical energy (like friction).
-            </p>
-          </div>
-
-          <!-- Conceptual -->
-          <div class="space-y-2">
-            <h3 class="text-lg font-semibold">Conceptual Rules</h3>
-            <ul class="list-disc list-inside text-sm md:text-base space-y-1">
-              <li>Energy cannot be created or destroyed, only transformed.</li>
-              <li>Mechanical energy is <span class="font-semibold">conserved</span> only when nonconservative work is zero.</li>
-              <li>Friction doesn’t “destroy” energy; it converts mechanical energy into thermal energy.</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Roller Coaster Quick Check -->
-        <div class="mt-4 border-t border-slate-200 pt-4">
-          <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-2">Quick Check – Energy Conservation</h3>
-          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 md:p-4 text-sm md:text-base space-y-2">
-            <p>
-              A frictionless roller coaster car of mass 500 kg starts from rest at the top of a hill,
-              20 m above the lowest point of the track. What is its speed at the bottom?
-            </p>
-            <button
-              class="mt-1 inline-flex items-center px-3 py-1.5 rounded-lg border border-sky-600 text-sky-700 text-xs md:text-sm font-semibold hover:bg-sky-50 show-answer-btn"
-              data-target="coaster-answer"
-            >
-              Show Answer
-            </button>
-            <div id="coaster-answer" class="answer-hidden mt-2">
-              Energy conservation:
-              $$K_i + U_{g,i} = K_f + U_{g,f}$$
-              $$0 + mgh = \tfrac{1}{2}mv^2 + 0$$
-              $$gh = \tfrac{1}{2}v^2 \Rightarrow v = \sqrt{2gh}
-                = \sqrt{2(9.8)(20)} \approx 20\ \text{m/s}.$$
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 3.5 Power -->
-      <section id="power" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
-        <h2 class="text-xl md:text-2xl font-semibold mb-2">6. Power (3.5)</h2>
-        <p class="text-sm md:text-base mb-3">
-          Power is how fast work is done or how fast energy is transferred.
-        </p>
-
-        <div class="grid md:grid-cols-2 gap-4">
-          <!-- Equations -->
-          <div class="space-y-2">
-            <h3 class="text-lg font-semibold">Equations</h3>
-            <ul class="list-disc list-inside text-sm md:text-base space-y-1">
-              <li>Average power:
-                $$P_\text{avg} = \frac{W}{\Delta t} = \frac{\Delta E}{\Delta t}.$$
-              </li>
-              <li>Instantaneous power (constant force, 1D):
-                $$P = F v \cos\theta.$$
-              </li>
-              <li>SI unit: watt (W), where $1\ \text{W} = 1\ \text{J/s}$.</li>
-            </ul>
-          </div>
-
-          <!-- Human power example -->
-          <div class="space-y-2">
-            <h3 class="text-lg font-semibold">Interpretation</h3>
-            <ul class="list-disc list-inside text-sm md:text-base space-y-1">
-              <li>Two people doing the same work: the one who does it faster has more power.</li>
-              <li>At constant speed, higher force or higher speed both increase power.</li>
-              <li>Real devices (motors, humans, pumps) are often limited by power, not just force.</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Stair Climb Quick Check -->
-        <div class="mt-4 border-t border-slate-200 pt-4">
-          <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-2">Quick Check – Stair Climb</h3>
-          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 md:p-4 text-sm md:text-base space-y-2">
-            <p>
-              A 70 kg student runs up a vertical height of 3.0 m in 4.0 s. Estimate the student’s average power output.
-            </p>
-            <button
-              class="mt-1 inline-flex items-center px-3 py-1.5 rounded-lg border border-sky-600 text-sky-700 text-xs md:text-sm font-semibold hover:bg-sky-50 show-answer-btn"
-              data-target="stair-answer"
-            >
-              Show Answer
-            </button>
-            <div id="stair-answer" class="answer-hidden mt-2">
-              First find the work against gravity:
-              $$W = mgh = (70)(9.8)(3.0) \approx 2.1 \times 10^3\ \text{J}.$$
-              Then
-              $$P_\text{avg} = \frac{W}{\Delta t}
-                \approx \frac{2.1 \times 10^3\ \text{J}}{4.0\ \text{s}}
-                \approx 5.3 \times 10^2\ \text{W}.$$
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- End-of-Unit Self-Check -->
-      <section id="self-check" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 mb-6">
-        <h2 class="text-xl md:text-2xl font-semibold mb-2">7. End-of-Unit Self-Check</h2>
-        <p class="text-sm md:text-base mb-3">
-          Use these to decide if you’re ready for a quiz/test on Unit 3.
-        </p>
-        <ol class="list-decimal list-inside text-sm md:text-base space-y-2">
-          <li>Can you explain the difference between:
-            <ul class="list-disc list-inside ml-5">
-              <li>force vs work,</li>
-              <li>energy vs power,</li>
-              <li>gravitational vs elastic potential energy?</li>
-            </ul>
-          </li>
-          <li>Can you read a force–displacement graph and calculate the work from the area?</li>
-          <li>Can you use energy conservation to find speeds at different heights on ramps/roller coasters?</li>
-          <li>Can you decide whether mechanical energy is conserved in a situation and justify your choice?</li>
-          <li>Can you estimate power for everyday tasks (climbing stairs, lifting an object, etc.)?</li>
-        </ol>
-
-        <p class="mt-4 text-xs md:text-sm text-slate-600">
-          If you’re stuck on any of these, go back to the relevant section above and rework the
-          Quick Check problems without looking at the answers first.
-        </p>
-      </section>
-    </main>
+    <div class="collapsible-content px-4 pb-4 text-sm leading-relaxed">
+      <p class="mt-2">Unit 3 shifts the focus from forces to energy. You should be able to:</p>
+      <ul class="list-disc list-inside mt-2 space-y-1">
+        <li>Use kinetic, gravitational, and elastic energy to describe motion.</li>
+        <li>Connect force and displacement to work.</li>
+        <li>Use energy bar charts to represent transfers.</li>
+        <li>Apply energy conservation to solve for speeds, heights, and system behavior.</li>
+        <li>Compute power as the rate of doing work.</li>
+      </ul>
+    </div>
   </div>
 
-  <!-- Simple JS for Show Answer buttons -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const buttons = document.querySelectorAll('.show-answer-btn');
+  <!-- 2. Kinetic Energy -->
+  <div class="bg-white border border-slate-200 rounded-xl shadow-sm">
+    <button class="w-full flex justify-between items-center px-4 py-3 text-lg font-semibold collapsible-btn">
+      2. Translational Kinetic Energy (3.1)
+      <span class="transition-transform chevron">▶</span>
+    </button>
 
-      buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const targetId = btn.getAttribute('data-target');
-          const answerDiv = document.getElementById(targetId);
-          if (!answerDiv) return;
+    <div class="collapsible-content px-4 pb-4 text-sm leading-relaxed">
+      <p class="mt-2">Kinetic energy describes the energy of motion:</p>
 
-          const isHidden = answerDiv.classList.contains('answer-hidden');
-          answerDiv.classList.toggle('answer-hidden', !isHidden);
+      <p class="text-center my-3">$$K = \tfrac12 m v^2$$</p>
 
-          btn.textContent = isHidden ? 'Hide Answer' : 'Show Answer';
-        });
-      });
+      <ul class="list-disc list-inside space-y-1">
+        <li>Depends on mass and <strong>speed</strong> only.</li>
+        <li>If speed doubles → kinetic energy becomes <strong>4× larger</strong>.</li>
+        <li>K is always positive; direction does not matter.</li>
+      </ul>
+
+      <div class="bg-slate-50 p-3 border rounded-xl mt-4">
+        <p class="font-medium">Quick Check</p>
+        <p>A car speeds up from 10 m/s to 20 m/s. By what factor does $K$ increase?</p>
+        <button class="mt-2 px-2 py-1 border rounded answer-btn">Show Answer</button>
+        <div class="answer hidden mt-1">
+          $$K \propto v^2 \Rightarrow (20/10)^2 = 4.$$
+          K increases by <strong>4×</strong>.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Work -->
+  <div class="bg-white border border-slate-200 rounded-xl shadow-sm">
+    <button class="w-full flex justify-between items-center px-4 py-3 text-lg font-semibold collapsible-btn">
+      3. Work (3.2)
+      <span class="transition-transform chevron">▶</span>
+    </button>
+
+    <div class="collapsible-content px-4 pb-4 text-sm leading-relaxed">
+      <p class="mt-2">Work is energy transferred by a force acting through displacement.</p>
+
+      <p class="text-center my-3">$$W = F d \cos\theta$$</p>
+
+      <p class="text-center my-3">
+        $$W = \int F(x)\, dx \quad \text{(area under } F\!-\!x \text{ graph)}$$
+      </p>
+
+      <ul class="list-disc list-inside space-y-1">
+        <li>$W &gt; 0$ → system gains energy.</li>
+        <li>$W &lt; 0$ → system loses energy.</li>
+        <li>Perpendicular force ($\theta=90^\circ$) does no work.</li>
+      </ul>
+
+      <div class="bg-slate-50 p-3 border rounded-xl mt-4">
+        <p class="font-medium">Graph Quick Check</p>
+        <p>Force increases linearly from 0→10 N over 0→2 m. Compute work.</p>
+        <button class="mt-2 px-2 py-1 border rounded answer-btn">Show Answer</button>
+        <div class="answer hidden mt-1">
+          Triangle area: $$W = \tfrac12 (2)(10)=10\text{ J}.$$
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Potential Energy -->
+  <div class="bg-white border border-slate-200 rounded-xl shadow-sm">
+    <button class="w-full flex justify-between items-center px-4 py-3 text-lg font-semibold collapsible-btn">
+      4. Potential Energy (3.3)
+      <span class="transition-transform chevron">▶</span>
+    </button>
+
+    <div class="collapsible-content px-4 pb-4 text-sm leading-relaxed">
+      <h3 class="font-semibold mt-3">Gravitational:</h3>
+
+      <p class="text-center my-3">$$U_g = mgh$$</p>
+
+      <h3 class="font-semibold mt-3">Elastic:</h3>
+
+      <p class="text-center my-3">$$U_s = \tfrac12 k x^2$$</p>
+
+      <ul class="list-disc list-inside space-y-1">
+        <li>Potential energy depends on your choice of zero level.</li>
+        <li>Elastic PE grows rapidly since it depends on $x^2$.</li>
+      </ul>
+
+      <div class="bg-slate-50 p-3 border rounded-xl mt-4">
+        <p class="font-medium">Quick Check</p>
+        <p>How much gravitational energy gained by lifting 2 kg up 1.5 m?</p>
+        <button class="mt-2 px-2 py-1 border rounded answer-btn">Show Answer</button>
+        <div class="answer hidden mt-1">
+          $$\Delta U = mgh = (2)(9.8)(1.5) \approx 29\text{ J}.$$
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Conservation of Energy -->
+  <div class="bg-white border border-slate-200 rounded-xl shadow-sm">
+    <button class="w-full flex justify-between items-center px-4 py-3 text-lg font-semibold collapsible-btn">
+      5. Conservation of Energy (3.4)
+      <span class="transition-transform chevron">▶</span>
+    </button>
+
+    <div class="collapsible-content px-4 pb-4 text-sm leading-relaxed">
+
+      <p class="text-center my-3">
+        $$K_i + U_i = K_f + U_f \quad \text{(if no nonconservative work)}$$
+      </p>
+
+      <p class="text-center my-3">
+        $$K_i + U_i + W_{nc} = K_f + U_f$$
+      </p>
+
+      <ul class="list-disc list-inside space-y-1">
+        <li>Friction and drag remove mechanical energy ($W_{nc} &lt; 0$).</li>
+        <li>Energy bar charts help visualize transfers.</li>
+      </ul>
+
+      <div class="bg-slate-50 p-3 border rounded-xl mt-4">
+        <p class="font-medium">Quick Check</p>
+        <p>Roller coaster drops 20 m from rest. Speed at bottom?</p>
+
+        <button class="mt-2 px-2 py-1 border rounded answer-btn">Show Answer</button>
+
+        <div class="answer hidden mt-1">
+          $$mgh = \tfrac12 mv^2 \Rightarrow v=\sqrt{2gh} \approx 20\text{ m/s}.$$
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Power -->
+  <div class="bg-white border border-slate-200 rounded-xl shadow-sm">
+    <button class="w-full flex justify-between items-center px-4 py-3 text-lg font-semibold collapsible-btn">
+      6. Power (3.5)
+      <span class="transition-transform chevron">▶</span>
+    </button>
+
+    <div class="collapsible-content px-4 pb-4 text-sm leading-relaxed">
+
+      <p class="text-center my-3">
+        $$P = \frac{W}{t}, \quad P = Fv \cos\theta$$
+      </p>
+
+      <ul class="list-disc list-inside space-y-1">
+        <li>Power is how fast energy is transferred.</li>
+        <li>High force or high speed → high power.</li>
+      </ul>
+
+      <div class="bg-slate-50 p-3 border rounded-xl mt-4">
+        <p class="font-medium">Quick Check</p>
+        <p>Find power: a 70 kg student climbs 3 m in 4 s.</p>
+        <button class="mt-2 px-2 py-1 border rounded answer-btn">Show Answer</button>
+        <div class="answer hidden mt-1">
+          $$W = mgh = 70(9.8)(3) \approx 2058\text{ J}$$
+          $$P = 2058/4 \approx 515\text{ W}.$$
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- JS for collapsibles and answers -->
+<script>
+  document.querySelectorAll('.collapsible-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const content = btn.nextElementSibling;
+      const chevron = btn.querySelector('.chevron');
+
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+        chevron.classList.remove('rotate-90');
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+        chevron.classList.add('rotate-90');
+      }
     });
-  </script>
+  });
+
+  document.querySelectorAll('.answer-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ans = btn.nextElementSibling;
+      ans.classList.toggle('hidden');
+      btn.textContent = ans.classList.contains('hidden') ? "Show Answer" : "Hide Answer";
+    });
+  });
+</script>
+
 </body>
 </html>
-
