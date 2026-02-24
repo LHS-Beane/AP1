@@ -1,1 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mobile Equilibrium Project | AP Physics 1</title>
 
+  <style>
+    /* --- GLOBAL VARIABLES (Matching your site theme) --- */
+    :root{
+      --primary:#0077da;
+      --secondary:#004d80;
+      --accent:#ffcc00;
+      --light:#f4f4f4;
+      --dark:#333;
+      --white:#fff;
+      --shadow:0 4px 6px rgba(0,0,0,0.1);
+      --danger:#e74c3c;
+      --success:#27ae60;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+    body{background-color:var(--light);color:var(--dark);line-height:1.6;}
+
+    /* --- TOP NAVIGATION --- */
+    nav{
+      background-color:var(--secondary);
+      color:var(--white);
+      padding:1rem 2rem;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      position:sticky;
+      top:0; z-index:1000;
+      box-shadow:var(--shadow);
+    }
+    .logo{font-size:1.5rem;font-weight:bold;letter-spacing:1px;}
+    .back-btn{
+      background-color:var(--accent);
+      color:var(--dark);
+      padding:8px 16px;
+      text-decoration:none;
+      font-weight:bold;
+      border-radius:4px;
+      font-size:0.9rem;
+      transition:transform 0.2s;
+    }
+    .back-btn:hover{transform:scale(1.05);}
+
+    /* --- HERO HEADER --- */
+    header{
+      background:
+        linear-gradient(rgba(0,77,128,0.9), rgba(0,77,128,0.9)),
+        url('https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=1950&q=80');
+      background-size:cover;
+      background-position:center;
+      color:var(--white);
+      padding:40px 20px;
+      text-align:center;
+    }
+    header h1{font-size:2.5rem;margin-bottom:10px;}
+    header p{max-width:900px;margin:0 auto;}
+
+    /* --- LAYOUT CONTAINER --- */
+    .container{max-width:1100px;margin:0 auto;padding:30px 20px;}
+
+    /* --- INTERNAL TAB NAVIGATION --- */
+    .tabs-container{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:30px;
+      background:var(--white);
+      padding:15px;
+      border-radius:8px;
+      box-shadow:var(--shadow);
+    }
+    .nav-link{
+      padding:10px 20px;
+      border:2px solid transparent;
+      border-radius:5px;
+      cursor:pointer;
+      font-weight:600;
+      color:var(--secondary);
+      transition:all 0.3s;
+      user-select:none;
+    }
+    .nav-link:hover{background-color:#eee;}
+    .nav-link.active{
+      background-color:var(--secondary);
+      color:var(--white);
+      border-color:var(--secondary);
+    }
+
+    /* --- CONTENT SECTIONS --- */
+    .page-content{display:none;animation:fadeIn 0.4s ease-in-out;}
+    .page-content.active{display:block;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+    h2{
+      color:var(--secondary);
+      border-bottom:3px solid var(--accent);
+      display:inline-block;
+      margin:30px 0 15px 0;
+      padding-bottom:5px;
+    }
+    h3{color:var(--primary);margin:20px 0 10px 0;}
+    ul,ol{margin-left:20px;margin-bottom:15px;}
+    li{margin-bottom:8px;}
+
+    /* --- CARD STYLES --- */
+    .card{
+      background:var(--white);
+      padding:25px;
+      border-radius:8px;
+      box-shadow:var(--shadow);
+      border-left:5px solid var(--primary);
+      margin-bottom:25px;
+    }
+    .card.warning{border-left-color:var(--danger);}
+    .card.success{border-left-color:var(--success);}
+
+    /* --- UTILITIES --- */
+    .pill{
+      display:inline-block;
+      padding:4px 10px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:0.8rem;
+      margin:4px 6px 0 0;
+    }
+    .pill.ap{background:rgba(0,119,218,0.12);color:var(--secondary);}
+    .pill.build{background:rgba(255,204,0,0.18);color:#7a5b00;}
+    .pill.data{background:rgba(39,174,96,0.14);color:var(--success);}
+    .eq{font-family:'Times New Roman',serif;font-style:italic;}
+
+    /* --- FORMS & INPUTS --- */
+    .form-row{display:flex;gap:15px;align-items:flex-end;flex-wrap:wrap;}
+    .form-group{flex:1;min-width:220px;}
+    label{display:block;font-weight:bold;margin-bottom:5px;font-size:0.9rem;}
+    input,select,textarea{
+      width:100%;
+      padding:10px;
+      border:1px solid #ccc;
+      border-radius:4px;
+      font-size:1rem;
+      background:#fff;
+    }
+    textarea{min-height:90px;resize:vertical;}
+    button.action-btn{
+      background-color:var(--secondary);
+      color:white;
+      border:none;
+      padding:10px 20px;
+      border-radius:4px;
+      cursor:pointer;
+      font-weight:bold;
+      font-size:1rem;
+      transition:background 0.2s;
+    }
+    button.action-btn:hover{background-color:var(--primary);}
+    button.reset-btn{
+      background-color:#777;color:white;border:none;padding:10px 20px;border-radius:4px;cursor:pointer;
+    }
+
+    /* --- TABLE STYLES --- */
+    table{width:100%;border-collapse:collapse;margin:20px 0;background:white;}
+    th,td{border:1px solid #ddd;padding:12px;text-align:left;vertical-align:top;}
+    th{background-color:var(--secondary);color:white;}
+    tr:nth-child(even){background-color:#f9f9f9;}
+
+    /* --- CODE/EXAMPLE BLOCKS --- */
+    .eq-block{
+      background:#f9f9f9;
+      padding:12px;
+      border:1px solid #ddd;
+      border-radius:6px;
+      margin:10px 0;
+      font-family:'Times New Roman',serif;
+      font-style:italic;
+      text-align:center;
+    }
+    .callout{
+      background:rgba(255,204,0,0.16);
+      border:1px solid rgba(255,204,0,0.5);
+      padding:12px 14px;
+      border-radius:8px;
+      margin-top:10px;
+    }
+
+    /* --- CHECKLIST --- */
+    .checklist{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+      gap:12px;
+      margin-top:10px;
+    }
+    .check{
+      background:#fff;
+      border:1px solid #e6e6e6;
+      border-radius:10px;
+      padding:12px;
+      box-shadow:0 2px 3px rgba(0,0,0,0.04);
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .check input{width:18px;height:18px;margin-top:2px;}
+    .check small{display:block;color:#666;margin-top:4px;}
+
+    /* --- RESPONSIVE --- */
+    @media (max-width:768px){
+      .tabs-container{flex-direction:column;}
+      .nav-link{text-align:center;}
+      .form-row{flex-direction:column;}
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="logo">AP Physics Hub</div>
+    <a href="../index.html" class="back-btn">&#8592; Back to Projects</a>
+  </nav>
+
+  <header>
+    <h1>AP Mobile Equilibrium Project</h1>
+    <p>Design a hanging mobile and prove—using AP Physics 1 reasoning—that every tier satisfies
+      <strong>translational equilibrium</strong> and <strong>rotational equilibrium</strong>.</p>
+  </header>
+
+  <div class="container">
+
+    <div class="tabs-container">
+      <div class="nav-link active" onclick="switchTab('page-overview', this)">Overview</div>
+      <div class="nav-link" onclick="switchTab('page-build', this)">Build Specs</div>
+      <div class="nav-link" onclick="switchTab('page-physics', this)">AP Physics Requirements</div>
+      <div class="nav-link" onclick="switchTab('page-calcs', this)">Calculations Toolkit</div>
+      <div class="nav-link" onclick="switchTab('page-submission', this)">Submission</div>
+      <div class="nav-link" onclick="switchTab('page-rubric', this)">Rubric</div>
+    </div>
+
+    <main>
+
+      <!-- OVERVIEW -->
+      <section id="page-overview" class="page-content active">
+        <div class="card">
+          <h2>🎯 The Challenge</h2>
+          <p>
+            You will design and construct a multi-tier hanging mobile that is stable at rest.
+            The mobile must be modeled as a set of rigid bodies and analyzed using both equilibrium conditions:
+          </p>
+          <div class="eq-block">
+            <span class="eq">&Sigma;F = 0</span> &nbsp; and &nbsp; <span class="eq">&Sigma;&tau; = 0</span>
+          </div>
+
+          <div style="margin-top:10px;">
+            <span class="pill ap">AP Skill: Modeling</span>
+            <span class="pill ap">AP Skill: Torque</span>
+            <span class="pill data">AP Skill: Error Analysis</span>
+            <span class="pill build">Build: Craftsmanship</span>
+          </div>
+        </div>
+
+        <div class="card warning">
+          <h3>AP Level Expectations</h3>
+          <ul>
+            <li><strong>Symbolic first:</strong> derive equations before plugging in numbers.</li>
+            <li><strong>FBDs required:</strong> one per tier (rigid body, not just point masses).</li>
+            <li><strong>Axis choice:</strong> must be stated and justified.</li>
+            <li><strong>Validation:</strong> compare prediction vs measurement and compute percent error.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h2>✅ What You’ll Learn</h2>
+          <ul>
+            <li>How to treat an extended object as a rigid body</li>
+            <li>How the center of mass relates to stability</li>
+            <li>Why <span class="eq">&Sigma;F = 0</span> alone does NOT prevent rotation</li>
+            <li>How torque depends on distance and angle: <span class="eq">&tau; = rF\sin\theta</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- BUILD SPECS -->
+      <section id="page-build" class="page-content">
+        <div class="card">
+          <h2>🛠️ Build Specifications</h2>
+
+          <h3>Design Criteria</h3>
+          <ul>
+            <li><strong>Minimum:</strong> 3 freely-swinging horizontal arms (3+ tiers)</li>
+            <li><strong>Size limit:</strong> ≤ 50 cm wide, 50 cm deep, 100 cm tall</li>
+            <li><strong>Safety:</strong> no fragile items, hooks, or anything hazardous/inappropriate</li>
+            <li><strong>Original theme:</strong> artistic OR physics-based</li>
+          </ul>
+
+          <h3>AP Upgrade Requirements</h3>
+          <ul>
+            <li>At least <strong>one arm must have non-negligible rod mass</strong> (you must include it in calculations).</li>
+            <li>At least <strong>one tier must be asymmetric</strong> (not “equal masses equal distances”).</li>
+            <li>Arms must hang <strong>approximately horizontal</strong> at rest (you’ll address small deviations in error).</li>
+          </ul>
+
+          <div class="callout">
+            <strong>Pro Tip:</strong> Start with small masses and designs that allow easy adjustment.
+            Balance comes from changing either <em>mass</em> or <em>lever arm distance</em>.
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>📦 Suggested Materials</h2>
+          <ul>
+            <li>Dowel rods / wooden skewers / lightweight rulers</li>
+            <li>String, thread, fishing line (thin)</li>
+            <li>Paper clips, binder clips, small hooks (safe)</li>
+            <li>Washers / nuts / bolts / coins for adjustable masses</li>
+            <li>Digital scale (grams), meter stick, ruler, graph paper</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- AP PHYSICS REQUIREMENTS -->
+      <section id="page-physics" class="page-content">
+        <div class="card">
+          <h2>📘 AP Physics Requirements</h2>
+          <p>You must provide the following <strong>for each tier</strong>:</p>
+
+          <h3>1) System Definition + FBD</h3>
+          <ul>
+            <li>Define the system: “Tier 2 arm + attached masses”</li>
+            <li>External forces: tensions, weight(s)</li>
+            <li>Include rod weight if required on that tier</li>
+            <li>Label all distances from pivot</li>
+          </ul>
+
+          <h3>2) Translational Equilibrium</h3>
+          <div class="eq-block"><span class="eq">&Sigma;F<sub>y</sub> = 0</span></div>
+          <p>Use this to relate the support tension to total weight.</p>
+
+          <h3>3) Rotational Equilibrium</h3>
+          <div class="eq-block"><span class="eq">&Sigma;&tau; = 0</span></div>
+          <p>
+            Choose a pivot (usually the suspension point). State sign convention and justify why that pivot simplifies.
+            If forces are vertical and arms are horizontal, you can often use <span class="eq">|&tau| = rF</span>.
+          </p>
+
+          <h3>4) Validation + Error Analysis</h3>
+          <ul>
+            <li>Predict pivot location(s) before building</li>
+            <li>Measure actual distances after building</li>
+            <li>Compute percent error and discuss sources</li>
+          </ul>
+        </div>
+
+        <div class="card warning">
+          <h3>AP-Style Concept Questions (Required)</h3>
+          <ol>
+            <li>If one hanging mass is doubled, what change must be made to restore balance? Explain without full recalculation.</li>
+            <li>If the mobile were taken to the Moon, would it still balance? Justify using equilibrium equations.</li>
+            <li>If an arm tilts 10° from horizontal, which part of your torque model changes? Explain conceptually.</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- CALCULATIONS TOOLKIT -->
+      <section id="page-calcs" class="page-content">
+        <div class="card">
+          <h2>🧮 Calculations Toolkit</h2>
+
+          <h3>Torque Reminder</h3>
+          <div class="eq-block"><span class="eq">&tau; = rF\sin\theta</span></div>
+          <ul>
+            <li><span class="eq">r</span> = distance from pivot to the line of action (m)</li>
+            <li><span class="eq">F</span> = force magnitude (N)</li>
+            <li><span class="eq">&theta;</span> = angle between <span class="eq">r</span> and <span class="eq">F</span></li>
+          </ul>
+
+          <h3>Typical Mobile Simplification</h3>
+          <p>If the arm is horizontal and forces are vertical, then <span class="eq">&theta; = 90&deg;</span> and:</p>
+          <div class="eq-block"><span class="eq">&tau; = rF</span></div>
+
+          <h3>Two-Mass Balance (One Tier)</h3>
+          <p>For two hanging masses on opposite sides of a pivot:</p>
+          <div class="eq-block">
+            <span class="eq">m<sub>L</sub>g r<sub>L</sub> = m<sub>R</sub>g r<sub>R</sub></span>
+            &nbsp;&rarr;&nbsp;
+            <span class="eq">m<sub>L</sub> r<sub>L</sub> = m<sub>R</sub> r<sub>R</sub></span>
+          </div>
+
+          <h3>Include Rod Mass (AP Upgrade)</h3>
+          <p>If the rod has mass <span class="eq">m<sub>rod</sub></span> and its center of mass is at distance <span class="eq">r<sub>cm</sub></span> from the pivot:</p>
+          <div class="eq-block">
+            <span class="eq">&Sigma;&tau; = (m<sub>L</sub>g r<sub>L</sub>) - (m<sub>R</sub>g r<sub>R</sub>) - (m<sub>rod</sub>g r<sub>cm</sub>) = 0</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>📏 Quick Calculator (Optional)</h2>
+          <p>Use this to solve for an unknown distance or mass for a single tier (horizontal arm, vertical forces).</p>
+
+          <form id="tierCalc" class="form-row">
+            <div class="form-group">
+              <label for="mL">Left Mass (g)</label>
+              <input type="number" id="mL" step="0.1" placeholder="e.g., 35.0" />
+            </div>
+            <div class="form-group">
+              <label for="rL">Left Distance (cm)</label>
+              <input type="number" id="rL" step="0.1" placeholder="e.g., 12.0" />
+            </div>
+            <div class="form-group">
+              <label for="mR">Right Mass (g)</label>
+              <input type="number" id="mR" step="0.1" placeholder="e.g., 20.0" />
+            </div>
+            <div class="form-group">
+              <label for="rR">Right Distance (cm) <span style="font-weight:normal;">(leave blank to solve)</span></label>
+              <input type="number" id="rR" step="0.1" placeholder="solve for rR" />
+            </div>
+
+            <button type="submit" class="action-btn">Solve</button>
+            <button type="button" id="resetTierCalc" class="reset-btn">Reset</button>
+          </form>
+
+          <div id="tierResult" style="margin-top:15px;font-weight:bold;font-size:1.1rem;color:var(--primary);"></div>
+
+          <div class="callout">
+            <strong>Note:</strong> This tool uses <span class="eq">m<sub>L</sub>r<sub>L</sub> = m<sub>R</sub>r<sub>R</sub></span>.
+            If you include rod mass, you must do that part in your written work.
+          </div>
+        </div>
+      </section>
+
+      <!-- SUBMISSION -->
+      <section id="page-submission" class="page-content">
+        <div class="card">
+          <h2>📤 What to Submit</h2>
+
+          <h3>Turn In (Physical)</h3>
+          <ul>
+            <li>Mobile (ready to hang, meets size + safety rules)</li>
+            <li>Design drawing on graph paper (to scale, in ink)</li>
+          </ul>
+
+          <h3>Turn In (Paper / Digital)</h3>
+          <ul>
+            <li>FBDs (one per tier)</li>
+            <li>Equilibrium calculations (symbolic then numeric)</li>
+            <li>Validation: predicted vs measured + percent error</li>
+            <li>Error analysis (2 systematic + 1 random)</li>
+            <li>AP concept questions (3 written responses)</li>
+          </ul>
+
+          <h3>Build-Day Checklist</h3>
+          <div class="checklist" id="checklist">
+            <label class="check"><input type="checkbox" /> <div><strong>Tier count</strong><small>3+ arms / tiers</small></div></label>
+            <label class="check"><input type="checkbox" /> <div><strong>Mass measurements</strong><small>All masses recorded (grams)</small></div></label>
+            <label class="check"><input type="checkbox" /> <div><strong>Distances</strong><small>All lever arms measured (cm)</small></div></label>
+            <label class="check"><input type="checkbox" /> <div><strong>FBDs</strong><small>One per tier, labeled</small></div></label>
+            <label class="check"><input type="checkbox" /> <div><strong>Στ = 0</strong><small>Torque balance shown for each tier</small></div></label>
+            <label class="check"><input type="checkbox" /> <div><strong>ΣF = 0</strong><small>Force balance shown for each tier</small></div></label>
+            <label class="check"><input type="checkbox" /> <div><strong>Validation</strong><small>Predicted vs measured + % error</small></div></label>
+            <label class="check"><input type="checkbox" /> <div><strong>Error analysis</strong><small>Systematic + random errors</small></div></label>
+          </div>
+
+          <div style="margin-top:12px;" class="form-row">
+            <button class="action-btn" type="button" id="saveChecklist">Save Checklist</button>
+            <button class="reset-btn" type="button" id="clearChecklist">Clear Saved</button>
+            <div id="checklistMsg" style="font-weight:bold;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RUBRIC -->
+      <section id="page-rubric" class="page-content">
+        <div class="card">
+          <h2>📌 Rubric (100 points)</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th style="text-align:center;">Points</th>
+                <th>What “AP Quality” Looks Like</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Mobile Construction</td>
+                <td style="text-align:center;font-weight:bold;">30</td>
+                <td>3+ tiers, stable, safe, meets size limit, good craftsmanship.</td>
+              </tr>
+              <tr>
+                <td>Design Drawing (to scale)</td>
+                <td style="text-align:center;font-weight:bold;">15</td>
+                <td>Graph paper, ink, labeled distances + masses + pivot points.</td>
+              </tr>
+              <tr style="background-color:rgba(0,119,218,0.08);">
+                <td>FBDs + System Definitions</td>
+                <td style="text-align:center;font-weight:bold;color:var(--secondary);">20</td>
+                <td>Correct external forces, clear axes, rod weight included when required.</td>
+              </tr>
+              <tr style="background-color:rgba(0,119,218,0.08);">
+                <td>Equilibrium Calculations</td>
+                <td style="text-align:center;font-weight:bold;color:var(--secondary);">20</td>
+                <td>Symbolic then numeric; sign convention; correct torque sums at each tier.</td>
+              </tr>
+              <tr style="background-color:rgba(39,174,96,0.10);">
+                <td>Validation + Error Analysis</td>
+                <td style="text-align:center;font-weight:bold;color:var(--success);">10</td>
+                <td>Predicted vs measured, % error, 2 systematic + 1 random error explained.</td>
+              </tr>
+              <tr>
+                <td>Theme / Visual Impact</td>
+                <td style="text-align:center;font-weight:bold;">5</td>
+                <td>Consistent theme, interesting, looks intentional.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="card success" style="margin-top:20px;">
+            <h3>Extra Credit (+5)</h3>
+            <p>
+              Add an educational component: a physics unit, physicist, or discovery—accurate and coherent.
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // ----- TAB SWITCHING -----
+    function switchTab(targetId, element){
+      document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
+      document.getElementById(targetId).classList.add('active');
+
+      document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+      element.classList.add('active');
+
+      // smooth-ish UX for mobile
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ----- TIER CALCULATOR -----
+    const tierCalc = document.getElementById('tierCalc');
+    const tierResult = document.getElementById('tierResult');
+    const resetTierCalc = document.getElementById('resetTierCalc');
+
+    function fmt(n){ return Number(n).toFixed(2); }
+
+    if (tierCalc){
+      tierCalc.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const mL = parseFloat(document.getElementById('mL').value);
+        const rL = parseFloat(document.getElementById('rL').value);
+        const mR = parseFloat(document.getElementById('mR').value);
+        const rR_raw = document.getElementById('rR').value;
+        const rR = rR_raw === "" ? NaN : parseFloat(rR_raw);
+
+        // Basic validation
+        if ([mL, rL, mR].some(v => isNaN(v)) || (isNaN(rR) && rR_raw !== "" && isNaN(parseFloat(rR_raw)))){
+          tierResult.textContent = "Please enter valid numbers for mL, rL, and mR.";
+          tierResult.style.color = "var(--danger)";
+          return;
+        }
+        if (mL <= 0 || rL <= 0 || mR <= 0){
+          tierResult.textContent = "Masses and distances must be positive.";
+          tierResult.style.color = "var(--danger)";
+          return;
+        }
+
+        // Solve for rR if blank; otherwise show balance check
+        if (rR_raw === ""){
+          // mL*rL = mR*rR  => rR = (mL*rL)/mR
+          const solved = (mL * rL) / mR;
+          tierResult.textContent = `Solve for rR: rR = (mL·rL)/mR = (${mL}·${rL})/${mR} = ${fmt(solved)} cm`;
+          tierResult.style.color = "var(--primary)";
+        } else {
+          if (isNaN(rR) || rR <= 0){
+            tierResult.textContent = "Right distance must be a positive number (or leave it blank to solve).";
+            tierResult.style.color = "var(--danger)";
+            return;
+          }
+          const leftMoment = mL * rL;
+          const rightMoment = mR * rR;
+          const diff = rightMoment - leftMoment;
+
+          const pctOff = Math.abs(diff) / leftMoment * 100;
+
+          let msg = `Left moment mL·rL = ${fmt(leftMoment)} (g·cm)\nRight moment mR·rR = ${fmt(rightMoment)} (g·cm)\n`;
+
+          if (Math.abs(diff) < 1e-6){
+            msg += "Perfect balance (theoretical).";
+            tierResult.style.color = "var(--success)";
+          } else if (pctOff < 5){
+            msg += `Close! Off by ~${fmt(pctOff)}%. Fine-tune mass or distance.`;
+            tierResult.style.color = "var(--primary)";
+          } else {
+            msg += `Not balanced. Off by ~${fmt(pctOff)}%. Adjust r or m.`;
+            tierResult.style.color = "var(--danger)";
+          }
+
+          tierResult.textContent = msg;
+        }
+      });
+    }
+
+    if (resetTierCalc){
+      resetTierCalc.addEventListener('click', () => {
+        ['mL','rL','mR','rR'].forEach(id => document.getElementById(id).value = "");
+        tierResult.textContent = "";
+      });
+    }
+
+    // ----- CHECKLIST SAVE (localStorage) -----
+    const saveChecklistBtn = document.getElementById('saveChecklist');
+    const clearChecklistBtn = document.getElementById('clearChecklist');
+    const checklistMsg = document.getElementById('checklistMsg');
+
+    function getChecklistBoxes(){
+      return Array.from(document.querySelectorAll('#checklist input[type="checkbox"]'));
+    }
+
+    function loadChecklist(){
+      try{
+        const saved = JSON.parse(localStorage.getItem('ap1_mobile_checklist') || "[]");
+        const boxes = getChecklistBoxes();
+        boxes.forEach((box, i) => box.checked = !!saved[i]);
+      }catch(e){}
+    }
+
+    function saveChecklist(){
+      const boxes = getChecklistBoxes();
+      const state = boxes.map(b => b.checked);
+      localStorage.setItem('ap1_mobile_checklist', JSON.stringify(state));
+      checklistMsg.textContent = "Saved ✅";
+      checklistMsg.style.color = "var(--success)";
+      setTimeout(()=> checklistMsg.textContent = "", 1500);
+    }
+
+    function clearChecklist(){
+      localStorage.removeItem('ap1_mobile_checklist');
+      getChecklistBoxes().forEach(b => b.checked = false);
+      checklistMsg.textContent = "Cleared.";
+      checklistMsg.style.color = "var(--danger)";
+      setTimeout(()=> checklistMsg.textContent = "", 1500);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadChecklist();
+      if (saveChecklistBtn) saveChecklistBtn.addEventListener('click', saveChecklist);
+      if (clearChecklistBtn) clearChecklistBtn.addEventListener('click', clearChecklist);
+    });
+  </script>
+</body>
+</html>
