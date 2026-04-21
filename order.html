@@ -1,411 +1,569 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chipotle Order Form</title>
-  <style>
-    :root {
-      --primary: #8b1e1e;
-      --secondary: #4b2e2e;
-      --accent: #d97706;
-      --bg: #f8f5f2;
-      --card: #ffffff;
-      --line: #d6d0ca;
-      --text: #222222;
-      --muted: #666666;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chipotle Order Form</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --chipotle: #C8102E;
+    --chipotle-dark: #9B0B22;
+    --chipotle-light: #FEE2E8;
+    --tan: #F5F0E8;
+    --tan-dark: #E8E0CC;
+    --ink: #1A1410;
+    --ink-mid: #4A3D34;
+    --ink-soft: #8C7B6E;
+    --border: #D4C9B8;
+    --white: #FFFDF9;
+    --success-bg: #E6F4EA;
+    --success: #1B7A3E;
+    --warn-bg: #FEF3C7;
+    --warn: #92400E;
+    --radius: 8px;
+    --radius-lg: 14px;
+  }
 
-    * {
-      box-sizing: border-box;
-    }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(180deg, #f8f5f2 0%, #efe7df 100%);
-      color: var(--text);
-    }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--tan);
+    color: var(--ink);
+    min-height: 100vh;
+  }
 
-    .page {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 24px;
-    }
+  /* ── SCREEN LAYOUT ── */
+  .page-shell {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
 
-    .toolbar {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 18px;
-      position: sticky;
-      top: 0;
-      background: rgba(248, 245, 242, 0.95);
-      backdrop-filter: blur(6px);
-      padding: 12px 0;
-      z-index: 10;
-    }
+  /* ── HEADER ── */
+  .site-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--chipotle);
+  }
+  .logo-mark {
+    width: 52px;
+    height: 52px;
+    background: var(--chipotle);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+  }
+  .site-header h1 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--chipotle);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  .site-header p {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 3px;
+    font-family: 'DM Mono', monospace;
+  }
 
-    .btn {
-      border: none;
-      border-radius: 10px;
-      padding: 12px 16px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.15s ease, opacity 0.15s ease;
-    }
+  /* ── NAME FIELDS ── */
+  .name-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 1.25rem;
+  }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: 'DM Mono', monospace;
+  }
+  .field input {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 9px 12px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--ink);
+    transition: border-color 0.15s;
+    outline: none;
+  }
+  .field input:focus { border-color: var(--chipotle); }
 
-    .btn:hover {
-      transform: translateY(-1px);
-      opacity: 0.95;
-    }
+  /* ── SECTIONS ── */
+  .section {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+    margin-bottom: 10px;
+    transition: opacity 0.2s;
+  }
+  .section.dimmed {
+    opacity: 0.38;
+    pointer-events: none;
+  }
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .section-head h2 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .badge {
+    font-size: 10.5px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-family: 'DM Mono', monospace;
+    white-space: nowrap;
+  }
+  .badge-req { background: var(--chipotle-light); color: var(--chipotle-dark); }
+  .badge-cond { background: var(--warn-bg); color: var(--warn); }
+  .badge-opt { background: var(--success-bg); color: var(--success); }
+  .hint { font-size: 11px; color: var(--ink-soft); margin-left: auto; font-family: 'DM Mono', monospace; }
 
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
+  /* ── OPTION CHIPS ── */
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    background: var(--tan);
+    cursor: pointer;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink-mid);
+    transition: background 0.12s, border-color 0.12s, color 0.12s;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .chip:hover { border-color: var(--chipotle); color: var(--chipotle); }
+  .chip.on {
+    background: var(--chipotle);
+    border-color: var(--chipotle);
+    color: #fff;
+  }
+  .chip-box {
+    width: 13px; height: 13px;
+    border: 1.5px solid currentColor;
+    border-radius: 3px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px;
+    opacity: 0.7;
+  }
+  .chip.on .chip-box { opacity: 1; }
+  .chip.on .chip-box::after { content: '✓'; color: white; }
 
-    .btn-secondary {
-      background: #e8e1da;
-      color: var(--secondary);
-      border: 1px solid #cbbfb2;
-    }
+  /* ── TOPPING COUNT BADGE ── */
+  #topping-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--tan-dark);
+    color: var(--ink-soft);
+    font-family: 'DM Mono', monospace;
+    transition: background 0.15s, color 0.15s;
+  }
+  #topping-badge.good { background: var(--success-bg); color: var(--success); }
+  #topping-badge.over { background: var(--warn-bg); color: var(--warn); }
 
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-      overflow: hidden;
-    }
+  /* ── ACTIONS ── */
+  .actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.5rem;
+  }
+  .btn {
+    padding: 11px 22px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: background 0.12s, transform 0.1s;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary {
+    flex: 1;
+    background: var(--chipotle);
+    color: white;
+    border-color: var(--chipotle);
+  }
+  .btn-primary:hover { background: var(--chipotle-dark); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink-mid);
+    border-color: var(--border);
+  }
+  .btn-ghost:hover { background: var(--tan-dark); }
+  .btn-print {
+    background: transparent;
+    color: var(--ink-mid);
+    border-color: var(--border);
+  }
+  .btn-print:hover { background: var(--tan-dark); }
 
-    .hero {
-      background: linear-gradient(135deg, var(--primary), #b53333);
-      color: white;
-      padding: 26px 28px;
-    }
+  /* ── ERROR ── */
+  .error-bar {
+    display: none;
+    background: var(--chipotle-light);
+    border: 1px solid #f5a0ae;
+    border-radius: var(--radius);
+    padding: 9px 14px;
+    font-size: 13px;
+    color: var(--chipotle-dark);
+    margin-top: 10px;
+    font-weight: 500;
+  }
+  .error-bar.show { display: block; }
 
-    .hero h1 {
-      margin: 0 0 8px;
-      font-size: 2rem;
-      line-height: 1.1;
-    }
+  /* ── SUMMARY ── */
+  .summary {
+    display: none;
+    background: var(--white);
+    border: 2px solid var(--chipotle);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    margin-top: 1rem;
+  }
+  .summary.show { display: block; }
+  .summary h3 {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--chipotle);
+    margin-bottom: 10px;
+    font-family: 'DM Mono', monospace;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 16px;
+  }
+  .summary-row { display: flex; flex-direction: column; }
+  .summary-row .lbl { font-size: 10px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.07em; font-family: 'DM Mono', monospace; }
+  .summary-row .val { font-size: 14px; font-weight: 600; color: var(--ink); }
 
-    .hero p {
-      margin: 0;
-      font-size: 1rem;
-      opacity: 0.96;
-    }
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 3rem;
+    font-family: 'DM Mono', monospace;
+  }
 
-    .content {
-      padding: 24px;
+  /* ── PRINT STYLES ── */
+  @media print {
+    @page { margin: 14mm 16mm; size: letter; }
+
+    body { background: white; font-size: 12px; }
+    .page-shell { padding: 0; max-width: 100%; }
+
+    .btn-print, .actions .btn-ghost, .actions .btn-primary { display: none; }
+    .actions { display: none; }
+    footer { display: none; }
+    .summary { display: none !important; }
+    .error-bar { display: none !important; }
+
+    .site-header {
+      border-bottom: 2px solid #C8102E;
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+    }
+    .site-header h1 { font-size: 18px; }
+
+    .name-row { gap: 10px; margin-bottom: 10px; }
+    .field input {
+      border: 1.5px solid #ccc;
+      background: white;
     }
 
     .section {
-      margin-bottom: 26px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid #ece7e2;
+      border: 1.5px solid #D4C9B8;
+      background: white;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 7px;
+      page-break-inside: avoid;
+    }
+    .section.dimmed {
+      opacity: 1 !important;
+      pointer-events: auto !important;
     }
 
-    .section:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
+    .chip {
+      background: #F5F0E8;
+      border: 1.5px solid #ccc;
+      color: #4A3D34;
+      padding: 4px 10px;
+      font-size: 12px;
+    }
+    .chip.on {
+      background: #C8102E;
+      color: white;
+      border-color: #C8102E;
     }
 
-    h2 {
-      margin: 0 0 12px;
-      font-size: 1.15rem;
-      color: var(--secondary);
-    }
-
-    .note {
-      font-size: 0.93rem;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-    }
-
-    .line-field label {
-      display: block;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .line {
-      border-bottom: 2px solid #555;
-      min-height: 28px;
-    }
-
-    .options {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 10px 18px;
-    }
-
-    .option {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-height: 28px;
-    }
-
-    .box {
-      width: 18px;
-      height: 18px;
-      border: 2px solid #444;
-      border-radius: 3px;
-      flex: 0 0 18px;
-    }
-
-    .option span:last-child {
-      line-height: 1.2;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .subcard {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px;
-      background: #fcfbfa;
-      min-height: 100%;
-    }
-
-    .subcard h3 {
-      margin: 0 0 10px;
-      font-size: 1rem;
-      color: var(--secondary);
-    }
-
-    .agreement {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      border: 1px dashed #b6a999;
-      border-radius: 14px;
-      padding: 14px;
-      background: #fffaf5;
-    }
-
-    .agreement .box {
-      margin-top: 2px;
-    }
-
-    .footer-note {
-      margin-top: 18px;
-      font-size: 0.9rem;
-      color: var(--muted);
-      text-align: center;
-    }
-
-    @media (max-width: 700px) {
-      .row,
-      .grid-3 {
-        grid-template-columns: 1fr;
-      }
-
-      .page {
-        padding: 14px;
-      }
-
-      .content {
-        padding: 18px;
-      }
-    }
-
-    @media print {
-      @page {
-        size: letter;
-        margin: 0.5in;
-      }
-
-      body {
-        background: white;
-      }
-
-      .toolbar {
-        display: none !important;
-      }
-
-      .page {
-        max-width: none;
-        margin: 0;
-        padding: 0;
-      }
-
-      .card {
-        box-shadow: none;
-        border: none;
-        border-radius: 0;
-      }
-
-      .hero {
-        padding: 0 0 14px;
-        color: black;
-        background: none;
-        border-bottom: 2px solid black;
-      }
-
-      .hero h1 {
-        font-size: 20pt;
-      }
-
-      .hero p {
-        color: black;
-      }
-
-      .content {
-        padding: 14px 0 0;
-      }
-
-      .section {
-        break-inside: avoid;
-        border-bottom-color: #bbb;
-      }
-
-      .subcard,
-      .agreement {
-        background: white;
-      }
-    }
-  </style>
+    .badge-cond { background: #FEF3C7 !important; }
+    .badge-req  { background: #FEE2E8 !important; }
+    .badge-opt  { background: #E6F4EA !important; }
+  }
+</style>
 </head>
 <body>
-  <div class="page">
-    <div class="toolbar">
-      <button class="btn btn-primary" onclick="window.print()">Print Form</button>
-      <button class="btn btn-secondary" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">Back to Top</button>
+
+<div class="page-shell">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="logo-mark">🌯</div>
+    <div>
+      <h1>Chipotle Order Form</h1>
+      <p>Fill out all required fields — print or submit digitally</p>
     </div>
+    <button class="btn btn-print" onclick="window.print()" style="margin-left:auto;align-self:center;">
+      🖨 Print
+    </button>
+  </header>
 
-    <div class="card">
-      <header class="hero">
-        <h1>Chipotle Order Form</h1>
-        <p>Fill this out carefully. You will receive <strong>ONE</strong> meal. Orders will be placed exactly as submitted.</p>
-      </header>
-
-      <main class="content">
-        <section class="section">
-          <h2>Student Information</h2>
-          <div class="row">
-            <div class="line-field">
-              <label>Name</label>
-              <div class="line"></div>
-            </div>
-            <div class="line-field">
-              <label>Class Period</label>
-              <div class="line"></div>
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2>1. Choose ONE Meal Type</h2>
-          <div class="options">
-            <div class="option"><span class="box"></span><span>Burrito</span></div>
-            <div class="option"><span class="box"></span><span>Bowl</span></div>
-            <div class="option"><span class="box"></span><span>Tacos (3)</span></div>
-            <div class="option"><span class="box"></span><span>Salad</span></div>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2>2. Choose ONE Protein</h2>
-          <div class="options">
-            <div class="option"><span class="box"></span><span>Chicken</span></div>
-            <div class="option"><span class="box"></span><span>Steak</span></div>
-            <div class="option"><span class="box"></span><span>Barbacoa</span></div>
-            <div class="option"><span class="box"></span><span>Carnitas</span></div>
-            <div class="option"><span class="box"></span><span>Sofritas</span></div>
-            <div class="option"><span class="box"></span><span>Veggie</span></div>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2>3. Meal Details</h2>
-          <div class="grid-3">
-            <div class="subcard">
-              <h3>Rice <span style="font-weight: normal; color: var(--muted);">(Burrito/Bowl Only)</span></h3>
-              <div class="options" style="grid-template-columns: 1fr;">
-                <div class="option"><span class="box"></span><span>White</span></div>
-                <div class="option"><span class="box"></span><span>Brown</span></div>
-                <div class="option"><span class="box"></span><span>None</span></div>
-              </div>
-            </div>
-
-            <div class="subcard">
-              <h3>Beans <span style="font-weight: normal; color: var(--muted);">(Choose One)</span></h3>
-              <div class="options" style="grid-template-columns: 1fr;">
-                <div class="option"><span class="box"></span><span>Black</span></div>
-                <div class="option"><span class="box"></span><span>Pinto</span></div>
-                <div class="option"><span class="box"></span><span>None</span></div>
-              </div>
-            </div>
-
-            <div class="subcard">
-              <h3>Tacos Only</h3>
-              <div class="note">Choose one shell type only if you selected tacos.</div>
-              <div class="options" style="grid-template-columns: 1fr;">
-                <div class="option"><span class="box"></span><span>Soft flour</span></div>
-                <div class="option"><span class="box"></span><span>Soft corn</span></div>
-                <div class="option"><span class="box"></span><span>Hard shell</span></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2>4. Toppings</h2>
-          <div class="note">Choose about 3–5 toppings.</div>
-          <div class="options">
-            <div class="option"><span class="box"></span><span>Fajita veggies</span></div>
-            <div class="option"><span class="box"></span><span>Mild salsa (tomato)</span></div>
-            <div class="option"><span class="box"></span><span>Medium salsa (green)</span></div>
-            <div class="option"><span class="box"></span><span>Hot salsa (red)</span></div>
-            <div class="option"><span class="box"></span><span>Sour cream</span></div>
-            <div class="option"><span class="box"></span><span>Cheese</span></div>
-            <div class="option"><span class="box"></span><span>Lettuce</span></div>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2>5. Backup Protein</h2>
-          <div class="note">Required in case your first choice is unavailable.</div>
-          <div class="options">
-            <div class="option"><span class="box"></span><span>Chicken</span></div>
-            <div class="option"><span class="box"></span><span>Steak</span></div>
-            <div class="option"><span class="box"></span><span>Barbacoa</span></div>
-            <div class="option"><span class="box"></span><span>Carnitas</span></div>
-            <div class="option"><span class="box"></span><span>Sofritas</span></div>
-            <div class="option"><span class="box"></span><span>Veggie</span></div>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2>6. Student Agreement</h2>
-          <div class="agreement">
-            <span class="box"></span>
-            <div>
-              I understand I get <strong>ONE</strong> meal and should keep my order reasonable. My order will be placed exactly as written.
-            </div>
-          </div>
-        </section>
-
-        <div class="footer-note">
-          Print this page, complete it neatly, and turn it in.
-        </div>
-      </main>
+  <!-- NAME FIELDS -->
+  <div class="name-row">
+    <div class="field">
+      <label for="f-name">Name</label>
+      <input id="f-name" type="text" placeholder="First and last name" autocomplete="name">
+    </div>
+    <div class="field">
+      <label for="f-period">Class Period</label>
+      <input id="f-period" type="text" placeholder="e.g. 3rd period">
     </div>
   </div>
+
+  <!-- MEAL TYPE -->
+  <div class="section" id="sec-meal">
+    <div class="section-head">
+      <h2>Meal type</h2>
+      <span class="badge badge-req">Required · choose 1</span>
+    </div>
+    <div class="chips" id="grp-meal"></div>
+  </div>
+
+  <!-- PROTEIN -->
+  <div class="section" id="sec-protein">
+    <div class="section-head">
+      <h2>Protein</h2>
+      <span class="badge badge-req">Required · choose 1</span>
+    </div>
+    <div class="chips" id="grp-protein"></div>
+  </div>
+
+  <!-- RICE -->
+  <div class="section dimmed" id="sec-rice">
+    <div class="section-head">
+      <h2>Rice</h2>
+      <span class="badge badge-cond">Burrito / Bowl only</span>
+    </div>
+    <div class="chips" id="grp-rice"></div>
+  </div>
+
+  <!-- BEANS -->
+  <div class="section" id="sec-beans">
+    <div class="section-head">
+      <h2>Beans</h2>
+      <span class="badge badge-req">Required · choose 1</span>
+    </div>
+    <div class="chips" id="grp-beans"></div>
+  </div>
+
+  <!-- TOPPINGS -->
+  <div class="section" id="sec-toppings">
+    <div class="section-head">
+      <h2>Toppings</h2>
+      <span class="badge badge-opt">Choose 3–5</span>
+      <span id="topping-badge" class="hint">0 / 5</span>
+    </div>
+    <div class="chips" id="grp-toppings"></div>
+  </div>
+
+  <!-- SHELL (TACOS) -->
+  <div class="section dimmed" id="sec-shell">
+    <div class="section-head">
+      <h2>Taco shell type</h2>
+      <span class="badge badge-cond">Tacos only · choose 1</span>
+    </div>
+    <div class="chips" id="grp-shell"></div>
+  </div>
+
+  <!-- BACKUP PROTEIN -->
+  <div class="section" id="sec-backup">
+    <div class="section-head">
+      <h2>Backup protein</h2>
+      <span class="badge badge-req">Required · choose 1</span>
+    </div>
+    <div class="chips" id="grp-backup"></div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <button class="btn btn-ghost" onclick="resetAll()">Clear form</button>
+    <button class="btn btn-primary" onclick="submitOrder()">Submit order →</button>
+  </div>
+
+  <div class="error-bar" id="err-bar">Please complete all required fields before submitting.</div>
+
+  <!-- SUMMARY -->
+  <div class="summary" id="summary">
+    <h3>Order Summary</h3>
+    <div class="summary-grid" id="summary-grid"></div>
+  </div>
+
+  <footer>
+    <p>Chipotle Order Form · GitHub Pages · <a href="https://github.com/" style="color:inherit;">github.com</a></p>
+  </footer>
+
+</div>
+
+<script>
+const CFG = {
+  meal:    { items: ['Burrito','Bowl','Tacos (3)','Salad'], single: true },
+  protein: { items: ['Chicken','Steak','Barbacoa','Carnitas','Sofritas','Veggie'], single: true },
+  rice:    { items: ['White rice','Brown rice','No rice'], single: true },
+  beans:   { items: ['Black beans','Pinto beans','No beans'], single: true },
+  toppings:{ items: ['Fajita veggies','Mild salsa','Medium salsa','Hot salsa','Sour cream','Cheese','Lettuce'], single: false, max: 5 },
+  shell:   { items: ['Soft flour','Soft corn','Hard shell'], single: true },
+  backup:  { items: ['Chicken','Steak','Barbacoa','Carnitas','Sofritas','Veggie'], single: true }
+};
+
+const S = { meal:null, protein:null, rice:null, beans:null, toppings:[], shell:null, backup:null };
+
+function buildGroups() {
+  Object.entries(CFG).forEach(([key, cfg]) => {
+    const el = document.getElementById('grp-' + key);
+    cfg.items.forEach(label => {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.innerHTML = `<span class="chip-box"></span>${label}`;
+      chip.dataset.val = label;
+      chip.onclick = () => pick(key, label, chip, el, cfg);
+      el.appendChild(chip);
+    });
+  });
+}
+
+function pick(key, val, chip, el, cfg) {
+  if (cfg.single) {
+    el.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+    chip.classList.add('on');
+    S[key] = val;
+    if (key === 'meal') onMealChange();
+    if (key === 'protein') onProteinChange(val);
+  } else {
+    const i = S[key].indexOf(val);
+    if (i > -1) { S[key].splice(i, 1); chip.classList.remove('on'); }
+    else if (S[key].length < cfg.max) { S[key].push(val); chip.classList.add('on'); }
+    updateToppingBadge();
+  }
+}
+
+function onMealChange() {
+  const m = S.meal;
+  toggle('sec-rice', m === 'Burrito' || m === 'Bowl');
+  toggle('sec-shell', m === 'Tacos (3)');
+}
+
+function toggle(id, active) {
+  document.getElementById(id).classList.toggle('dimmed', !active);
+}
+
+function onProteinChange(chosen) {
+  document.getElementById('grp-backup').querySelectorAll('.chip').forEach(c => {
+    const same = c.dataset.val === chosen;
+    c.style.opacity = same ? '0.35' : '1';
+    c.style.pointerEvents = same ? 'none' : 'auto';
+    if (same && S.backup === chosen) { c.classList.remove('on'); S.backup = null; }
+  });
+}
+
+function updateToppingBadge() {
+  const n = S.toppings.length;
+  const el = document.getElementById('topping-badge');
+  el.textContent = n + ' / 5';
+  el.className = n >= 3 ? (n <= 5 ? 'good' : 'over') : '';
+}
+
+function resetAll() {
+  Object.keys(S).forEach(k => { S[k] = k === 'toppings' ? [] : null; });
+  document.querySelectorAll('.chip').forEach(c => {
+    c.classList.remove('on');
+    c.style.opacity = '';
+    c.style.pointerEvents = '';
+  });
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-period').value = '';
+  ['sec-rice','sec-shell'].forEach(id => document.getElementById(id).classList.add('dimmed'));
+  document.getElementById('err-bar').classList.remove('show');
+  document.getElementById('summary').classList.remove('show');
+  updateToppingBadge();
+}
+
+function submitOrder() {
+  const name   = document.getElementById('f-name').value.trim();
+  const period = document.getElementById('f-period').value.trim();
+  const m = S.meal;
+  const needRice  = m === 'Burrito' || m === 'Bowl';
+  const needShell = m === 'Tacos (3)';
+  const ok = name && period && m && S.protein && S.beans && S.backup &&
+    (!needRice || S.rice) && (!needShell || S.shell) && S.toppings.length >= 3;
+  const err = document.getElementById('err-bar');
+  if (!ok) { err.classList.add('show'); return; }
+  err.classList.remove('show');
+
+  const rows = [
+    ['Name', name], ['Period', period], ['Meal', m], ['Protein', S.protein],
+    needRice  ? ['Rice',  S.rice]  : null,
+    ['Beans', S.beans],
+    ['Toppings', S.toppings.join(', ')],
+    needShell ? ['Shell', S.shell] : null,
+    ['Backup protein', S.backup]
+  ].filter(Boolean);
+
+  const grid = document.getElementById('summary-grid');
+  grid.innerHTML = rows.map(([l,v]) =>
+    `<div class="summary-row"><span class="lbl">${l}</span><span class="val">${v}</span></div>`
+  ).join('');
+  document.getElementById('summary').classList.add('show');
+  document.getElementById('summary').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+buildGroups();
+</script>
 </body>
 </html>
