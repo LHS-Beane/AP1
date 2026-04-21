@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chipotle Order Form</title>
+  <style>
+    :root {
+      --primary: #8b1e1e;
+      --secondary: #4b2e2e;
+      --accent: #d97706;
+      --bg: #f8f5f2;
+      --card: #ffffff;
+      --line: #d6d0ca;
+      --text: #222222;
+      --muted: #666666;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #f8f5f2 0%, #efe7df 100%);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      position: sticky;
+      top: 0;
+      background: rgba(248, 245, 242, 0.95);
+      backdrop-filter: blur(6px);
+      padding: 12px 0;
+      z-index: 10;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      opacity: 0.95;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #e8e1da;
+      color: var(--secondary);
+      border: 1px solid #cbbfb2;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary), #b53333);
+      color: white;
+      padding: 26px 28px;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 2rem;
+      line-height: 1.1;
+    }
+
+    .hero p {
+      margin: 0;
+      font-size: 1rem;
+      opacity: 0.96;
+    }
+
+    .content {
+      padding: 24px;
+    }
+
+    .section {
+      margin-bottom: 26px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid #ece7e2;
+    }
+
+    .section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 1.15rem;
+      color: var(--secondary);
+    }
+
+    .note {
+      font-size: 0.93rem;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .line-field label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .line {
+      border-bottom: 2px solid #555;
+      min-height: 28px;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px 18px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 28px;
+    }
+
+    .box {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #444;
+      border-radius: 3px;
+      flex: 0 0 18px;
+    }
+
+    .option span:last-child {
+      line-height: 1.2;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .subcard {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      background: #fcfbfa;
+      min-height: 100%;
+    }
+
+    .subcard h3 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      color: var(--secondary);
+    }
+
+    .agreement {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      border: 1px dashed #b6a999;
+      border-radius: 14px;
+      padding: 14px;
+      background: #fffaf5;
+    }
+
+    .agreement .box {
+      margin-top: 2px;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 700px) {
+      .row,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .page {
+        padding: 14px;
+      }
+
+      .content {
+        padding: 18px;
+      }
+    }
+
+    @media print {
+      @page {
+        size: letter;
+        margin: 0.5in;
+      }
+
+      body {
+        background: white;
+      }
+
+      .toolbar {
+        display: none !important;
+      }
+
+      .page {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .card {
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+      }
+
+      .hero {
+        padding: 0 0 14px;
+        color: black;
+        background: none;
+        border-bottom: 2px solid black;
+      }
+
+      .hero h1 {
+        font-size: 20pt;
+      }
+
+      .hero p {
+        color: black;
+      }
+
+      .content {
+        padding: 14px 0 0;
+      }
+
+      .section {
+        break-inside: avoid;
+        border-bottom-color: #bbb;
+      }
+
+      .subcard,
+      .agreement {
+        background: white;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="toolbar">
+      <button class="btn btn-primary" onclick="window.print()">Print Form</button>
+      <button class="btn btn-secondary" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">Back to Top</button>
+    </div>
+
+    <div class="card">
+      <header class="hero">
+        <h1>Chipotle Order Form</h1>
+        <p>Fill this out carefully. You will receive <strong>ONE</strong> meal. Orders will be placed exactly as submitted.</p>
+      </header>
+
+      <main class="content">
+        <section class="section">
+          <h2>Student Information</h2>
+          <div class="row">
+            <div class="line-field">
+              <label>Name</label>
+              <div class="line"></div>
+            </div>
+            <div class="line-field">
+              <label>Class Period</label>
+              <div class="line"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>1. Choose ONE Meal Type</h2>
+          <div class="options">
+            <div class="option"><span class="box"></span><span>Burrito</span></div>
+            <div class="option"><span class="box"></span><span>Bowl</span></div>
+            <div class="option"><span class="box"></span><span>Tacos (3)</span></div>
+            <div class="option"><span class="box"></span><span>Salad</span></div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>2. Choose ONE Protein</h2>
+          <div class="options">
+            <div class="option"><span class="box"></span><span>Chicken</span></div>
+            <div class="option"><span class="box"></span><span>Steak</span></div>
+            <div class="option"><span class="box"></span><span>Barbacoa</span></div>
+            <div class="option"><span class="box"></span><span>Carnitas</span></div>
+            <div class="option"><span class="box"></span><span>Sofritas</span></div>
+            <div class="option"><span class="box"></span><span>Veggie</span></div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>3. Meal Details</h2>
+          <div class="grid-3">
+            <div class="subcard">
+              <h3>Rice <span style="font-weight: normal; color: var(--muted);">(Burrito/Bowl Only)</span></h3>
+              <div class="options" style="grid-template-columns: 1fr;">
+                <div class="option"><span class="box"></span><span>White</span></div>
+                <div class="option"><span class="box"></span><span>Brown</span></div>
+                <div class="option"><span class="box"></span><span>None</span></div>
+              </div>
+            </div>
+
+            <div class="subcard">
+              <h3>Beans <span style="font-weight: normal; color: var(--muted);">(Choose One)</span></h3>
+              <div class="options" style="grid-template-columns: 1fr;">
+                <div class="option"><span class="box"></span><span>Black</span></div>
+                <div class="option"><span class="box"></span><span>Pinto</span></div>
+                <div class="option"><span class="box"></span><span>None</span></div>
+              </div>
+            </div>
+
+            <div class="subcard">
+              <h3>Tacos Only</h3>
+              <div class="note">Choose one shell type only if you selected tacos.</div>
+              <div class="options" style="grid-template-columns: 1fr;">
+                <div class="option"><span class="box"></span><span>Soft flour</span></div>
+                <div class="option"><span class="box"></span><span>Soft corn</span></div>
+                <div class="option"><span class="box"></span><span>Hard shell</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>4. Toppings</h2>
+          <div class="note">Choose about 3–5 toppings.</div>
+          <div class="options">
+            <div class="option"><span class="box"></span><span>Fajita veggies</span></div>
+            <div class="option"><span class="box"></span><span>Mild salsa (tomato)</span></div>
+            <div class="option"><span class="box"></span><span>Medium salsa (green)</span></div>
+            <div class="option"><span class="box"></span><span>Hot salsa (red)</span></div>
+            <div class="option"><span class="box"></span><span>Sour cream</span></div>
+            <div class="option"><span class="box"></span><span>Cheese</span></div>
+            <div class="option"><span class="box"></span><span>Lettuce</span></div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>5. Backup Protein</h2>
+          <div class="note">Required in case your first choice is unavailable.</div>
+          <div class="options">
+            <div class="option"><span class="box"></span><span>Chicken</span></div>
+            <div class="option"><span class="box"></span><span>Steak</span></div>
+            <div class="option"><span class="box"></span><span>Barbacoa</span></div>
+            <div class="option"><span class="box"></span><span>Carnitas</span></div>
+            <div class="option"><span class="box"></span><span>Sofritas</span></div>
+            <div class="option"><span class="box"></span><span>Veggie</span></div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>6. Student Agreement</h2>
+          <div class="agreement">
+            <span class="box"></span>
+            <div>
+              I understand I get <strong>ONE</strong> meal and should keep my order reasonable. My order will be placed exactly as written.
+            </div>
+          </div>
+        </section>
+
+        <div class="footer-note">
+          Print this page, complete it neatly, and turn it in.
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
