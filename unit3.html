@@ -2,290 +2,813 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Unit 3 | AP Physics 1 – Work, Energy, and Power</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Tailwind -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Inter Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
-
-  <!-- MathJax -->
+  <title>AP Physics 1 Energy Review | Interactive Study Site</title>
   <script>
     window.MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$','$$']]
-      },
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$','$$']] },
       svg: { fontCache: 'global' }
     };
   </script>
-  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
   <style>
-    body { font-family: 'Inter', sans-serif; }
-
-    .collapsible-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
+    :root {
+      --primary: #0077da;
+      --secondary: #004d80;
+      --accent: #ffcc00;
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --ink: #172033;
+      --muted: #5c6b80;
+      --success: #18a058;
+      --warning: #c77700;
+      --danger: #d93025;
+      --border: #d9e2ef;
+      --shadow: 0 14px 35px rgba(15, 44, 89, 0.12);
+      --radius: 20px;
     }
 
-    .rotate-90 {
-      transform: rotate(90deg);
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #e5f2ff 0%, var(--bg) 38%, #ffffff 100%);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--secondary), var(--primary));
+      color: white;
+      padding: 48px 22px 38px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.11);
+      right: -140px;
+      top: -160px;
+    }
+
+    .hero {
+      max-width: 1180px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.02em;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 4.7rem);
+      line-height: 0.98;
+      margin: 20px 0 14px;
+      max-width: 900px;
+    }
+
+    .hero p {
+      font-size: clamp(1.04rem, 1.5vw, 1.25rem);
+      max-width: 780px;
+      color: #eaf5ff;
+      margin: 0 0 24px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .btn {
+      border: none;
+      background: var(--primary);
+      color: white;
+      padding: 11px 16px;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      box-shadow: 0 8px 18px rgba(0, 119, 218, 0.22);
+    }
+
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 12px 22px rgba(0, 119, 218, 0.28); }
+    .btn.secondary { background: white; color: var(--secondary); }
+    .btn.ghost { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); }
+    .btn.small { padding: 8px 11px; font-size: 0.87rem; box-shadow: none; }
+    .btn.reset { background: #e9eff7; color: var(--secondary); box-shadow: none; }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 10px 16px;
+    }
+
+    .nav-inner a {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 800;
+      padding: 8px 12px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .nav-inner a:hover { background: #e8f3ff; }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 16px 80px;
+    }
+
+    section { margin: 34px 0; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .section-title .num {
+      background: var(--secondary);
+      color: white;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+
+    h2 { font-size: clamp(1.6rem, 3vw, 2.35rem); margin: 0; color: var(--secondary); }
+    h3 { margin: 0 0 8px; color: var(--secondary); }
+
+    .grid { display: grid; gap: 16px; }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .mini-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 15px;
+      background: #fbfdff;
+    }
+
+    .callout {
+      border-left: 5px solid var(--accent);
+      background: #fff8d8;
+      padding: 14px 16px;
+      border-radius: 14px;
+      margin: 14px 0;
+    }
+
+    .success { border-left-color: var(--success); background: #eaf8f0; }
+    .danger { border-left-color: var(--danger); background: #fff0ef; }
+    .blue { border-left-color: var(--primary); background: #eaf5ff; }
+
+    .formula {
+      background: #0f2942;
+      color: white;
+      border-radius: 16px;
+      padding: 16px;
+      font-size: 1.08rem;
+      min-height: 86px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .formula strong { color: var(--accent); }
+
+    details {
+      border: 1px solid var(--border);
+      background: #f9fbff;
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin: 12px 0;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 900;
+      color: var(--secondary);
+    }
+
+    .problem {
+      border: 2px solid #e1e9f5;
+      border-radius: 18px;
+      padding: 18px;
+      background: white;
+      margin: 16px 0;
+    }
+
+    .level {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 900;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #e8f3ff;
+      color: var(--secondary);
+      margin-bottom: 8px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 10px 0;
+    }
+
+    input, select, textarea {
+      border: 1px solid #b9c8da;
+      border-radius: 11px;
+      padding: 10px 12px;
+      font: inherit;
+      background: white;
+      color: var(--ink);
+    }
+
+    textarea { width: 100%; min-height: 90px; resize: vertical; }
+    input[type="number"] { width: 110px; }
+
+    .feedback {
+      font-weight: 800;
+      margin-top: 8px;
+      min-height: 24px;
+    }
+
+    .bar-wrap {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 90px 1fr 55px;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .track {
+      height: 24px;
+      background: #e7edf5;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid #d1ddec;
+    }
+
+    .fill {
+      height: 100%;
+      width: 0%;
+      transition: width 0.35s ease;
+      background: linear-gradient(90deg, var(--primary), #59b7ff);
+    }
+
+    .fill.pe { background: linear-gradient(90deg, #ffb100, #ffd85a); }
+    .fill.loss { background: linear-gradient(90deg, #d93025, #ff8a80); }
+    .fill.spring { background: linear-gradient(90deg, #7b61ff, #b3a6ff); }
+
+    .energy-canvas {
+      background: linear-gradient(180deg, #eef7ff, #ffffff);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      min-height: 280px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hill {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 160px;
+      background: linear-gradient(135deg, transparent 0 20%, #bfd2e7 20% 22%, #dce8f5 22% 100%);
+      clip-path: polygon(0 80%, 18% 55%, 38% 72%, 62% 30%, 100% 80%, 100% 100%, 0 100%);
+    }
+
+    .ball {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #ffffff, var(--primary) 36%, #003f75 100%);
+      position: absolute;
+      left: 70%;
+      bottom: 178px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+      transition: left 0.3s ease, bottom 0.3s ease;
+    }
+
+    .zero-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 42px;
+      border-top: 2px dashed #d93025;
+      color: #d93025;
+      font-weight: 900;
+      padding-left: 12px;
+      font-size: 0.85rem;
+    }
+
+    .quiz-option {
+      display: block;
+      margin: 8px 0;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+    }
+
+    .quiz-option:hover { background: #eef7ff; }
+    .quiz-option.correct { border-color: var(--success); background: #eaf8f0; }
+    .quiz-option.wrong { border-color: var(--danger); background: #fff0ef; }
+
+    .checklist li { margin: 8px 0; }
+    .print-only { display: none; }
+
+    footer {
+      padding: 28px 16px;
+      text-align: center;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: white;
+    }
+
+    @media (max-width: 840px) {
+      .two, .three, .four { grid-template-columns: 1fr; }
+      .bar-row { grid-template-columns: 70px 1fr 45px; }
+    }
+
+    @media print {
+      nav, .hero-actions, .btn, .interactive-only { display: none !important; }
+      header { padding: 22px; background: white; color: black; }
+      header p, .badge { color: black; border-color: #aaa; background: white; }
+      body { background: white; }
+      .card, .problem { box-shadow: none; break-inside: avoid; }
+      details { border: 1px solid #aaa; }
+      details:not([open]) > *:not(summary) { display: block; }
+      .print-only { display: block; }
     }
   </style>
 </head>
-
-<body class="bg-slate-100 text-slate-900">
-
-<!-- HEADER -->
-<header class="bg-gradient-to-r from-sky-700 via-sky-600 to-slate-900 text-white shadow-lg">
-  <div class="max-w-4xl mx-auto px-4 py-6">
-    <h1 class="text-3xl font-bold">AP Physics 1 – Unit 3 Review</h1>
-    <p class="text-sky-100 mt-1">Work, Energy, and Power (CED Topics 3.1–3.5)</p>
-  </div>
-</header>
-
-<!-- NAVIGATION -->
-<nav class="bg-slate-900 text-slate-100 text-sm">
-  <div class="max-w-4xl mx-auto px-4 py-2 flex items-center gap-4">
-    <a href="/AP1/index.html" class="hover:underline font-medium">Home</a>
-  </div>
-</nav>
-
-<!-- MAIN CONTENT -->
-<main class="max-w-4xl mx-auto px-4 py-6 space-y-6">
-
-  <!-- 1. Big Picture -->
-  <div class="bg-white border border-slate-200 rounded-xl shadow-sm">
-    <button class="w-full flex justify-between items-center px-4 py-3 text-left text-lg font-semibold collapsible-btn">
-      1. Big Picture Overview
-      <span class="transition-transform chevron">▶</span>
-    </button>
-
-    <div class="collapsible-content px-4 pb-4 text-sm leading-relaxed">
-      <p class="mt-2">Unit 3 shifts the focus from forces to energy. You should be able to:</p>
-      <ul class="list-disc list-inside mt-2 space-y-1">
-        <li>Use kinetic, gravitational, and elastic energy to describe motion.</li>
-        <li>Connect force and displacement to work.</li>
-        <li>Interpret and build energy bar charts + graphs.</li>
-        <li>Apply conservation of energy to explain motion.</li>
-        <li>Compute and compare power as the rate of energy transfer.</li>
-      </ul>
+<body>
+  <header>
+    <div class="hero">
+      <span class="badge">⚡ AP Physics 1 Review • Work, Energy & Power</span>
+      <h1>Energy Master Review</h1>
+      <p>A scaffolded, interactive review that moves students from reference points and energy transformations to AP-style mathematical reasoning.</p>
+      <div class="hero-actions">
+        <a class="btn secondary" href="#diagnostic">Start Diagnostic</a>
+        <a class="btn ghost" href="#problems">Jump to Problems</a>
+        <button class="btn ghost" onclick="window.print()">Print / Save PDF</button>
+      </div>
     </div>
-  </div>
+  </header>
 
-  <!-- 2. Kinetic Energy -->
-  <div class="bg-white border border-slate-200 rounded-xl shadow-sm">
-    <button class="w-full flex justify-between items-center px-4 py-3 text-lg font-semibold collapsible-btn">
-      2. Translational Kinetic Energy (3.1)
-      <span class="transition-transform chevron">▶</span>
-    </button>
+  <nav>
+    <div class="nav-inner">
+      <a href="#map">Roadmap</a>
+      <a href="#diagnostic">Diagnostic</a>
+      <a href="#concepts">Concepts</a>
+      <a href="#reference">Reference Points</a>
+      <a href="#bars">Energy Bars</a>
+      <a href="#equations">Equations</a>
+      <a href="#problems">Scaffolded Problems</a>
+      <a href="#apstyle">AP Style</a>
+      <a href="#teacher">Teacher Notes</a>
+    </div>
+  </nav>
 
-    <div class="collapsible-content px-4 pb-4 text-sm leading-relaxed">
+  <main>
+    <section id="map">
+      <div class="section-title"><span class="num">1</span><h2>Energy Review Roadmap</h2></div>
+      <div class="grid four">
+        <div class="card"><h3>1. Define the System</h3><p>Decide what objects are inside the system. Energy can move within the system or be transferred across its boundary.</p></div>
+        <div class="card"><h3>2. Choose Zero Height</h3><p>Gravitational potential energy depends on your reference point. Motion does not.</p></div>
+        <div class="card"><h3>3. Track Energy Forms</h3><p>Use bar charts before equations: $K$, $U_g$, $U_s$, thermal/internal energy, and external work.</p></div>
+        <div class="card"><h3>4. Use a Law</h3><p>Use conservation of energy or the work-energy theorem depending on the situation.</p></div>
+      </div>
+      <div class="callout blue"><strong>AP Exam Mindset:</strong> The answer is rarely just a number. Students must explain why the equation applies and what the energy changes mean physically.</div>
+    </section>
 
-      <p class="mt-2">Kinetic energy describes the energy of motion:</p>
+    <section id="diagnostic">
+      <div class="section-title"><span class="num">2</span><h2>Quick Diagnostic: What Is the Real Weakness?</h2></div>
+      <div class="card">
+        <p>Use this as a 5-minute warmup. Students answer first, then reveal explanations.</p>
+        <div class="problem quiz" data-answer="b">
+          <h3>Question 1: Reference Height</h3>
+          <p>A book is on a table. A student chooses the tabletop as $h=0$. Another student chooses the floor as $h=0$. Which statement is true?</p>
+          <button class="quiz-option" data-choice="a">A. The book's motion changes because the potential energy changes.</button>
+          <button class="quiz-option" data-choice="b">B. The numerical value of $U_g$ changes, but physical predictions do not.</button>
+          <button class="quiz-option" data-choice="c">C. Only the floor can be used as zero height.</button>
+          <button class="quiz-option" data-choice="d">D. Potential energy cannot be zero.</button>
+          <div class="feedback"></div>
+          <details><summary>Explanation</summary><p>Potential energy depends on the chosen reference point. Changes in potential energy are what matter for motion.</p></details>
+        </div>
 
-      <p class="text-center my-3">$$K = \tfrac12 m v^2$$</p>
+        <div class="problem quiz" data-answer="c">
+          <h3>Question 2: Heavier vs. Lighter Objects</h3>
+          <p>Two objects are dropped from the same height with negligible air resistance. Object A has twice the mass of Object B. How do their speeds compare right before impact?</p>
+          <button class="quiz-option" data-choice="a">A. Object A is twice as fast.</button>
+          <button class="quiz-option" data-choice="b">B. Object A is four times as fast.</button>
+          <button class="quiz-option" data-choice="c">C. They have the same speed.</button>
+          <button class="quiz-option" data-choice="d">D. Object B is faster because it has less inertia.</button>
+          <div class="feedback"></div>
+          <details><summary>Explanation</summary><p>Using $mgh = \frac{1}{2}mv^2$, mass cancels. The heavier object has more energy, but it also requires more energy per speed because it has more mass.</p></details>
+        </div>
 
-      <ul class="list-disc list-inside space-y-1">
-        <li>Depends on mass and <strong>speed</strong> only.</li>
-        <li>If speed doubles → kinetic energy becomes <strong>4× larger</strong>.</li>
-        <li>K is always positive; direction of velocity doesn’t matter.</li>
-      </ul>
-
-      <!-- Quick Check -->
-      <div class="bg-slate-50 p-3 border rounded-xl mt-4">
-        <p class="font-medium">Quick Check</p>
-        <p>A car speeds up from 10 m/s to 20 m/s. By what factor does $K$ increase?</p>
-        <button class="mt-2 px-2 py-1 border rounded answer-btn">Show Answer</button>
-
-        <div class="answer hidden mt-1">
-          $$K \propto v^2 \Rightarrow (20/10)^2 = 4.$$
-          K increases by <strong>4×</strong>.
+        <div class="problem quiz" data-answer="a">
+          <h3>Question 3: Friction</h3>
+          <p>A block slides down a rough ramp. Compared with a frictionless ramp of the same height, the block reaches the bottom with...</p>
+          <button class="quiz-option" data-choice="a">A. less kinetic energy because some mechanical energy becomes thermal/internal energy.</button>
+          <button class="quiz-option" data-choice="b">B. more kinetic energy because friction adds energy.</button>
+          <button class="quiz-option" data-choice="c">C. the same kinetic energy because energy is always conserved.</button>
+          <button class="quiz-option" data-choice="d">D. zero kinetic energy because friction cancels gravity.</button>
+          <div class="feedback"></div>
+          <details><summary>Explanation</summary><p>Total energy is conserved if thermal/internal energy is included, but mechanical energy decreases when friction does negative work.</p></details>
         </div>
       </div>
+    </section>
 
-    </div>
-  </div>
-
-  <!-- 3. Work -->
-  <div class="bg-white border border-slate-200 rounded-xl shadow-sm">
-    <button class="w-full flex justify-between items-center px-4 py-3 text-lg font-semibold collapsible-btn">
-      3. Work (3.2)
-      <span class="transition-transform chevron">▶</span>
-    </button>
-
-    <div class="collapsible-content px-4 pb-4 text-sm leading-relaxed">
-
-      <p class="mt-2">Work is energy transferred by a force acting through displacement.</p>
-
-      <p class="text-center my-3">
-        $$W = F d \cos\theta$$
-      </p>
-
-      <p class="text-center my-3">
-        $$W = \int F(x)\, dx \quad \text{(area under the } F\!-\!x \text{ graph)}$$
-      </p>
-
-      <ul class="list-disc list-inside space-y-1">
-        <li>$W &gt; 0$ → system gains energy.</li>
-        <li>$W &lt; 0$ → system loses energy.</li>
-        <li>If force ⟂ displacement → $W = 0$.</li>
-      </ul>
-
-      <!-- Quick Check -->
-      <div class="bg-slate-50 p-3 border rounded-xl mt-4">
-        <p class="font-medium">Quick Check</p>
-        <p>Force increases linearly from 0→10 N over 0→2 m. Compute the work.</p>
-
-        <button class="mt-2 px-2 py-1 border rounded answer-btn">Show Answer</button>
-
-        <div class="answer hidden mt-1">
-          Triangle area:
-          $$W = \tfrac12 (2)(10)=10\text{ J}.$$
+    <section id="concepts">
+      <div class="section-title"><span class="num">3</span><h2>Core Concepts Students Must Own</h2></div>
+      <div class="grid two">
+        <div class="card">
+          <h3>Energy Is a Tracking Tool</h3>
+          <p>Energy helps us predict changes in motion and position without needing to analyze every force during the motion.</p>
+          <div class="callout">Energy is not “used up.” It is stored, transferred, or transformed.</div>
+        </div>
+        <div class="card">
+          <h3>System Choice Matters</h3>
+          <p>If the system is the object alone, gravity may be external work. If the system is object + Earth, gravitational potential energy is stored inside the system.</p>
+          <details><summary>Student-friendly language</summary><p>Ask: “Did I include the thing causing the interaction inside my system?” If yes, it can be potential energy. If no, it may be external work.</p></details>
+        </div>
+        <div class="card">
+          <h3>Mechanical Energy</h3>
+          <p>Mechanical energy usually means:</p>
+          <p>$$E_{mech}=K+U_g+U_s$$</p>
+          <p>Mechanical energy is conserved only when nonconservative work is zero or negligible.</p>
+        </div>
+        <div class="card">
+          <h3>Nonconservative Work</h3>
+          <p>Friction, applied pushes, drag, and motors can change mechanical energy.</p>
+          <p>$$W_{nc}=\Delta E_{mech}$$</p>
         </div>
       </div>
+    </section>
 
-    </div>
-  </div>
-
-  <!-- 4. Potential Energy -->
-  <div class="bg-white border border-slate-200 rounded-xl shadow-sm">
-    <button class="w-full flex justify-between items-center px-4 py-3 text-lg font-semibold collapsible-btn">
-      4. Potential Energy (3.3)
-      <span class="transition-transition chevron">▶</span>
-    </button>
-
-    <div class="collapsible-content px-4 pb-4 text-sm leading-relaxed">
-
-      <h3 class="font-semibold mt-3">Gravitational Potential Energy</h3>
-      <p class="text-center my-3">$$U_g = mgh$$</p>
-
-      <h3 class="font-semibold mt-3">Elastic Potential Energy</h3>
-      <p class="text-center my-3">$$U_s = \tfrac12 k x^2$$</p>
-
-      <ul class="list-disc list-inside space-y-1">
-        <li>Potential energy is stored in interactions, not objects.</li>
-        <li>The zero level for $U_g$ is arbitrary but must be consistent.</li>
-      </ul>
-
-      <!-- Quick Check -->
-      <div class="bg-slate-50 p-3 border rounded-xl mt-4">
-        <p class="font-medium">Quick Check</p>
-        <p>How much gravitational energy is gained by lifting 2 kg up 1.5 m?</p>
-
-        <button class="mt-2 px-2 py-1 border rounded answer-btn">Show Answer</button>
-
-        <div class="answer hidden mt-1">
-          $$\Delta U = mgh = (2)(9.8)(1.5) \approx 29\text{ J}.$$
+    <section id="reference">
+      <div class="section-title"><span class="num">4</span><h2>Interactive Reference Point Simulator</h2></div>
+      <div class="grid two">
+        <div class="card">
+          <h3>Change the Zero Height</h3>
+          <p>Use this to show students that potential energy values change, but energy changes remain consistent.</p>
+          <div class="input-row">
+            <label>Object mass: <input id="massRef" type="number" value="2" step="0.1"> kg</label>
+            <label>Object height: <input id="heightRef" type="number" value="5" step="0.1"> m</label>
+            <label>Zero height: <input id="zeroRef" type="number" value="0" step="0.1"> m</label>
+          </div>
+          <button class="btn small" onclick="updateReference()">Update</button>
+          <div id="referenceOutput" class="callout blue"></div>
+          <details><summary>Discussion Prompt</summary><p>If you move the zero reference upward, can $U_g$ become negative? What does that mean physically?</p></details>
+        </div>
+        <div class="card">
+          <div class="energy-canvas">
+            <div class="hill"></div>
+            <div id="refBall" class="ball"></div>
+            <div id="zeroLine" class="zero-line">h = 0 reference</div>
+          </div>
+          <p><strong>Teacher move:</strong> Ask students to predict before changing the zero. Then force them to explain why the motion does not change.</p>
         </div>
       </div>
+    </section>
 
-    </div>
-  </div>
-
-  <!-- 5. Conservation of Energy -->
-  <div class="bg-white border border-slate-200 rounded-xl shadow-sm">
-    <button class="w-full flex justify-between items-center px-4 py-3 text-lg font-semibold collapsible-btn">
-      5. Conservation of Energy (3.4)
-      <span class="transition-transform chevron">▶</span>
-    </button>
-
-    <div class="collapsible-content px-4 pb-4 text-sm leading-relaxed">
-
-      <p class="text-center my-3">
-        $$K_i + U_i = K_f + U_f$$
-      </p>
-
-      <p class="text-center my-3">
-        $$K_i + U_i + W_{nc} = K_f + U_f$$
-      </p>
-
-      <ul class="list-disc list-inside space-y-1">
-        <li>Mechanical energy is conserved only if $W_{nc} = 0$.</li>
-        <li>Friction and drag convert mechanical energy into thermal energy.</li>
-      </ul>
-
-      <!-- Quick Check -->
-      <div class="bg-slate-50 p-3 border rounded-xl mt-4">
-        <p class="font-medium">Quick Check</p>
-        <p>A roller coaster drops 20 m from rest. What is its speed at the bottom (no friction)?</p>
-
-        <button class="mt-2 px-2 py-1 border rounded answer-btn">Show Answer</button>
-
-        <div class="answer hidden mt-1">
-          $$mgh = \tfrac12 mv^2 \Rightarrow v=\sqrt{2gh} \approx 20\text{ m/s}.$$
+    <section id="bars">
+      <div class="section-title"><span class="num">5</span><h2>Energy Bar Chart Builder</h2></div>
+      <div class="grid two">
+        <div class="card">
+          <h3>Build an Energy Snapshot</h3>
+          <p>Set the energy amounts. The total should tell a story.</p>
+          <div class="input-row">
+            <label>$K$: <input id="barK" type="number" value="20" min="0" max="100"> J</label>
+            <label>$U_g$: <input id="barUg" type="number" value="80" min="0" max="100"> J</label>
+            <label>$U_s$: <input id="barUs" type="number" value="0" min="0" max="100"> J</label>
+            <label>Thermal: <input id="barLoss" type="number" value="0" min="0" max="100"> J</label>
+          </div>
+          <button class="btn small" onclick="updateBars()">Update Bars</button>
+          <button class="btn small reset" onclick="presetBars('top')">Top of Hill</button>
+          <button class="btn small reset" onclick="presetBars('middle')">Middle</button>
+          <button class="btn small reset" onclick="presetBars('friction')">With Friction</button>
+          <div id="barFeedback" class="feedback"></div>
+        </div>
+        <div class="card">
+          <h3>Bar Chart</h3>
+          <div class="bar-wrap">
+            <div class="bar-row"><strong>$K$</strong><div class="track"><div id="kFill" class="fill"></div></div><span id="kVal">0 J</span></div>
+            <div class="bar-row"><strong>$U_g$</strong><div class="track"><div id="ugFill" class="fill pe"></div></div><span id="ugVal">0 J</span></div>
+            <div class="bar-row"><strong>$U_s$</strong><div class="track"><div id="usFill" class="fill spring"></div></div><span id="usVal">0 J</span></div>
+            <div class="bar-row"><strong>Thermal</strong><div class="track"><div id="lossFill" class="fill loss"></div></div><span id="lossVal">0 J</span></div>
+          </div>
         </div>
       </div>
+    </section>
 
-    </div>
-  </div>
+    <section id="equations">
+      <div class="section-title"><span class="num">6</span><h2>Equation Toolbox: Meaning Before Plugging In</h2></div>
+      <div class="grid three">
+        <div class="formula"><strong>Kinetic Energy</strong>$$K=\frac{1}{2}mv^2$$<small>Energy due to motion. Speed is squared.</small></div>
+        <div class="formula"><strong>Gravitational PE</strong>$$U_g=mgh$$<small>Energy stored by object-Earth position.</small></div>
+        <div class="formula"><strong>Spring PE</strong>$$U_s=\frac{1}{2}kx^2$$<small>Energy stored in a stretched/compressed spring.</small></div>
+        <div class="formula"><strong>Work</strong>$$W=Fd\cos\theta$$<small>Energy transferred by a force over a displacement.</small></div>
+        <div class="formula"><strong>Work-Energy</strong>$$W_{net}=\Delta K$$<small>Net work changes kinetic energy.</small></div>
+        <div class="formula"><strong>Power</strong>$$P=\frac{\Delta E}{\Delta t}=Fv$$<small>Rate of energy transfer.</small></div>
+      </div>
+      <div class="callout danger"><strong>Common AP trap:</strong> $W=Fd$ only works when force is constant and in the same direction as displacement. Otherwise use $W=Fd\cos\theta$ or area under an $F$ vs. $x$ graph.</div>
+    </section>
 
-  <!-- 6. Power -->
-  <div class="bg-white border border-slate-200 rounded-xl shadow-sm">
-    <button class="w-full flex justify-between items-center px-4 py-3 text-lg font-semibold collapsible-btn">
-      6. Power (3.5)
-      <span class="transition-transform chevron">▶</span>
-    </button>
+    <section id="problems">
+      <div class="section-title"><span class="num">7</span><h2>Scaffolded Practice: Concept → Math → AP Reasoning</h2></div>
 
-    <div class="collapsible-content px-4 pb-4 text-sm leading-relaxed">
-
-      <p class="text-center my-3">
-        $$P = \frac{W}{t}, \quad P = Fv \cos\theta$$
-      </p>
-
-      <ul class="list-disc list-inside space-y-1">
-        <li>Power measures how fast energy is transferred.</li>
-        <li>High force or high speed → high power.</li>
-      </ul>
-
-      <!-- Quick Check -->
-      <div class="bg-slate-50 p-3 border rounded-xl mt-4">
-        <p class="font-medium">Quick Check</p>
-        <p>A 70 kg student climbs 3 m in 4 s. Estimate average power.</p>
-
-        <button class="mt-2 px-2 py-1 border rounded answer-btn">Show Answer</button>
-
-        <div class="answer hidden mt-1">
-          $$W = mgh = 70(9.8)(3) \approx 2058\text{ J}$$
-          $$P = \frac{2058}{4} \approx 515\text{ W}.$$
-        </div>
+      <div class="problem">
+        <span class="level">Level 1 • Energy Identification</span>
+        <h3>Problem 1: Dropped Ball</h3>
+        <p>A $2.0\,\text{kg}$ ball is held $5.0\,\text{m}$ above the ground and released from rest. Use $g=10\,\text{m/s}^2$.</p>
+        <ol>
+          <li>What is the system?</li>
+          <li>What energy does the system have at the top?</li>
+          <li>What energy does it have right before impact?</li>
+        </ol>
+        <details><summary>Reveal scaffold</summary><p>Use ball + Earth as the system. At the top: $U_g$. At the bottom: mostly $K$, assuming negligible air resistance.</p></details>
+        <details><summary>Reveal solution</summary><p>$U_g=mgh=(2)(10)(5)=100\,\text{J}$. At the bottom, $K=100\,\text{J}$.</p></details>
       </div>
 
-    </div>
-  </div>
+      <div class="problem">
+        <span class="level">Level 2 • Reference Point</span>
+        <h3>Problem 2: Same Ball, Different Zero</h3>
+        <p>The same ball is held $5.0\,\text{m}$ above the ground, but now the release point is chosen as $h=0$.</p>
+        <ol>
+          <li>What is $U_g$ at release?</li>
+          <li>What is $U_g$ at the ground?</li>
+          <li>Does the final speed change?</li>
+        </ol>
+        <details><summary>Reveal solution</summary><p>At release, $U_g=0$. At the ground, $h=-5.0\,\text{m}$, so $U_g=(2)(10)(-5)=-100\,\text{J}$. The final speed does not change because $\Delta U_g$ is still $-100\,\text{J}$.</p></details>
+      </div>
 
-</main>
+      <div class="problem">
+        <span class="level">Level 3 • Solve for Speed</span>
+        <h3>Problem 3: Drop Height to Speed</h3>
+        <p>A cart rolls without friction from rest down a track from a vertical height of $1.25\,\text{m}$. Find its speed at the bottom.</p>
+        <details><summary>Reveal scaffold</summary><p>Start with $U_{g,i}+K_i=U_{g,f}+K_f$. Choose bottom as $h=0$.</p></details>
+        <details><summary>Reveal solution</summary><p>$mgh=\frac{1}{2}mv^2$. Mass cancels. $v=\sqrt{2gh}=\sqrt{2(10)(1.25)}=5.0\,\text{m/s}$.</p></details>
+      </div>
 
-<!-- JS FOR COLLAPSIBLES + ANSWERS -->
-<script>
-  document.querySelectorAll('.collapsible-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const content = btn.nextElementSibling;
-      const chevron = btn.querySelector('.chevron');
+      <div class="problem">
+        <span class="level">Level 4 • Work-Energy</span>
+        <h3>Problem 4: Push Across a Floor</h3>
+        <p>A $5.0\,\text{kg}$ box starts from rest. A student does $90\,\text{J}$ of work on the box while friction does $-30\,\text{J}$ of work.</p>
+        <ol>
+          <li>What is the net work?</li>
+          <li>What is the final kinetic energy?</li>
+          <li>What is the final speed?</li>
+        </ol>
+        <details><summary>Reveal solution</summary><p>$W_{net}=90-30=60\,\text{J}$. Since $W_{net}=\Delta K$ and the box starts from rest, $K_f=60\,\text{J}$. Then $60=\frac{1}{2}(5)v^2$, so $v=\sqrt{24}=4.9\,\text{m/s}$.</p></details>
+      </div>
 
-      if (content.style.maxHeight) {
-        content.style.maxHeight = null;
-        chevron.classList.remove('rotate-90');
-      } else {
-        content.style.maxHeight = content.scrollHeight + "px";
-        chevron.classList.add('rotate-90');
-      }
+      <div class="problem">
+        <span class="level">Level 5 • Ramp with Friction</span>
+        <h3>Problem 5: Lost Mechanical Energy</h3>
+        <p>A $3.0\,\text{kg}$ block slides from rest down a rough ramp with vertical height $2.0\,\text{m}$. Friction transforms $18\,\text{J}$ of mechanical energy into thermal energy. Find the speed at the bottom.</p>
+        <details><summary>Reveal scaffold</summary><p>Initial gravitational energy becomes kinetic energy plus thermal/internal energy.</p></details>
+        <details><summary>Reveal solution</summary><p>$mgh=(3)(10)(2)=60\,\text{J}$. Energy left as kinetic: $60-18=42\,\text{J}$. $42=\frac{1}{2}(3)v^2$, so $v^2=28$ and $v=5.3\,\text{m/s}$.</p></details>
+      </div>
+
+      <div class="problem">
+        <span class="level">Level 6 • Spring Energy</span>
+        <h3>Problem 6: Spring Launch</h3>
+        <p>A $0.50\,\text{kg}$ cart is pushed against a spring with spring constant $200\,\text{N/m}$. The spring is compressed $0.20\,\text{m}$ and released on a frictionless horizontal track.</p>
+        <ol>
+          <li>What energy is stored initially?</li>
+          <li>What is the cart's speed after leaving the spring?</li>
+        </ol>
+        <details><summary>Reveal solution</summary><p>$U_s=\frac{1}{2}kx^2=\frac{1}{2}(200)(0.20)^2=4.0\,\text{J}$. Then $4.0=\frac{1}{2}(0.50)v^2$, so $v=4.0\,\text{m/s}$.</p></details>
+      </div>
+
+      <div class="problem">
+        <span class="level">Level 7 • Power</span>
+        <h3>Problem 7: Stair Climb</h3>
+        <p>A $70\,\text{kg}$ student climbs a vertical height of $4.0\,\text{m}$ in $5.0\,\text{s}$.</p>
+        <ol>
+          <li>How much gravitational potential energy does the student gain?</li>
+          <li>What is the student's average power output?</li>
+        </ol>
+        <details><summary>Reveal solution</summary><p>$\Delta U_g=mgh=(70)(10)(4)=2800\,\text{J}$. $P=\Delta E/\Delta t=2800/5=560\,\text{W}$.</p></details>
+      </div>
+    </section>
+
+    <section id="apstyle">
+      <div class="section-title"><span class="num">8</span><h2>AP-Style Reasoning Practice</h2></div>
+      <div class="grid two">
+        <div class="card">
+          <h3>Paragraph Response Prompt</h3>
+          <p>A student claims: “A heavier cart must be moving faster at the bottom of the ramp because it has more gravitational potential energy at the top.”</p>
+          <p><strong>Write a paragraph that agrees or disagrees with the student. Use energy reasoning.</strong></p>
+          <textarea placeholder="Student response..."></textarea>
+          <details><summary>Reveal strong response</summary><p>The student is incorrect. A heavier cart does have more gravitational potential energy because $U_g=mgh$, but it also requires more kinetic energy to reach the same speed because $K=\frac{1}{2}mv^2$. When energy is conserved, $mgh=\frac{1}{2}mv^2$, and the mass cancels. Therefore, if both carts start from rest at the same height and friction is negligible, they reach the bottom with the same speed.</p></details>
+        </div>
+        <div class="card">
+          <h3>Graph / Work Prompt</h3>
+          <p>A force varies with position as shown in a graph. The area under the force-position graph is $24\,\text{J}$. The object starts from rest and has mass $3.0\,\text{kg}$.</p>
+          <ol>
+            <li>What does the area represent?</li>
+            <li>What is the final speed?</li>
+          </ol>
+          <details><summary>Reveal solution</summary><p>The area under an $F$ vs. $x$ graph represents work. If the net work is $24\,\text{J}$, then $W_{net}=\Delta K=24\,\text{J}$. Since the object starts from rest, $24=\frac{1}{2}(3)v^2$. Thus $v=4.0\,\text{m/s}$.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section id="calculator">
+      <div class="section-title"><span class="num">9</span><h2>Mini Energy Calculator</h2></div>
+      <div class="card">
+        <p>This is intentionally simple so students can check calculations after doing the reasoning first.</p>
+        <div class="grid three">
+          <div class="mini-card">
+            <h3>$U_g=mgh$</h3>
+            <div class="input-row"><input id="calcM" type="number" value="2" step="0.1"> kg <input id="calcH" type="number" value="5" step="0.1"> m</div>
+            <button class="btn small" onclick="calcUg()">Calculate $U_g$</button>
+            <div id="calcUgOut" class="feedback"></div>
+          </div>
+          <div class="mini-card">
+            <h3>$K=\frac{1}{2}mv^2$</h3>
+            <div class="input-row"><input id="calcKm" type="number" value="2" step="0.1"> kg <input id="calcV" type="number" value="4" step="0.1"> m/s</div>
+            <button class="btn small" onclick="calcK()">Calculate $K$</button>
+            <div id="calcKOut" class="feedback"></div>
+          </div>
+          <div class="mini-card">
+            <h3>$W=Fd\cos\theta$</h3>
+            <div class="input-row"><input id="calcF" type="number" value="10" step="0.1"> N <input id="calcD" type="number" value="3" step="0.1"> m <input id="calcTheta" type="number" value="0" step="1">°</div>
+            <button class="btn small" onclick="calcW()">Calculate $W$</button>
+            <div id="calcWOut" class="feedback"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+  </main>
+
+  <footer>
+    AP Physics 1 Energy Review • Built for classroom use, Chromebook-friendly, and GitHub Pages ready.
+  </footer>
+
+  <script>
+    function $(id) { return document.getElementById(id); }
+    function val(id) { return parseFloat($(id).value) || 0; }
+
+    function updateReference() {
+      const m = val('massRef');
+      const h = val('heightRef');
+      const z = val('zeroRef');
+      const g = 10;
+      const relativeHeight = h - z;
+      const Ug = m * g * relativeHeight;
+      $('referenceOutput').innerHTML = `<strong>Result:</strong> Relative height = ${relativeHeight.toFixed(2)} m, so $U_g = m g (h-h_0) = ${Ug.toFixed(1)}\\,\\text{J}$.<br><strong>Key idea:</strong> Changing zero height changes $U_g$, not the actual motion.`;
+      const bottom = Math.max(60, Math.min(210, 42 + relativeHeight * 26));
+      $('refBall').style.bottom = `${bottom}px`;
+      const zeroBottom = Math.max(22, Math.min(235, 42 + z * 26));
+      $('zeroLine').style.bottom = `${zeroBottom}px`;
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+    }
+
+    function updateBars() {
+      const k = Math.max(0, val('barK'));
+      const ug = Math.max(0, val('barUg'));
+      const us = Math.max(0, val('barUs'));
+      const loss = Math.max(0, val('barLoss'));
+      const total = k + ug + us + loss;
+      const max = Math.max(100, total, k, ug, us, loss);
+      setBar('k', k, max);
+      setBar('ug', ug, max);
+      setBar('us', us, max);
+      setBar('loss', loss, max);
+      $('barFeedback').innerHTML = `Total tracked energy: <strong>${total.toFixed(1)} J</strong>. Use this to explain where the energy is stored or transferred.`;
+    }
+
+    function setBar(prefix, amount, max) {
+      $(`${prefix}Fill`).style.width = `${100 * amount / max}%`;
+      $(`${prefix}Val`).textContent = `${amount.toFixed(0)} J`;
+    }
+
+    function presetBars(type) {
+      const presets = {
+        top: [0, 100, 0, 0],
+        middle: [50, 50, 0, 0],
+        friction: [60, 0, 0, 40]
+      };
+      const [k, ug, us, loss] = presets[type];
+      $('barK').value = k;
+      $('barUg').value = ug;
+      $('barUs').value = us;
+      $('barLoss').value = loss;
+      updateBars();
+    }
+
+    function calcUg() {
+      const Ug = val('calcM') * 10 * val('calcH');
+      $('calcUgOut').innerHTML = `$U_g = ${Ug.toFixed(1)}\\,\\text{J}$`;
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+    }
+
+    function calcK() {
+      const K = 0.5 * val('calcKm') * val('calcV') ** 2;
+      $('calcKOut').innerHTML = `$K = ${K.toFixed(1)}\\,\\text{J}$`;
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+    }
+
+    function calcW() {
+      const theta = val('calcTheta') * Math.PI / 180;
+      const W = val('calcF') * val('calcD') * Math.cos(theta);
+      $('calcWOut').innerHTML = `$W = ${W.toFixed(1)}\\,\\text{J}$`;
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+    }
+
+    document.querySelectorAll('.quiz').forEach(q => {
+      const answer = q.dataset.answer;
+      q.querySelectorAll('.quiz-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          q.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('correct', 'wrong'));
+          if (btn.dataset.choice === answer) {
+            btn.classList.add('correct');
+            q.querySelector('.feedback').textContent = 'Correct — nice energy reasoning.';
+            q.querySelector('.feedback').style.color = 'var(--success)';
+          } else {
+            btn.classList.add('wrong');
+            q.querySelector(`[data-choice="${answer}"]`).classList.add('correct');
+            q.querySelector('.feedback').textContent = 'Not quite — check the explanation and focus on the system/energy change.';
+            q.querySelector('.feedback').style.color = 'var(--danger)';
+          }
+        });
+      });
     });
-  });
 
-  document.querySelectorAll('.answer-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const ans = btn.nextElementSibling;
-      ans.classList.toggle('hidden');
-      btn.textContent = ans.classList.contains('hidden') ? "Show Answer" : "Hide Answer";
+    window.addEventListener('load', () => {
+      updateReference();
+      updateBars();
+      calcUg();
+      calcK();
+      calcW();
     });
-  });
-</script>
-
+  </script>
 </body>
 </html>
+
 
