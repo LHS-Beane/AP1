@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AP Physics 1 – Practice Exam Builder</title>
+  <meta name="description" content="Interactive AP Physics 1 multiple-choice practice exam builder with timer, formula sheet, and analytics." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ═══════════════ HEADER ═══════════════════════════════ -->
+  <header class="hero">
+    <div class="hero-left">
+      <p class="eyebrow">⚛️ AP Physics 1 &nbsp;·&nbsp; Practice Exam Builder</p>
+      <h1>Physics <span>Exam Builder</span></h1>
+      <p class="hero-sub">Generate custom practice sets by unit, difficulty, or topic. Get instant feedback, analytics, and formula reference.</p>
+    </div>
+    <div class="hero-right">
+      <div class="stat-row" id="statChips"></div>
+      <div class="header-controls">
+        <div id="timerDisplay">00:00</div>
+        <button class="icon-btn" id="formulaBtn"   title="Open Formula Sheet">📐 Formulas</button>
+        <button class="icon-btn" id="shortcutsBtn" title="Keyboard Shortcuts">⌨️ Shortcuts</button>
+        <button class="icon-btn" id="themeBtn"     title="Toggle dark/light mode">🌙 Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════ MAIN LAYOUT ══════════════════════════ -->
+  <main class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <h2>🔧 Build Your Exam</h2>
+
+      <div class="form-group">
+        <label for="unitSelect">Unit</label>
+        <select id="unitSelect"></select>
+      </div>
+
+      <div class="form-group">
+        <label for="topicSelect">Topic</label>
+        <select id="topicSelect"></select>
+      </div>
+
+      <div class="form-group">
+        <label for="difficultySelect">Difficulty</label>
+        <select id="difficultySelect">
+          <option value="all">All Difficulties</option>
+          <option value="Easy">Easy</option>
+          <option value="Medium">Medium</option>
+          <option value="Hard">Hard</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="countInput">Number of Questions</label>
+        <input id="countInput" type="number" min="1" max="100" value="10" />
+      </div>
+
+      <!-- Timer Toggle -->
+      <div class="form-group" style="display:flex;gap:10px;align-items:center;margin-top:6px;">
+        <input type="checkbox" id="timerToggle" style="width:auto;" />
+        <label for="timerToggle" style="margin:0;font-size:.88rem;text-transform:none;color:var(--ink-2);">Enable Countdown Timer</label>
+      </div>
+      <div class="form-group" id="timerMinutesRow" style="display:none;">
+        <label for="timerMinutes">Time Limit (minutes)</label>
+        <input id="timerMinutes" type="number" min="1" max="90" value="25" />
+      </div>
+
+      <button class="btn btn-primary" id="buildBtn">⚡ Generate Exam</button>
+      <button class="btn btn-secondary" id="resetBtn">↺ Reset</button>
+      <button class="btn btn-ghost" id="printBtn">🖨 Print / PDF</button>
+
+      <div class="sidebar-note">
+        💡 <strong>Tip:</strong> Use keyboard shortcuts during the exam — number keys select answers, arrow keys navigate questions.
+      </div>
+
+      <!-- Question counts by topic -->
+      <div class="topic-counts">
+        <details>
+          <summary>Question counts by unit ▾</summary>
+          <div id="topicCounts" style="margin-top:8px;"></div>
+        </details>
+      </div>
+
+      <!-- Session History -->
+      <div style="margin-top:18px;">
+        <p style="font-size:.78rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Recent Scores</p>
+        <ul class="history-list" id="historyList"></ul>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <section>
+      <!-- Question Navigator (populated by JS) -->
+      <div class="q-navigator" id="qNavigator"></div>
+      <!-- Exam Questions -->
+      <div id="examArea" class="exam-area"></div>
+    </section>
+
+  </main>
+
+  <footer>
+    AP Physics 1 Practice Exam Builder &nbsp;·&nbsp;
+    Static site — works fully offline once loaded &nbsp;·&nbsp;
+    <a href="https://github.com" target="_blank" rel="noopener">View on GitHub</a>
+  </footer>
+
+  <!-- ═══════════════ FORMULA SHEET MODAL ══════════════════ -->
+  <div class="modal-overlay hidden" id="formulaModal" role="dialog" aria-modal="true" aria-label="Formula Sheet">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>📐 AP Physics 1 — Formula Sheet</h2>
+        <button class="modal-close" id="closeFormula" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body" id="formulaBody">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ KEYBOARD SHORTCUTS MODAL ════════════ -->
+  <div class="modal-overlay hidden" id="shortcutsModal" role="dialog" aria-modal="true" aria-label="Keyboard Shortcuts">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>⌨️ Keyboard Shortcuts</h2>
+        <button class="modal-close" id="closeShortcuts" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="shortcut-grid">
+          <span class="shortcut-key">1 – 5</span>
+          <span class="shortcut-desc">Select answer choice A – E</span>
+
+          <span class="shortcut-key">→ / n</span>
+          <span class="shortcut-desc">Next question</span>
+
+          <span class="shortcut-key">← / p</span>
+          <span class="shortcut-desc">Previous question</span>
+
+          <span class="shortcut-key">Enter</span>
+          <span class="shortcut-desc">Submit exam &amp; check answers</span>
+
+          <span class="shortcut-key">f</span>
+          <span class="shortcut-desc">Flag / unflag current question</span>
+        </div>
+        <p style="margin-top:18px;font-size:.82rem;color:var(--muted);">
+          Shortcuts are inactive while typing in text fields or dropdowns.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
