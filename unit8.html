@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AP Physics 1 Fluids Review | Interactive Study Site</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$','$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root {
+      --primary: #0077da;
+      --secondary: #004d80;
+      --accent: #ffcc00;
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --ink: #172033;
+      --muted: #5c6b80;
+      --success: #18a058;
+      --warning: #c77700;
+      --danger: #d93025;
+      --purple: #7b61ff;
+      --aqua: #00a6a6;
+      --border: #d9e2ef;
+      --shadow: 0 14px 35px rgba(15, 44, 89, 0.12);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #e1f7ff 0%, var(--bg) 42%, #ffffff 100%);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+
+    header {
+      background: linear-gradient(135deg, #00334d, var(--primary));
+      color: white;
+      padding: 52px 22px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.11);
+      right: -150px;
+      top: -180px;
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      left: -40px;
+      bottom: -60px;
+      width: 260px;
+      height: 120px;
+      border-radius: 50% 50% 0 0;
+      background: rgba(255,255,255,0.10);
+    }
+
+    .hero {
+      max-width: 1180px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-weight: 850;
+      font-size: 0.85rem;
+      letter-spacing: 0.02em;
+    }
+
+    h1 {
+      font-size: clamp(2.25rem, 5vw, 4.7rem);
+      line-height: 0.98;
+      margin: 20px 0 14px;
+      max-width: 980px;
+    }
+
+    .hero p {
+      font-size: clamp(1.04rem, 1.5vw, 1.25rem);
+      max-width: 820px;
+      color: #eaf5ff;
+      margin: 0 0 24px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .btn {
+      border: none;
+      background: var(--primary);
+      color: white;
+      padding: 11px 16px;
+      border-radius: 12px;
+      font-weight: 850;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      box-shadow: 0 8px 18px rgba(0, 119, 218, 0.22);
+    }
+
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 12px 22px rgba(0, 119, 218, 0.28); }
+    .btn.secondary { background: white; color: var(--secondary); }
+    .btn.ghost { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); }
+    .btn.small { padding: 8px 11px; font-size: 0.87rem; box-shadow: none; }
+    .btn.reset { background: #e9eff7; color: var(--secondary); box-shadow: none; }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 10px 16px;
+    }
+
+    .nav-inner a {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 850;
+      padding: 8px 12px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .nav-inner a:hover { background: #e8f3ff; }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 16px 80px;
+    }
+
+    section { margin: 34px 0; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .section-title .num {
+      background: var(--secondary);
+      color: white;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-weight: 950;
+    }
+
+    h2 { font-size: clamp(1.6rem, 3vw, 2.35rem); margin: 0; color: var(--secondary); }
+    h3 { margin: 0 0 8px; color: var(--secondary); }
+
+    .grid { display: grid; gap: 16px; }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .mini-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 15px;
+      background: #fbfdff;
+    }
+
+    .callout {
+      border-left: 5px solid var(--accent);
+      background: #fff8d8;
+      padding: 14px 16px;
+      border-radius: 14px;
+      margin: 14px 0;
+    }
+    .success { border-left-color: var(--success); background: #eaf8f0; }
+    .danger-note { border-left-color: var(--danger); background: #fff0ef; }
+    .blue { border-left-color: var(--primary); background: #eaf5ff; }
+    .purple { border-left-color: var(--purple); background: #f0edff; }
+    .aqua { border-left-color: var(--aqua); background: #e6fbfb; }
+
+    .formula {
+      background: #0f2942;
+      color: white;
+      border-radius: 16px;
+      padding: 16px;
+      font-size: 1.08rem;
+      min-height: 112px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .formula strong { color: var(--accent); }
+
+    details {
+      border: 1px solid var(--border);
+      background: #f9fbff;
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin: 12px 0;
+    }
+    summary { cursor: pointer; font-weight: 900; color: var(--secondary); }
+
+    .problem {
+      border: 2px solid #e1e9f5;
+      border-radius: 18px;
+      padding: 18px;
+      background: white;
+      margin: 16px 0;
+    }
+    .level {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 950;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #e8f3ff;
+      color: var(--secondary);
+      margin-bottom: 8px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 10px 0;
+    }
+
+    input, select, textarea {
+      border: 1px solid #b9c8da;
+      border-radius: 11px;
+      padding: 10px 12px;
+      font: inherit;
+      background: white;
+      color: var(--ink);
+    }
+    textarea { width: 100%; min-height: 100px; resize: vertical; }
+    input[type="number"] { width: 118px; }
+
+    .feedback { font-weight: 850; margin-top: 8px; min-height: 24px; }
+
+    .quiz-option {
+      display: block;
+      width: 100%;
+      text-align: left;
+      margin: 8px 0;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      font: inherit;
+    }
+    .quiz-option:hover { background: #eef7ff; }
+    .quiz-option.correct { border-color: var(--success); background: #eaf8f0; }
+    .quiz-option.wrong { border-color: var(--danger); background: #fff0ef; }
+
+    .diagram-card {
+      background: linear-gradient(180deg, #eef9ff, #ffffff);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      min-height: 310px;
+      position: relative;
+      overflow: hidden;
+      padding: 10px;
+    }
+    .canvas-wrap { display: grid; place-items: center; min-height: 310px; }
+    svg { max-width: 100%; height: auto; }
+    .svg-label { font-weight: 850; fill: var(--secondary); font-size: 14px; }
+    .svg-small { fill: var(--muted); font-size: 12px; font-weight: 750; }
+
+    .meter {
+      height: 18px;
+      background: #e7edf5;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid #d1ddec;
+      margin-top: 8px;
+    }
+    .meter-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), #59b7ff);
+      transition: width 0.25s ease;
+    }
+
+    .water-stage {
+      position: relative;
+      min-height: 330px;
+      border: 1px dashed #b9c8da;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #ffffff, #f4fbff);
+      overflow: hidden;
+    }
+    .tank {
+      position: absolute;
+      left: 16%;
+      right: 16%;
+      bottom: 28px;
+      height: 250px;
+      border: 8px solid #7aa8c7;
+      border-top: none;
+      border-radius: 0 0 22px 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.2));
+    }
+    .water {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 68%;
+      background: linear-gradient(180deg, rgba(0,166,166,0.42), rgba(0,119,218,0.55));
+      transition: height 0.25s ease;
+    }
+    .float-block {
+      position: absolute;
+      left: calc(50% - 33px);
+      bottom: 132px;
+      width: 66px;
+      height: 66px;
+      background: #ffcc00;
+      border: 3px solid #c77700;
+      border-radius: 8px;
+      transition: bottom 0.25s ease;
+      display: grid;
+      place-items: center;
+      font-weight: 950;
+      color: #6b4300;
+    }
+    .pressure-dot {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #d93025;
+      left: calc(50% - 9px);
+      bottom: 70px;
+      transition: bottom 0.25s ease;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      font-size: 0.95rem;
+    }
+    .comparison-table th, .comparison-table td {
+      border: 1px solid var(--border);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .comparison-table th { background: #eaf5ff; color: var(--secondary); }
+    .comparison-table tr:nth-child(even) td { background: #fbfdff; }
+
+    footer {
+      padding: 28px 16px;
+      text-align: center;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: white;
+    }
+
+    @media (max-width: 840px) { .two, .three, .four { grid-template-columns: 1fr; } }
+
+    @media print {
+      nav, .hero-actions, .btn, .interactive-only { display: none !important; }
+      header { padding: 22px; background: white; color: black; }
+      header p, .badge { color: black; border-color: #aaa; background: white; }
+      body { background: white; }
+      .card, .problem { box-shadow: none; break-inside: avoid; }
+      details { border: 1px solid #aaa; }
+      details:not([open]) > *:not(summary) { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hero">
+      <span class="badge">🌊 AP Physics 1 Unit 8 • Fluids</span>
+      <h1>Fluids Master Review</h1>
+      <p>An interactive review for density, pressure, Pascal's principle, buoyancy, continuity, Bernoulli's principle, and AP-style fluid reasoning.</p>
+      <div class="hero-actions">
+        <a class="btn secondary" href="#diagnostic">Start Diagnostic</a>
+        <a class="btn ghost" href="#pressure-sim">Pressure Simulator</a>
+        <a class="btn ghost" href="#buoyancy-sim">Buoyancy Simulator</a>
+        <a class="btn ghost" href="#problems">Jump to Problems</a>
+        <button class="btn ghost" onclick="window.print()">Print / Save PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="#overview">Overview</a>
+      <a href="#diagnostic">Diagnostic</a>
+      <a href="#density">Density</a>
+      <a href="#pressure-sim">Pressure</a>
+      <a href="#pascal">Pascal</a>
+      <a href="#buoyancy-sim">Buoyancy</a>
+      <a href="#continuity">Continuity</a>
+      <a href="#bernoulli">Bernoulli</a>
+      <a href="#graphs">Graphs</a>
+      <a href="#equations">Equations</a>
+      <a href="#problems">Problems</a>
+      <a href="#apstyle">AP Style</a>
+    </div>
+  </nav>
+
+  <main>
+    <section id="overview">
+      <div class="section-title"><span class="num">1</span><h2>Fluids Roadmap</h2></div>
+      <div class="grid four">
+        <div class="card"><h3>1. Density</h3><p>Density connects mass and volume. It helps predict floating, sinking, and slope meanings in graphs.</p></div>
+        <div class="card"><h3>2. Pressure</h3><p>Pressure depends on force per area and depth in a fluid.</p></div>
+        <div class="card"><h3>3. Buoyancy</h3><p>Fluids push upward with a force equal to the weight of displaced fluid.</p></div>
+        <div class="card"><h3>4. Flow</h3><p>Continuity and Bernoulli connect pipe area, speed, pressure, and height.</p></div>
+      </div>
+      <div class="callout blue"><strong>AP Exam Mindset:</strong> Fluids questions often ask students to compare scenarios. The key is identifying what stays the same, what changes, and whether pressure, force, density, or volume is being compared.</div>
+    </section>
+
+    <section id="diagnostic">
+      <div class="section-title"><span class="num">2</span><h2>Quick Diagnostic: Common Fluid Traps</h2></div>
+      <div class="card">
+        <div class="problem quiz" data-answer="b">
+          <h3>Question 1: Pressure at Depth</h3>
+          <p>Two containers hold the same liquid to the same height. One container is wide and one is narrow. How does the pressure at the bottom compare?</p>
+          <button class="quiz-option" data-choice="a">A. Greater in the wider container because it has more liquid.</button>
+          <button class="quiz-option" data-choice="b">B. Equal because pressure depends on depth, density, and gravity.</button>
+          <button class="quiz-option" data-choice="c">C. Greater in the narrow container because the liquid is more concentrated.</button>
+          <button class="quiz-option" data-choice="d">D. Zero in both because the liquid is not moving.</button>
+          <div class="feedback"></div>
+          <details><summary>Explanation</summary><p>Gauge pressure in a static fluid is $\rho gh$. Same liquid and same depth means same pressure.</p></details>
+        </div>
+
+        <div class="problem quiz" data-answer="c">
+          <h3>Question 2: Buoyant Force</h3>
+          <p>A floating object is at rest on water. Which statement is true?</p>
+          <button class="quiz-option" data-choice="a">A. The buoyant force is greater than the object's weight.</button>
+          <button class="quiz-option" data-choice="b">B. The buoyant force is less than the object's weight.</button>
+          <button class="quiz-option" data-choice="c">C. The buoyant force equals the object's weight.</button>
+          <button class="quiz-option" data-choice="d">D. The buoyant force is always equal to the object's density.</button>
+          <div class="feedback"></div>
+          <details><summary>Explanation</summary><p>If the object floats at rest, vertical acceleration is zero, so $F_B=F_g$.</p></details>
+        </div>
+
+        <div class="problem quiz" data-answer="d">
+          <h3>Question 3: Pipe Flow</h3>
+          <p>Water flows through a horizontal pipe that narrows. What happens to the speed of the water in the narrow section?</p>
+          <button class="quiz-option" data-choice="a">A. It decreases because there is less room.</button>
+          <button class="quiz-option" data-choice="b">B. It becomes zero.</button>
+          <button class="quiz-option" data-choice="c">C. It stays the same no matter what.</button>
+          <button class="quiz-option" data-choice="d">D. It increases because $Av$ stays constant.</button>
+          <div class="feedback"></div>
+          <details><summary>Explanation</summary><p>For incompressible fluid flow, $A_1v_1=A_2v_2$. Smaller area means larger speed.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section id="density">
+      <div class="section-title"><span class="num">3</span><h2>Density: Mass per Volume</h2></div>
+      <div class="grid two">
+        <div class="card">
+          <h3>Core Idea</h3>
+          <div class="formula"><strong>Density</strong>$$\rho=\frac{m}{V}$$<small>How much mass is packed into a given volume.</small></div>
+          <div class="callout blue"><strong>Graph skill:</strong> On a graph of mass vs. volume, the slope equals density.</div>
+          <table class="comparison-table">
+            <thead><tr><th>Object Compared to Fluid</th><th>Prediction</th></tr></thead>
+            <tbody>
+              <tr><td>$\rho_{object} > \rho_{fluid}$</td><td>Sinks</td></tr>
+              <tr><td>$\rho_{object} < \rho_{fluid}$</td><td>Floats</td></tr>
+              <tr><td>$\rho_{object} = \rho_{fluid}$</td><td>Neutral buoyancy</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <h3>Density Calculator</h3>
+          <div class="input-row interactive-only">
+            <label>Mass <input id="densM" type="number" value="2.7" step="0.1"> kg</label>
+            <label>Volume <input id="densV" type="number" value="0.001" step="0.0001"> m³</label>
+          </div>
+          <button class="btn small interactive-only" onclick="updateDensity()">Calculate Density</button>
+          <div id="densityOutput" class="callout blue"></div>
+          <details><summary>AP reasoning check</summary><p>If two materials have mass-volume graphs, the steeper line represents the larger density.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section id="pressure-sim">
+      <div class="section-title"><span class="num">4</span><h2>Pressure in Fluids</h2></div>
+      <div class="grid two">
+        <div class="card">
+          <h3>Hydrostatic Pressure</h3>
+          <div class="formula"><strong>Pressure</strong>$$P=\frac{F}{A}$$<small>Force spread over area.</small></div>
+          <div class="formula"><strong>Gauge Pressure in a Fluid</strong>$$P=\rho gh$$<small>Pressure due to fluid depth.</small></div>
+          <div class="formula"><strong>Absolute Pressure</strong>$$P_{abs}=P_0+\rho gh$$<small>Atmospheric plus fluid pressure.</small></div>
+          <div class="callout danger-note"><strong>Trap:</strong> Fluid pressure at a point does not depend on container shape or total amount of liquid. It depends on depth, density, and $g$.</div>
+        </div>
+        <div class="card">
+          <h3>Pressure Simulator</h3>
+          <div class="input-row interactive-only">
+            <label>Fluid density <input id="pressRho" type="number" value="1000" step="50"> kg/m³</label>
+            <label>Depth <input id="pressH" type="number" value="2" step="0.1"> m</label>
+            <label>Area <input id="pressA" type="number" value="0.20" step="0.01"> m²</label>
+          </div>
+          <button class="btn small interactive-only" onclick="updatePressure()">Update Pressure</button>
+          <div id="pressureOutput" class="callout blue"></div>
+          <div class="water-stage">
+            <div class="tank"><div id="pressureWater" class="water"></div><div id="pressureDot" class="pressure-dot"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pascal">
+      <div class="section-title"><span class="num">5</span><h2>Pascal's Principle & Hydraulic Systems</h2></div>
+      <div class="grid two">
+        <div class="card">
+          <h3>Big Idea</h3>
+          <p>Pressure changes applied to an enclosed fluid are transmitted throughout the fluid.</p>
+          <div class="formula"><strong>Hydraulic Relationship</strong>$$\frac{F_1}{A_1}=\frac{F_2}{A_2}$$<small>Same pressure, different forces if areas differ.</small></div>
+          <div class="callout success"><strong>Why hydraulics multiply force:</strong> A small force on a small area creates pressure. That same pressure on a larger area produces a larger force.</div>
+        </div>
+        <div class="card">
+          <h3>Hydraulic Lift Calculator</h3>
+          <div class="input-row interactive-only">
+            <label>$F_1$ <input id="hydF1" type="number" value="100" step="5"> N</label>
+            <label>$A_1$ <input id="hydA1" type="number" value="0.01" step="0.001"> m²</label>
+            <label>$A_2$ <input id="hydA2" type="number" value="0.20" step="0.01"> m²</label>
+          </div>
+          <button class="btn small interactive-only" onclick="updateHydraulics()">Calculate Output Force</button>
+          <div id="hydOutput" class="callout blue"></div>
+          <div class="diagram-card canvas-wrap">
+            <svg viewBox="0 0 560 300" aria-label="Hydraulic lift diagram">
+              <rect x="115" y="185" width="90" height="70" fill="#9fd3ff" stroke="#004d80" stroke-width="4"/>
+              <rect x="335" y="135" width="135" height="120" fill="#9fd3ff" stroke="#004d80" stroke-width="4"/>
+              <rect x="205" y="225" width="130" height="30" fill="#9fd3ff" stroke="#004d80" stroke-width="4"/>
+              <rect x="125" y="160" width="70" height="25" fill="#004d80"/>
+              <rect x="340" y="110" width="125" height="25" fill="#004d80"/>
+              <text x="113" y="280" class="svg-label">small area</text>
+              <text x="345" y="280" class="svg-label">large area</text>
+              <text x="120" y="122" class="svg-label">input force</text>
+              <text x="350" y="75" class="svg-label">larger output force</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="buoyancy-sim">
+      <div class="section-title"><span class="num">6</span><h2>Buoyancy & Archimedes' Principle</h2></div>
+      <div class="grid two">
+        <div class="card">
+          <h3>Core Idea</h3>
+          <div class="formula"><strong>Buoyant Force</strong>$$F_B=\rho_{fluid}gV_{disp}$$<small>Equal to the weight of displaced fluid.</small></div>
+          <div class="callout aqua"><strong>Floating object:</strong> $F_B=F_g$. The object displaces enough fluid so the displaced fluid's weight equals the object's weight.</div>
+          <div class="callout danger-note"><strong>Trap:</strong> A floating object does not necessarily displace its full volume. A fully submerged object does.</div>
+        </div>
+        <div class="card">
+          <h3>Buoyancy Simulator</h3>
+          <div class="input-row interactive-only">
+            <label>Object mass <input id="buoyM" type="number" value="0.60" step="0.05"> kg</label>
+            <label>Object volume <input id="buoyV" type="number" value="0.001" step="0.0001"> m³</label>
+            <label>Fluid density <input id="buoyRho" type="number" value="1000" step="50"> kg/m³</label>
+          </div>
+          <button class="btn small interactive-only" onclick="updateBuoyancy()">Check Float/Sink</button>
+          <div id="buoyOutput" class="callout blue"></div>
+          <div class="water-stage">
+            <div class="tank"><div class="water"></div><div id="floatBlock" class="float-block">object</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="continuity">
+      <div class="section-title"><span class="num">7</span><h2>Continuity: Flow Rate Stays Constant</h2></div>
+      <div class="grid two">
+        <div class="card">
+          <h3>Core Idea</h3>
+          <div class="formula"><strong>Continuity Equation</strong>$$A_1v_1=A_2v_2$$<small>For incompressible steady flow.</small></div>
+          <div class="callout blue"><strong>Student translation:</strong> If the pipe narrows, the fluid speeds up so the same volume passes each point each second.</div>
+        </div>
+        <div class="card">
+          <h3>Pipe Speed Calculator</h3>
+          <div class="input-row interactive-only">
+            <label>$A_1$ <input id="contA1" type="number" value="0.040" step="0.005"> m²</label>
+            <label>$v_1$ <input id="contV1" type="number" value="2.0" step="0.1"> m/s</label>
+            <label>$A_2$ <input id="contA2" type="number" value="0.010" step="0.005"> m²</label>
+          </div>
+          <button class="btn small interactive-only" onclick="updateContinuity()">Calculate $v_2$</button>
+          <div id="contOutput" class="callout blue"></div>
+          <div class="diagram-card canvas-wrap">
+            <svg viewBox="0 0 560 270" aria-label="Pipe continuity diagram">
+              <defs>
+                <marker id="flowArrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#0077da"/></marker>
+              </defs>
+              <path d="M45 105 C150 105 165 105 250 125 L330 145 C405 165 430 165 515 165 L515 205 C430 205 405 205 330 185 L250 165 C165 145 150 145 45 145 Z" fill="#9fd3ff" stroke="#004d80" stroke-width="4"/>
+              <line x1="75" y1="125" x2="190" y2="125" stroke="#0077da" stroke-width="5" marker-end="url(#flowArrow)"/>
+              <line x1="355" y1="175" x2="490" y2="175" stroke="#0077da" stroke-width="7" marker-end="url(#flowArrow)"/>
+              <text x="80" y="86" class="svg-label">large area → slower</text>
+              <text x="342" y="136" class="svg-label">small area → faster</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="bernoulli">
+      <div class="section-title"><span class="num">8</span><h2>Bernoulli's Principle</h2></div>
+      <div class="grid two">
+        <div class="card">
+          <h3>Energy in Moving Fluids</h3>
+          <div class="formula"><strong>Bernoulli Equation</strong>$$P+\frac12\rho v^2+\rho gy=\text{constant}$$<small>Pressure energy + kinetic energy + gravitational potential energy per volume.</small></div>
+          <div class="callout danger-note"><strong>Common trap:</strong> Faster fluid flow generally means lower pressure if height is unchanged.</div>
+          <details><summary>When to use Bernoulli</summary><p>Use it for steady, incompressible, nonviscous flow along a streamline. AP problems usually simplify enough for comparison reasoning.</p></details>
+        </div>
+        <div class="card">
+          <h3>Bernoulli Comparison</h3>
+          <div class="input-row interactive-only">
+            <label>$v_1$ <input id="bernV1" type="number" value="2" step="0.1"> m/s</label>
+            <label>$v_2$ <input id="bernV2" type="number" value="6" step="0.1"> m/s</label>
+            <label>$\rho$ <input id="bernRho" type="number" value="1000" step="50"> kg/m³</label>
+          </div>
+          <button class="btn small interactive-only" onclick="updateBernoulli()">Compare Pressure</button>
+          <div id="bernOutput" class="callout blue"></div>
+          <p><strong>Horizontal pipe shortcut:</strong> If speed increases, pressure decreases.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="graphs">
+      <div class="section-title"><span class="num">9</span><h2>AP Graph Skills for Fluids</h2></div>
+      <div class="grid three">
+        <div class="card">
+          <h3>Mass vs. Volume</h3>
+          <p>Slope = density.</p>
+          <p>$$m=\rho V$$</p>
+          <div class="callout blue">Steeper line → greater density.</div>
+        </div>
+        <div class="card">
+          <h3>Pressure vs. Depth</h3>
+          <p>Slope = $\rho g$.</p>
+          <p>$$P=\rho gh$$</p>
+          <div class="callout blue">Greater density → steeper pressure-depth graph.</div>
+        </div>
+        <div class="card">
+          <h3>Buoyant Force vs. Submerged Volume</h3>
+          <p>Slope = $\rho_{fluid}g$.</p>
+          <p>$$F_B=\rho gV_{disp}$$</p>
+          <div class="callout blue">Force increases linearly until fully submerged.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="equations">
+      <div class="section-title"><span class="num">10</span><h2>Fluids Equation Toolbox</h2></div>
+      <div class="grid three">
+        <div class="formula"><strong>Density</strong>$$\rho=\frac{m}{V}$$<small>Mass per volume.</small></div>
+        <div class="formula"><strong>Pressure</strong>$$P=\frac{F}{A}$$<small>Force per area.</small></div>
+        <div class="formula"><strong>Fluid Pressure</strong>$$P=P_0+\rho gh$$<small>Absolute pressure at depth.</small></div>
+        <div class="formula"><strong>Buoyant Force</strong>$$F_B=\rho_{fluid}gV_{disp}$$<small>Weight of displaced fluid.</small></div>
+        <div class="formula"><strong>Continuity</strong>$$A_1v_1=A_2v_2$$<small>Flow rate constant.</small></div>
+        <div class="formula"><strong>Bernoulli</strong>$$P+\frac12\rho v^2+\rho gy=constant$$<small>Energy conservation in ideal flow.</small></div>
+      </div>
+    </section>
+
+    <section id="problems">
+      <div class="section-title"><span class="num">11</span><h2>Scaffolded Fluids Problems</h2></div>
+
+      <div class="problem">
+        <span class="level">Level 1 • Density</span>
+        <h3>Problem 1: Unknown Liquid</h3>
+        <p>A liquid has mass $0.90\,\text{kg}$ and volume $1.0\times10^{-3}\,\text{m}^3$.</p>
+        <ol><li>Find the density.</li><li>Would it float on water?</li></ol>
+        <details><summary>Reveal solution</summary><p>$\rho=m/V=0.90/(1.0\times10^{-3})=900\,\text{kg/m}^3$. Since this is less than water's density, it would float on water.</p></details>
+      </div>
+
+      <div class="problem">
+        <span class="level">Level 2 • Pressure</span>
+        <h3>Problem 2: Pressure at Depth</h3>
+        <p>A diver is $4.0\,\text{m}$ below the surface of water. Use $\rho=1000\,\text{kg/m}^3$ and $g=10\,\text{m/s}^2$.</p>
+        <ol><li>Find gauge pressure.</li><li>Explain why container width would not matter.</li></ol>
+        <details><summary>Reveal solution</summary><p>$P=\rho gh=(1000)(10)(4)=4.0\times10^4\,\text{Pa}$. Width does not matter because pressure at a depth depends on density, gravity, and depth.</p></details>
+      </div>
+
+      <div class="problem">
+        <span class="level">Level 3 • Force from Pressure</span>
+        <h3>Problem 3: Window Underwater</h3>
+        <p>A small underwater window has area $0.30\,\text{m}^2$ and is at a depth where the gauge pressure is $2.0\times10^4\,\text{Pa}$.</p>
+        <ol><li>Find the force due to the gauge pressure.</li></ol>
+        <details><summary>Reveal solution</summary><p>$F=PA=(2.0\times10^4)(0.30)=6.0\times10^3\,\text{N}$.</p></details>
+      </div>
+
+      <div class="problem">
+        <span class="level">Level 4 • Floating Object</span>
+        <h3>Problem 4: Floating Block</h3>
+        <p>A $2.0\,\text{kg}$ block floats in water.</p>
+        <ol><li>What is the buoyant force?</li><li>What volume of water is displaced?</li></ol>
+        <details><summary>Reveal solution</summary><p>Since the block floats at rest, $F_B=F_g=mg=(2)(10)=20\,\text{N}$. $F_B=\rho gV_{disp}$, so $V_{disp}=20/(1000\cdot10)=0.0020\,\text{m}^3$.</p></details>
+      </div>
+
+      <div class="problem">
+        <span class="level">Level 5 • Fully Submerged Object</span>
+        <h3>Problem 5: Apparent Weight</h3>
+        <p>A $5.0\,\text{kg}$ object with volume $2.0\times10^{-3}\,\text{m}^3$ is fully submerged in water.</p>
+        <ol><li>Find the object's weight.</li><li>Find the buoyant force.</li><li>Find the apparent weight.</li></ol>
+        <details><summary>Reveal solution</summary><p>$F_g=mg=(5)(10)=50\,\text{N}$. $F_B=\rho gV=(1000)(10)(2.0\times10^{-3})=20\,\text{N}$. Apparent weight is $50-20=30\,\text{N}$.</p></details>
+      </div>
+
+      <div class="problem">
+        <span class="level">Level 6 • Continuity</span>
+        <h3>Problem 6: Narrow Pipe</h3>
+        <p>Water flows through a pipe. At one section, area is $0.060\,\text{m}^2$ and speed is $2.0\,\text{m/s}$. The pipe narrows to $0.020\,\text{m}^2$.</p>
+        <ol><li>Find the speed in the narrow section.</li></ol>
+        <details><summary>Reveal solution</summary><p>$A_1v_1=A_2v_2$. $(0.060)(2.0)=(0.020)v_2$, so $v_2=6.0\,\text{m/s}$.</p></details>
+      </div>
+
+      <div class="problem">
+        <span class="level">Level 7 • Bernoulli Reasoning</span>
+        <h3>Problem 7: Horizontal Pipe</h3>
+        <p>Water flows through a horizontal pipe that narrows. Speed increases in the narrow section.</p>
+        <ol><li>What happens to pressure?</li><li>Justify using Bernoulli's principle.</li></ol>
+        <details><summary>Reveal solution</summary><p>Pressure decreases. In a horizontal pipe, $\rho gy$ does not change. If speed increases, the kinetic energy per volume term $\frac12\rho v^2$ increases, so pressure must decrease to keep the Bernoulli sum constant.</p></details>
+      </div>
+
+      <div class="problem">
+        <span class="level">Level 8 • Mixed AP Reasoning</span>
+        <h3>Problem 8: Same Depth, Different Area</h3>
+        <p>Two caps are located at the same depth in the same fluid. Cap A has twice the area of Cap B.</p>
+        <ol><li>Compare the pressure on each cap.</li><li>Compare the force on each cap.</li></ol>
+        <details><summary>Reveal solution</summary><p>The pressures are equal because depth and fluid density are the same. Since $F=PA$, Cap A experiences twice the force because it has twice the area.</p></details>
+      </div>
+    </section>
+
+    <section id="apstyle">
+      <div class="section-title"><span class="num">12</span><h2>AP-Style Reasoning Practice</h2></div>
+      <div class="grid two">
+        <div class="card">
+          <h3>Paragraph Prompt: Pressure Misconception</h3>
+          <p>A student says: “The pressure at the bottom of a wide container must be greater because there is more water above it.”</p>
+          <p><strong>Write a paragraph that agrees or disagrees. Use the pressure-depth relationship.</strong></p>
+          <textarea placeholder="Student response..."></textarea>
+          <details><summary>Reveal strong response</summary><p>The claim is not correct if the wide container and narrow container hold the same fluid to the same height. Pressure at a depth in a static fluid depends on $P=\rho gh$, so it depends on density, gravity, and depth. The wider container contains more total water and may exert a larger total force on its bottom because the area is larger, but the pressure at the same depth is the same.</p></details>
+        </div>
+        <div class="card">
+          <h3>Paragraph Prompt: Floating vs. Submerged</h3>
+          <p>A block floats with half its volume underwater. Another identical block is pushed fully underwater and held at rest.</p>
+          <p><strong>Compare the buoyant force on the two blocks.</strong></p>
+          <textarea placeholder="Student response..."></textarea>
+          <details><summary>Reveal strong response</summary><p>The fully submerged block experiences a larger buoyant force because buoyant force equals the weight of displaced fluid. The floating block only displaces fluid equal to half of its volume, while the fully submerged block displaces fluid equal to its entire volume. Therefore, the submerged block displaces more fluid and experiences a greater buoyant force.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section id="calculator">
+      <div class="section-title"><span class="num">13</span><h2>Mini Fluids Calculator</h2></div>
+      <div class="card">
+        <div class="grid three">
+          <div class="mini-card">
+            <h3>$P=\rho gh$</h3>
+            <div class="input-row"><input id="calcRho" type="number" value="1000" step="50"> kg/m³ <input id="calcH" type="number" value="3" step="0.1"> m</div>
+            <button class="btn small" onclick="calcPressure()">Calculate $P$</button>
+            <div id="calcPressureOut" class="feedback"></div>
+          </div>
+          <div class="mini-card">
+            <h3>$F_B=\rho gV$</h3>
+            <div class="input-row"><input id="calcBRho" type="number" value="1000" step="50"> kg/m³ <input id="calcBV" type="number" value="0.002" step="0.0001"> m³</div>
+            <button class="btn small" onclick="calcBuoy()">Calculate $F_B$</button>
+            <div id="calcBuoyOut" class="feedback"></div>
+          </div>
+          <div class="mini-card">
+            <h3>$A_1v_1=A_2v_2$</h3>
+            <div class="input-row"><input id="calcA1" type="number" value="0.04" step="0.005"> <input id="calcV1" type="number" value="2" step="0.1"> <input id="calcA2" type="number" value="0.01" step="0.005"></div>
+            <button class="btn small" onclick="calcContinuity()">Calculate $v_2$</button>
+            <div id="calcContOut" class="feedback"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    AP Physics 1 Fluids Review • Student-facing, Chromebook-friendly, GitHub Pages ready, and print-friendly.
+  </footer>
+
+  <script>
+    function $(id) { return document.getElementById(id); }
+    function val(id) { return parseFloat($(id).value) || 0; }
+    function typeset() { if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise(); }
+
+    document.querySelectorAll('.quiz').forEach(q => {
+      const answer = q.dataset.answer;
+      q.querySelectorAll('.quiz-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          q.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('correct', 'wrong'));
+          if (btn.dataset.choice === answer) {
+            btn.classList.add('correct');
+            q.querySelector('.feedback').textContent = 'Correct — strong fluids reasoning.';
+            q.querySelector('.feedback').style.color = 'var(--success)';
+          } else {
+            btn.classList.add('wrong');
+            q.querySelector(`[data-choice="${answer}"]`).classList.add('correct');
+            q.querySelector('.feedback').textContent = 'Not quite — focus on depth, displaced volume, or flow rate.';
+            q.querySelector('.feedback').style.color = 'var(--danger)';
+          }
+        });
+      });
+    });
+
+    function updateDensity() {
+      const m = val('densM');
+      const V = Math.max(1e-9, val('densV'));
+      const rho = m / V;
+      const comparison = rho < 1000 ? 'less dense than water, so it would float on water.' : rho > 1000 ? 'more dense than water, so it would sink in water.' : 'equal to water density, so it would be neutrally buoyant.';
+      $('densityOutput').innerHTML = `<strong>Density:</strong> $\\rho=m/V=${rho.toFixed(1)}\\,\\text{kg/m}^3$.<br>This is ${comparison}`;
+      typeset();
+    }
+
+    function updatePressure() {
+      const rho = val('pressRho');
+      const h = Math.max(0, val('pressH'));
+      const A = Math.max(0, val('pressA'));
+      const P = rho * 10 * h;
+      const F = P * A;
+      $('pressureOutput').innerHTML = `<strong>Gauge pressure:</strong> ${P.toLocaleString(undefined,{maximumFractionDigits:1})} Pa<br><strong>Force on area:</strong> ${F.toLocaleString(undefined,{maximumFractionDigits:1})} N<br><strong>Key:</strong> Increasing depth increases pressure linearly.`;
+      $('pressureWater').style.height = `${Math.min(92, Math.max(18, 22 + h * 13))}%`;
+      $('pressureDot').style.bottom = `${Math.min(205, Math.max(25, 35 + h * 24))}px`;
+      typeset();
+    }
+
+    function updateHydraulics() {
+      const F1 = val('hydF1');
+      const A1 = Math.max(1e-9, val('hydA1'));
+      const A2 = Math.max(1e-9, val('hydA2'));
+      const P = F1 / A1;
+      const F2 = P * A2;
+      $('hydOutput').innerHTML = `<strong>Pressure created:</strong> ${P.toLocaleString(undefined,{maximumFractionDigits:1})} Pa<br><strong>Output force:</strong> $F_2=P A_2=${F2.toLocaleString(undefined,{maximumFractionDigits:1})}\\,\\text{N}$.`;
+      typeset();
+    }
+
+    function updateBuoyancy() {
+      const m = Math.max(0, val('buoyM'));
+      const V = Math.max(1e-9, val('buoyV'));
+      const rhoFluid = Math.max(1e-9, val('buoyRho'));
+      const rhoObj = m / V;
+      const weight = m * 10;
+      const maxBuoy = rhoFluid * 10 * V;
+      const floats = rhoObj < rhoFluid;
+      const neutral = Math.abs(rhoObj - rhoFluid) < 1e-6;
+      const percentSubmerged = floats ? Math.min(100, 100 * rhoObj / rhoFluid) : 100;
+      const buoyForce = floats ? weight : maxBuoy;
+      let text = '';
+      if (neutral) text = 'The object is neutrally buoyant.';
+      else if (floats) text = `The object floats. About ${percentSubmerged.toFixed(1)}% of its volume is submerged.`;
+      else text = 'The object sinks because its density is greater than the fluid density.';
+      $('buoyOutput').innerHTML = `<strong>Object density:</strong> ${rhoObj.toFixed(1)} kg/m³<br><strong>Weight:</strong> ${weight.toFixed(1)} N<br><strong>Buoyant force:</strong> ${buoyForce.toFixed(1)} N<br><strong>Prediction:</strong> ${text}`;
+      const block = $('floatBlock');
+      block.style.bottom = floats ? `${150 - percentSubmerged * 0.65}px` : '42px';
+      block.textContent = floats ? 'float' : 'sink';
+      typeset();
+    }
+
+    function updateContinuity() {
+      const A1 = Math.max(1e-9, val('contA1'));
+      const v1 = val('contV1');
+      const A2 = Math.max(1e-9, val('contA2'));
+      const v2 = A1 * v1 / A2;
+      $('contOutput').innerHTML = `<strong>Flow rate:</strong> ${(A1*v1).toFixed(3)} m³/s<br><strong>New speed:</strong> $v_2=\\frac{A_1v_1}{A_2}=${v2.toFixed(2)}\\,\\text{m/s}$.`;
+      typeset();
+    }
+
+    function updateBernoulli() {
+      const v1 = val('bernV1');
+      const v2 = val('bernV2');
+      const rho = val('bernRho');
+      const deltaP = 0.5 * rho * (v2*v2 - v1*v1);
+      const direction = deltaP > 0 ? 'lower' : deltaP < 0 ? 'higher' : 'the same';
+      $('bernOutput').innerHTML = `<strong>Pressure comparison:</strong> Point 2 has ${direction} pressure than Point 1.<br><strong>Magnitude of pressure drop/rise:</strong> ${Math.abs(deltaP).toLocaleString(undefined,{maximumFractionDigits:1})} Pa, assuming same height.`;
+      typeset();
+    }
+
+    function calcPressure() {
+      const P = val('calcRho') * 10 * val('calcH');
+      $('calcPressureOut').innerHTML = `$P=${P.toLocaleString(undefined,{maximumFractionDigits:1})}\\,\\text{Pa}$`;
+      typeset();
+    }
+
+    function calcBuoy() {
+      const F = val('calcBRho') * 10 * val('calcBV');
+      $('calcBuoyOut').innerHTML = `$F_B=${F.toFixed(2)}\\,\\text{N}$`;
+      typeset();
+    }
+
+    function calcContinuity() {
+      const v2 = val('calcA1') * val('calcV1') / Math.max(1e-9, val('calcA2'));
+      $('calcContOut').innerHTML = `$v_2=${v2.toFixed(2)}\\,\\text{m/s}$`;
+      typeset();
+    }
+
+    window.addEventListener('load', () => {
+      updateDensity();
+      updatePressure();
+      updateHydraulics();
+      updateBuoyancy();
+      updateContinuity();
+      updateBernoulli();
+      calcPressure();
+      calcBuoy();
+      calcContinuity();
+    });
+  </script>
+</body>
+</html>
