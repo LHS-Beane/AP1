@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Report | Water Rocket | AP Physics 1</title>
+    <style>
+        :root {
+            --primary: #0077da;
+            --secondary: #004d80;
+            --accent: #ffcc00;
+            --light: #f4f4f4;
+            --dark: #333;
+            --white: #fff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --danger: #e74c3c;
+            --success: #27ae60;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--light); color: var(--dark); line-height: 1.6; }
+
+        nav {
+            background-color: var(--secondary);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0; z-index: 1000; box-shadow: var(--shadow);
+        }
+        .logo { font-size: 1.5rem; font-weight: bold; letter-spacing: 1px; }
+        .back-btn {
+            background-color: var(--accent);
+            color: var(--dark);
+            padding: 8px 16px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: transform 0.2s;
+        }
+        .back-btn:hover { transform: scale(1.05); }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 30px 20px 60px; }
+
+        /* --- Sample banner --- */
+        .banner {
+            background: #fff8e1;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+        }
+        .banner h1 { font-size: 1.4rem; color: var(--secondary); margin-bottom: 6px; }
+        .banner p { margin-bottom: 6px; }
+        .banner ul { margin: 6px 0 0 20px; }
+
+        /* --- The "paper" --- */
+        .sample-paper {
+            background: white;
+            padding: 50px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.15);
+            max-width: 850px;
+            margin: 0 auto;
+            font-family: 'Times New Roman', Times, serif;
+            color: black;
+            border: 1px solid #ddd;
+            line-height: 1.5;
+        }
+        .sample-paper * { font-family: 'Times New Roman', Times, serif; }
+        .sample-paper h2 {
+            color: black; border-bottom: 1px solid black;
+            font-size: 1.35rem; margin: 34px 0 12px 0; padding-bottom: 3px;
+        }
+        .sample-paper h3 { color: black; font-size: 1.1rem; margin: 20px 0 8px 0; }
+        .sample-paper p { margin-bottom: 10px; }
+        .sample-paper ul, .sample-paper ol { margin: 0 0 12px 24px; }
+        .sample-paper li { margin-bottom: 4px; }
+
+        .title-page { text-align: center; padding: 60px 0 70px; border-bottom: 1px solid black; margin-bottom: 10px; }
+        .title-page h1 { font-size: 2rem; margin-bottom: 30px; }
+        .title-page p { font-size: 1.15rem; margin-bottom: 6px; }
+
+        /* --- Calculations --- */
+        .calc { margin: 6px 0 16px 20px; padding-left: 14px; border-left: 3px solid #cfd8dc; }
+        .calc div { margin-bottom: 3px; }
+        .label { font-weight: bold; }
+        .ans { font-weight: bold; }
+        .var { font-style: italic; }
+
+        /* --- Tables inside the paper --- */
+        .sample-paper table { width: 100%; border-collapse: collapse; margin: 12px 0 8px; font-size: 0.95rem; background: white; }
+        .sample-paper th, .sample-paper td { border: 1px solid #555; padding: 6px 8px; text-align: center; vertical-align: top; }
+        .sample-paper th { background: #e8e8e8; color: black; }
+        .sample-paper tr:nth-child(even) { background: white; }
+        .sample-paper td.left, .sample-paper th.left { text-align: left; }
+        .caption { font-size: 0.9rem; font-style: italic; text-align: center; margin: 4px 0 14px; }
+        .table-scroll { overflow-x: auto; }
+
+        /* --- Figures --- */
+        figure { margin: 14px 0; text-align: center; }
+        figure svg { max-width: 100%; height: auto; }
+        .fbd-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 12px 0; }
+        .fbd-grid figure { border: 1px solid #ccc; padding: 6px; margin: 0; }
+        .fbd-grid figcaption { font-size: 0.85rem; }
+
+        /* --- Margin notes (not part of the report) --- */
+        .note {
+            font-family: 'Segoe UI', sans-serif;
+            background: #e8f1fa;
+            border-left: 5px solid var(--primary);
+            border-radius: 4px;
+            padding: 10px 14px;
+            margin: 12px 0 16px;
+            font-size: 0.85rem;
+            line-height: 1.45;
+            color: var(--dark);
+        }
+        .sample-paper .note, .sample-paper .note * { font-family: 'Segoe UI', sans-serif; }
+        .note strong.tagline { color: var(--secondary); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; display: block; margin-bottom: 2px; }
+
+        @media (max-width: 768px) {
+            .sample-paper { padding: 22px; }
+            .title-page { padding: 30px 0 40px; }
+            .title-page h1 { font-size: 1.5rem; }
+        }
+        @media print {
+            nav, .banner, .note { display: none; }
+            body { background: white; }
+            .sample-paper { box-shadow: none; border: none; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">AP Physics Hub</div>
+        <a href="water-rocket.html" class="back-btn">&#8592; Back to Water Rocket Lab</a>
+    </nav>
+
+    <div class="container">
+
+        <div class="banner">
+            <h1>Sample Report: What This Can Look Like</h1>
+            <p>This is a <strong>mock report</strong> for a different rocket than yours. <strong>All of the data and results are made up.</strong> Your measurements, numbers, and conclusions will be different, and that is expected.</p>
+            <ul>
+                <li>Use it to see the <strong>structure</strong>, the <strong>level of detail</strong>, and how a calculation is <strong>written out</strong> (general equation, substitution with units, answer).</li>
+                <li>Blue boxes like the one below are notes to you. They are <em>not</em> part of the report, so leave them out of yours.</li>
+                <li>This rocket missed the 45 m target. A report that misses the target can still earn high marks for the analysis.</li>
+            </ul>
+        </div>
+
+        <article class="sample-paper">
+
+            <!-- ============== TITLE PAGE ============== -->
+            <div class="title-page">
+                <h1>Water Rocket Launch:<br>Kinematics and Forces Analysis</h1>
+                <p><strong>Student:</strong> Alex Sample</p>
+                <p><strong>Partner:</strong> Jordan Sample</p>
+                <p><strong>Course:</strong> AP Physics 1</p>
+                <p><strong>Date:</strong> October 22</p>
+            </div>
+
+            <!-- ============== INTRODUCTION ============== -->
+            <h2>1. Introduction</h2>
+
+            <h3>Objective</h3>
+            <p>Our objective was to design and launch a water rocket made from 2.0 L bottles to a height of at least 45.0 m, and then to use measurements from the flight to describe the rocket's motion with kinematics and to explain it with Newton's laws.</p>
+
+            <h3>Physics Models</h3>
+            <p>We divided the flight into three phases and chose a model for each. We define up as positive and y = 0 at the launch pad.</p>
+            <ul>
+                <li><strong>Thrust phase</strong> (water leaving the nozzle): the rocket starts from rest and speeds up with a constant average acceleration. A net upward force acts, because the thrust force is larger than the weight.</li>
+                <li><strong>Coast phase</strong> (water gone, rocket still rising): only gravity acts, so the acceleration is &minus;<span class="var">g</span> = &minus;9.8 m/s&sup2;. The rocket keeps moving up but slows down until it stops at the peak.</li>
+                <li><strong>Descent:</strong> free fall from rest at the peak, with acceleration &minus;<span class="var">g</span>.</li>
+            </ul>
+
+            <h3>Assumptions</h3>
+            <ul>
+                <li>Air resistance is negligible during the whole flight.</li>
+                <li>The rocket lands at the same height it was launched from.</li>
+                <li>The time spent rising equals the time spent falling (this follows from the first two assumptions).</li>
+                <li>The acceleration during the thrust phase is constant, and all of the water leaves the rocket during that phase.</li>
+                <li>The mass of the air in the bottle is negligible compared with the mass of the rocket and water.</li>
+            </ul>
+
+            <h3>Prediction</h3>
+            <p>We predict a peak height of about <strong>28 m</strong>. We estimated an average thrust-phase acceleration of 9<span class="var">g</span> (88 m/s&sup2;) lasting 0.25 s, since the rocket is mostly water and the launch pressure is high. That gives a burnout speed of (88.2 m/s&sup2;)(0.25 s) = 22 m/s. The rocket gains about 2.8 m during thrust, and (22.05 m/s)&sup2;/(2 &times; 9.8 m/s&sup2;) = 24.8 m more while coasting, for a total of about 27.6 m.</p>
+
+            <div class="note">
+                <strong class="tagline">Notice</strong>
+                The prediction is a number with reasoning behind it, built from the same models the team will use later. It does not have to be right. This team's guess for the acceleration turned out to be too low, and the discussion comes back to that.
+            </div>
+
+            <!-- ============== PROCEDURE ============== -->
+            <h2>2. Procedure &amp; Design</h2>
+
+            <h3>Materials</h3>
+            <ul>
+                <li>Two 2.0 L plastic bottles (one pressure vessel, one nose section), duct tape</li>
+                <li>Cardboard (three fins), 25 g of modeling clay (nose ballast)</li>
+                <li>Lab balance, meter stick, three stopwatches, measuring wheel, phone camera (240 frames per second), 1.00 m stick for video scale</li>
+                <li>Safety glasses for every team member</li>
+            </ul>
+
+            <h3>Design</h3>
+            <figure>
+                <svg viewBox="0 0 470 400" width="470" role="img" aria-label="Labeled diagram of the rocket with component masses and positions measured from the nozzle">
+                    <!-- distance axis -->
+                    <line x1="70" y1="360" x2="70" y2="25" stroke="#333" stroke-width="1.5"/>
+                    <polygon points="70,18 65,28 75,28" fill="#333"/>
+                    <g font-size="11" fill="#333" text-anchor="end" font-family="Segoe UI, sans-serif">
+                        <line x1="62" y1="360" x2="78" y2="360" stroke="#333"/><text x="56" y="364">0</text>
+                        <line x1="62" y1="310" x2="78" y2="310" stroke="#333"/><text x="56" y="314">0.1</text>
+                        <line x1="62" y1="260" x2="78" y2="260" stroke="#333"/><text x="56" y="264">0.2</text>
+                        <line x1="62" y1="210" x2="78" y2="210" stroke="#333"/><text x="56" y="214">0.3</text>
+                        <line x1="62" y1="160" x2="78" y2="160" stroke="#333"/><text x="56" y="164">0.4</text>
+                        <line x1="62" y1="110" x2="78" y2="110" stroke="#333"/><text x="56" y="114">0.5</text>
+                        <line x1="62" y1="60" x2="78" y2="60" stroke="#333"/><text x="56" y="64">0.6</text>
+                    </g>
+                    <text x="14" y="200" font-size="11" fill="#333" font-family="Segoe UI, sans-serif" transform="rotate(-90 14 200)" text-anchor="middle">distance from nozzle, x (m)</text>
+
+                    <!-- rocket -->
+                    <polygon points="120,300 90,330 90,372 120,350" fill="#bcaaa4" stroke="#333"/>
+                    <polygon points="180,300 210,330 210,372 180,350" fill="#bcaaa4" stroke="#333"/>
+                    <rect x="120" y="190" width="60" height="170" rx="6" fill="#bbdefb" stroke="#333"/>
+                    <polygon points="120,190 180,190 150,30" fill="#c8e6c9" stroke="#333"/>
+                    <ellipse cx="150" cy="45" rx="5" ry="6" fill="#5d4037"/>
+                    <rect x="140" y="360" width="20" height="10" fill="#90a4ae" stroke="#333"/>
+
+                    <!-- component labels -->
+                    <g font-size="12" fill="#222" font-family="Segoe UI, sans-serif">
+                        <line x1="213" y1="330" x2="236" y2="330" stroke="#777" stroke-dasharray="3 2"/>
+                        <text x="240" y="334">Fins + tape: 0.028 kg at 0.06 m</text>
+                        <line x1="180" y1="275" x2="236" y2="275" stroke="#777" stroke-dasharray="3 2"/>
+                        <text x="240" y="279">Pressure bottle: 0.052 kg at 0.17 m</text>
+                        <line x1="165" y1="110" x2="236" y2="110" stroke="#777" stroke-dasharray="3 2"/>
+                        <text x="240" y="114">Nose bottle: 0.045 kg at 0.50 m</text>
+                        <line x1="157" y1="45" x2="236" y2="45" stroke="#777" stroke-dasharray="3 2"/>
+                        <text x="240" y="49">Clay ballast: 0.025 kg at 0.62 m</text>
+                        <text x="165" y="388" fill="#555">nozzle (x = 0)</text>
+                    </g>
+                    <!-- CM markers -->
+                    <g font-size="12" font-family="Segoe UI, sans-serif" fill="#b71c1c">
+                        <circle cx="150" cy="198" r="5" fill="white" stroke="#b71c1c" stroke-width="2"/>
+                        <line x1="145" y1="198" x2="155" y2="198" stroke="#b71c1c"/><line x1="150" y1="193" x2="150" y2="203" stroke="#b71c1c"/>
+                        <line x1="155" y1="198" x2="236" y2="198" stroke="#b71c1c" stroke-dasharray="3 2"/>
+                        <text x="240" y="202">CM, empty (calculated): 0.32 m</text>
+                        <circle cx="150" cy="305" r="5" fill="white" stroke="#b71c1c" stroke-width="2"/>
+                        <line x1="145" y1="305" x2="155" y2="305" stroke="#b71c1c"/><line x1="150" y1="300" x2="150" y2="310" stroke="#b71c1c"/>
+                        <line x1="155" y1="305" x2="236" y2="305" stroke="#b71c1c" stroke-dasharray="3 2"/>
+                        <text x="240" y="309">CM, loaded (calculated): 0.11 m</text>
+                    </g>
+                </svg>
+                <div class="caption">Figure 1. The rocket (not drawn exactly to scale). Positions are measured along the rocket from the nozzle. Total length: 0.66 m.</div>
+            </figure>
+            <p>The bottom bottle is the unaltered pressure vessel. The second bottle forms a long nose section, capped with clay so that the center of mass stays toward the nose. Three cardboard fins are taped near the nozzle. We chose a water volume of 0.80 L because most of the rocket's mass then comes from the water, which leaves the rocket and lets the empty rocket coast with a small mass.</p>
+
+            <h3>Procedure</h3>
+            <ol>
+                <li>Measured the mass of each component and the empty rocket on the lab balance. Located each component's center along the rocket from the nozzle. Found the empty rocket's center of mass by balancing it on a ruler edge.</li>
+                <li>Filled the pressure bottle with 0.80 L of water. Measured the loaded mass and balanced it to find the center of mass.</li>
+                <li>Placed the rocket on the launcher, with the team behind the launch line wearing safety glasses. The teacher pressurized and released the rocket.</li>
+                <li>Three people started and stopped separate stopwatches at launch and at landing. One person recorded slow-motion video with the 1.00 m stick in frame to find the thrust time by counting frames.</li>
+                <li>Measured the position of the landing spot from the pad with the measuring wheel, east and north.</li>
+            </ol>
+
+            <!-- ============== DATA & GRAPHS ============== -->
+            <h2>3. Data &amp; Graphs</h2>
+
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Trial</th>
+                            <th rowspan="2">Water (L)</th>
+                            <th rowspan="2">Launch mass (kg)</th>
+                            <th colspan="3">Hang time, each timer (s)</th>
+                            <th rowspan="2">Mean hang time (s)</th>
+                            <th rowspan="2">Thrust time (s)</th>
+                            <th rowspan="2">Landing, east / north (m)</th>
+                        </tr>
+                        <tr><th>A</th><th>B</th><th>C</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>0.80</td><td>0.950</td><td>5.52</td><td>5.68</td><td>5.60</td><td>5.60</td><td>0.26</td><td>4.5 / 1.0</td></tr>
+                        <tr><td>2</td><td>0.80</td><td>0.950</td><td>5.71</td><td>5.58</td><td>5.65</td><td>5.65</td><td>0.25</td><td>6.0 / 3.5</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="caption">Table 1. Flight data for both launches. All analysis uses Trial 2.</div>
+
+            <p>We analyzed Trial 2, which had the highest mean hang time and the closest agreement among the three timers (range of 0.13 s compared with 0.16 s in Trial 1).</p>
+
+            <h3>Mass and Center of Mass Data</h3>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr><th class="left">Component</th><th>Mass (kg)</th><th>Position from nozzle (m)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="left">Fins + tape</td><td>0.028</td><td>0.06</td></tr>
+                        <tr><td class="left">Pressure bottle</td><td>0.052</td><td>0.17</td></tr>
+                        <tr><td class="left">Nose bottle</td><td>0.045</td><td>0.50</td></tr>
+                        <tr><td class="left">Clay ballast</td><td>0.025</td><td>0.62</td></tr>
+                        <tr><td class="left"><strong>Empty rocket (measured)</strong></td><td>0.150</td><td>CM at 0.33 (balance)</td></tr>
+                        <tr><td class="left">Water, 0.80 L</td><td>0.800</td><td>0.07 (estimated center of the water)</td></tr>
+                        <tr><td class="left"><strong>Loaded rocket (measured)</strong></td><td>0.950</td><td>CM at 0.12 (balance)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="caption">Table 2. Mass and position data used in B2.</div>
+
+            <h3>Uncertainty in Hang Time</h3>
+            <p>The three timers in Trial 2 recorded 5.71 s, 5.58 s, and 5.65 s. Their mean is <strong>5.65 s</strong> and their spread is 5.58 s to 5.71 s, which gives an uncertainty of &plusmn;0.07 s (rounded up from half the range, 0.065 s). We carry this through to the height in A1.</p>
+
+            <h3>Velocity&ndash;Time Graph</h3>
+            <figure>
+                <svg viewBox="0 0 640 360" width="640" role="img" aria-label="Velocity versus time graph for the whole flight: rises to 25.9 meters per second at 0.25 seconds, falls to zero at 2.89 seconds, and reaches negative 27.1 meters per second at 5.65 seconds">
+                    <!-- phase shading -->
+                    <rect x="70" y="30" width="22" height="290" fill="#e8f5e9"/>
+                    <rect x="92" y="30" width="233" height="290" fill="#e3f2fd"/>
+                    <rect x="325" y="30" width="245" height="290" fill="#fff3e0"/>
+                    <!-- grid -->
+                    <g stroke="#cfd8dc" stroke-width="1">
+                        <line x1="158.3" y1="30" x2="158.3" y2="320"/><line x1="246.7" y1="30" x2="246.7" y2="320"/>
+                        <line x1="335" y1="30" x2="335" y2="320"/><line x1="423.3" y1="30" x2="423.3" y2="320"/>
+                        <line x1="511.7" y1="30" x2="511.7" y2="320"/>
+                        <line x1="70" y1="126.7" x2="600" y2="126.7"/><line x1="70" y1="78.3" x2="600" y2="78.3"/>
+                        <line x1="70" y1="223.3" x2="600" y2="223.3"/><line x1="70" y1="271.7" x2="600" y2="271.7"/>
+                    </g>
+                    <!-- axes -->
+                    <line x1="70" y1="30" x2="70" y2="320" stroke="#222" stroke-width="1.5"/>
+                    <line x1="70" y1="175" x2="600" y2="175" stroke="#222" stroke-width="1.5"/>
+                    <g font-size="11" fill="#222" font-family="Segoe UI, sans-serif">
+                        <g text-anchor="end">
+                            <text x="64" y="34">30</text><text x="64" y="82">20</text><text x="64" y="130">10</text>
+                            <text x="64" y="179">0</text><text x="64" y="227">&minus;10</text><text x="64" y="275">&minus;20</text><text x="64" y="324">&minus;30</text>
+                        </g>
+                        <g text-anchor="middle">
+                            <text x="70" y="338">0</text><text x="158.3" y="338">1</text><text x="246.7" y="338">2</text>
+                            <text x="335" y="338">3</text><text x="423.3" y="338">4</text><text x="511.7" y="338">5</text><text x="600" y="338">6</text>
+                        </g>
+                        <text x="335" y="355" text-anchor="middle" font-size="12">time, t (s)</text>
+                        <text x="16" y="175" text-anchor="middle" font-size="12" transform="rotate(-90 16 175)">velocity, v (m/s, up is positive)</text>
+                    </g>
+                    <!-- phase labels -->
+                    <g font-size="11" fill="#455a64" font-family="Segoe UI, sans-serif" text-anchor="middle">
+                        <text x="82" y="22">Thrust</text>
+                        <text x="208" y="22">Coast (rising)</text>
+                        <text x="447" y="22">Descent (falling)</text>
+                    </g>
+                    <!-- data line -->
+                    <polyline points="70,175 92.1,49.8 325.3,175 569.1,306" fill="none" stroke="#c62828" stroke-width="2.5" stroke-linejoin="round"/>
+                    <g fill="#c62828">
+                        <circle cx="92.1" cy="49.8" r="4"/><circle cx="325.3" cy="175" r="4"/><circle cx="569.1" cy="306" r="4"/>
+                    </g>
+                    <!-- point labels -->
+                    <g font-size="11" fill="#222" font-family="Segoe UI, sans-serif">
+                        <text x="102" y="60">Burnout: 25.9 m/s at 0.25 s</text>
+                        <text x="325" y="164" text-anchor="middle">Peak: v = 0 at 2.89 s</text>
+                        <text x="560" y="296" text-anchor="end">Landing: &minus;27.1 m/s at 5.65 s</text>
+                        <text x="232" y="106" fill="#1a237e">slope = &minus;9.8 m/s&sup2;</text>
+                        <text x="108" y="132" fill="#1b5e20">slope = +103 m/s&sup2;</text>
+                        <text x="440" y="216" fill="#e65100">slope = &minus;9.8 m/s&sup2;</text>
+                    </g>
+                </svg>
+                <div class="caption">Figure 2. Velocity versus time for Trial 2, built from the values calculated in Part A.</div>
+            </figure>
+
+            <p><strong>Interpretation.</strong> The slope of a velocity&ndash;time graph is acceleration. During the thrust phase the slope is steep and positive (+103 m/s&sup2;, about 10.6<span class="var">g</span>). In the coast and descent phases the graph is one straight line with slope &minus;9.8 m/s&sup2;, which shows that gravity alone is acting. The slope does not change when the velocity crosses zero at the peak, because the acceleration is the same there. The area between the graph and the time axis is displacement. The area above the axis from 0 to 2.89 s is &frac12;(25.9 m/s)(0.25 s) + &frac12;(25.9 m/s)(2.64 s) = 3.2 m + 34.1 m = 37.4 m, which is the height gained on the way up. This is 4.5% less than the 39.1 m found from hang time in A1. The area below the axis (the descent) has the same size, 37.4 m, so the rocket returns to the pad.</p>
+
+            <div class="note">
+                <strong class="tagline">Notice</strong>
+                The graph is built from calculated values, with every key point labeled and the slopes and areas explained in terms of what they mean. Checking an area against an earlier answer, and commenting honestly on the small disagreement, is the kind of verification that earns the Data &amp; Graphs points.
+            </div>
+
+            <!-- ============== CALCULATIONS ============== -->
+            <h2>4. Calculations</h2>
+            <p>Up is positive, y = 0 at the launch pad, and <span class="var">g</span> = 9.8 m/s&sup2;. All values are from Trial 2: <span class="var">t</span><sub>total</sub> = 5.65 s and <span class="var">t</span><sub>thrust</sub> = 0.25 s.</p>
+
+            <h3>Part A &mdash; Kinematics</h3>
+
+            <p><span class="label">A1. Maximum height.</span> Because the rocket lands at the height it left, we assume the rise and the fall take equal times, so the fall from the peak takes half the hang time. The fall begins at rest at the peak.</p>
+            <div class="calc">
+                <div><span class="var">t</span><sub>fall</sub> = <span class="var">t</span><sub>total</sub>/2 = 5.65 s / 2 = 2.825 s</div>
+                <div>&Delta;<span class="var">y</span> = <span class="var">v</span><sub>0</sub><span class="var">t</span> + &frac12;<span class="var">a</span><span class="var">t</span>&sup2;, with <span class="var">v</span><sub>0</sub> = 0 and <span class="var">a</span> = &minus;<span class="var">g</span>, so |&Delta;<span class="var">y</span>| = &frac12;<span class="var">g</span><span class="var">t</span><sub>fall</sub>&sup2;</div>
+                <div><span class="var">H</span> = &frac12;(9.8 m/s&sup2;)(2.825 s)&sup2; = 39.1 m</div>
+                <div>Uncertainty: using 5.58 s gives 38.1 m and using 5.72 s gives 40.1 m.</div>
+                <div class="ans"><span class="var">H</span> = 39.1 m &plusmn; 1.0 m</div>
+            </div>
+
+            <p><span class="label">A2. Burnout speed, two methods.</span> The burnout speed <span class="var">v</span><sub>b</sub> is the speed at the end of the thrust phase.</p>
+            <p><em>Method 1: time in the coast phase.</em> The rise lasts <span class="var">t</span><sub>fall</sub> = 2.825 s in total (equal rise and fall times), and 0.25 s of that was thrust, so the coast phase lasts 2.575 s. At the peak <span class="var">v</span> = 0.</p>
+            <div class="calc">
+                <div><span class="var">t</span><sub>coast</sub> = 2.825 s &minus; 0.25 s = 2.575 s</div>
+                <div><span class="var">v</span> = <span class="var">v</span><sub>b</sub> + <span class="var">a</span><span class="var">t</span>, so 0 = <span class="var">v</span><sub>b</sub> &minus; <span class="var">g</span><span class="var">t</span><sub>coast</sub>, giving <span class="var">v</span><sub>b</sub> = <span class="var">g</span><span class="var">t</span><sub>coast</sub></div>
+                <div><span class="var">v</span><sub>b</sub> = (9.8 m/s&sup2;)(2.575 s) = 25.2 m/s</div>
+            </div>
+            <p><em>Method 2: heights.</em> The maximum height is the height gained during thrust plus the height gained while coasting. During thrust the acceleration is constant and the rocket starts from rest, so its average velocity is &frac12;<span class="var">v</span><sub>b</sub>. The coast starts at <span class="var">v</span><sub>b</sub> and ends at 0.</p>
+            <div class="calc">
+                <div><span class="var">h</span><sub>thrust</sub> = &frac12;<span class="var">v</span><sub>b</sub><span class="var">t</span><sub>thrust</sub></div>
+                <div><span class="var">v</span>&sup2; = <span class="var">v</span><sub>0</sub>&sup2; + 2<span class="var">a</span>&Delta;<span class="var">y</span> gives 0 = <span class="var">v</span><sub>b</sub>&sup2; &minus; 2<span class="var">g</span><span class="var">h</span><sub>coast</sub>, so <span class="var">h</span><sub>coast</sub> = <span class="var">v</span><sub>b</sub>&sup2;/(2<span class="var">g</span>)</div>
+                <div><span class="var">H</span> = <span class="var">h</span><sub>thrust</sub> + <span class="var">h</span><sub>coast</sub> = &frac12;<span class="var">v</span><sub>b</sub><span class="var">t</span><sub>thrust</sub> + <span class="var">v</span><sub>b</sub>&sup2;/(2<span class="var">g</span>)</div>
+                <div>Multiply both sides by 2<span class="var">g</span> and rearrange: <span class="var">v</span><sub>b</sub>&sup2; + (<span class="var">g</span><span class="var">t</span><sub>thrust</sub>)<span class="var">v</span><sub>b</sub> &minus; 2<span class="var">g</span><span class="var">H</span> = 0</div>
+                <div>Substitute: <span class="var">g</span><span class="var">t</span><sub>thrust</sub> = (9.8 m/s&sup2;)(0.25 s) = 2.45 m/s and 2<span class="var">g</span><span class="var">H</span> = 2(9.8 m/s&sup2;)(39.1 m) = 766 m&sup2;/s&sup2;</div>
+                <div><span class="var">v</span><sub>b</sub>&sup2; + 2.45<span class="var">v</span><sub>b</sub> &minus; 766 = 0</div>
+                <div>Quadratic formula: <span class="var">v</span><sub>b</sub> = [&minus;2.45 + &radic;(2.45&sup2; + 4(766))] / 2 = [&minus;2.45 + &radic;3072] / 2 = (&minus;2.45 + 55.4) / 2</div>
+                <div><span class="var">v</span><sub>b</sub> = 26.5 m/s</div>
+                <div>(The negative root of the quadratic is rejected because the rocket is moving upward at burnout.)</div>
+            </div>
+            <p><em>Comparison.</em></p>
+            <div class="calc">
+                <div>Percent difference = |26.5 &minus; 25.2| / [(26.5 + 25.2)/2] &times; 100% = 1.3 / 25.85 &times; 100% = <span class="ans">4.8%</span></div>
+                <div>We use the mean of the two methods for the rest of the analysis: <span class="ans"><span class="var">v</span><sub>b</sub> = 25.9 m/s</span>.</div>
+            </div>
+            <p>The methods agree within 5%, which supports the models. They do not agree exactly because both use the hang time to find a peak, and that assumes equal rise and fall times, which would not be exactly true if air resistance mattered. We return to this in the discussion.</p>
+
+            <p><span class="label">A3. Average acceleration during thrust.</span> The rocket started from rest.</p>
+            <div class="calc">
+                <div><span class="var">a</span><sub>avg</sub> = &Delta;<span class="var">v</span> / &Delta;<span class="var">t</span> = (<span class="var">v</span><sub>b</sub> &minus; 0) / <span class="var">t</span><sub>thrust</sub></div>
+                <div><span class="var">a</span><sub>avg</sub> = (25.9 m/s &minus; 0) / 0.25 s = 103 m/s&sup2; (up)</div>
+                <div>In multiples of <span class="var">g</span>: (103 m/s&sup2;) / (9.8 m/s&sup2;) = <span class="ans">10.6<span class="var">g</span></span></div>
+            </div>
+
+            <p><span class="label">A4. Two-dimensional motion.</span> We use east as +<span class="var">x</span> and north as +<span class="var">y</span> for the horizontal plane. The rocket landed 6.0 m east and 3.5 m north of the pad. It landed at the launch height, so the vertical displacement for the whole flight is zero.</p>
+            <div class="calc">
+                <div>|&Delta;<strong>r</strong>| = &radic;(&Delta;<span class="var">x</span>&sup2; + &Delta;<span class="var">y</span>&sup2;) = &radic;[(6.0 m)&sup2; + (3.5 m)&sup2;] = &radic;48.25 m&sup2; = 6.9 m</div>
+                <div>&theta; = tan<sup>&minus;1</sup>(&Delta;<span class="var">y</span>/&Delta;<span class="var">x</span>) = tan<sup>&minus;1</sup>(3.5 m / 6.0 m) = 30&deg;</div>
+                <div class="ans">Displacement: 6.9 m at 30&deg; north of east</div>
+                <div><strong>v</strong><sub>avg</sub> = &Delta;<strong>r</strong> / &Delta;<span class="var">t</span> = 6.9 m / 5.65 s = <span class="ans">1.2 m/s at 30&deg; north of east</span></div>
+                <div>Distance traveled &asymp; up 39.1 m + down 39.1 m = 78.2 m. (The sideways drift adds well under 1 m to this, so we neglect it.)</div>
+                <div>Average speed = distance / &Delta;<span class="var">t</span> = 78.2 m / 5.65 s = <span class="ans">13.8 m/s</span></div>
+            </div>
+            <p>The average velocity is a vector found from the <em>displacement</em>, which is small because the rocket ended up near where it started. The average speed uses the <em>distance traveled</em>, which counts the full trip up and back down. That is why the average speed (13.8 m/s) is more than ten times the size of the average velocity (1.2 m/s).</p>
+
+            <h3>Part B &mdash; Forces &amp; Dynamics</h3>
+
+            <p><span class="label">B1. Weights and water mass.</span></p>
+            <div class="calc">
+                <div><span class="var">W</span> = <span class="var">m</span><span class="var">g</span></div>
+                <div><span class="var">W</span><sub>empty</sub> = (0.150 kg)(9.8 m/s&sup2;) = <span class="ans">1.47 N</span></div>
+                <div><span class="var">W</span><sub>loaded</sub> = (0.950 kg)(9.8 m/s&sup2;) = <span class="ans">9.31 N</span></div>
+                <div>Mass of water ejected = 0.950 kg &minus; 0.150 kg = <span class="ans">0.800 kg</span> (check: 0.80 L &times; 1.00 kg/L = 0.80 kg)</div>
+            </div>
+
+            <p><span class="label">B2. Center of mass.</span> The center of mass of a system is the mass-weighted average of the positions of its parts, <span class="var">x</span><sub>cm</sub> = &Sigma;(<span class="var">m</span><sub>i</sub><span class="var">x</span><sub>i</sub>) / &Sigma;<span class="var">m</span><sub>i</sub>, with positions measured from the nozzle.</p>
+            <div class="table-scroll">
+                <table>
+                    <thead><tr><th class="left">Part</th><th><span class="var">m</span> (kg)</th><th><span class="var">x</span> (m)</th><th><span class="var">m</span><span class="var">x</span> (kg&middot;m)</th></tr></thead>
+                    <tbody>
+                        <tr><td class="left">Fins + tape</td><td>0.028</td><td>0.06</td><td>0.00168</td></tr>
+                        <tr><td class="left">Pressure bottle</td><td>0.052</td><td>0.17</td><td>0.00884</td></tr>
+                        <tr><td class="left">Nose bottle</td><td>0.045</td><td>0.50</td><td>0.02250</td></tr>
+                        <tr><td class="left">Clay ballast</td><td>0.025</td><td>0.62</td><td>0.01550</td></tr>
+                        <tr><td class="left"><strong>Empty total</strong></td><td><strong>0.150</strong></td><td></td><td><strong>0.04852</strong></td></tr>
+                        <tr><td class="left">Water</td><td>0.800</td><td>0.07</td><td>0.05600</td></tr>
+                        <tr><td class="left"><strong>Loaded total</strong></td><td><strong>0.950</strong></td><td></td><td><strong>0.10452</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="calc">
+                <div><span class="var">x</span><sub>cm, empty</sub> = 0.04852 kg&middot;m / 0.150 kg = <span class="ans">0.32 m</span></div>
+                <div><span class="var">x</span><sub>cm, loaded</sub> = 0.10452 kg&middot;m / 0.950 kg = <span class="ans">0.11 m</span></div>
+                <div>Compared with the balance measurements (0.33 m and 0.12 m): |0.3235 &minus; 0.33| / 0.33 = 2.0% and |0.1100 &minus; 0.12| / 0.12 = 8.3%.</div>
+            </div>
+            <p>The calculated and measured values agree well for the empty rocket. The larger disagreement for the loaded rocket most likely comes from our estimate of where the center of the water sits (the bottle narrows near the nozzle) and from the water shifting while we balanced the rocket. The center of mass matters for stability. With water on board, the center of mass (0.11 m) is only about 0.05 m ahead of the fins, so the rocket is least stable at launch. Once the water leaves, the center of mass moves to 0.32 m, well ahead of the fins, which helps the rocket keep pointing nose-first. The thrust phase is very short (0.25 s), so this was acceptable for our design.</p>
+
+            <p><span class="label">B3. Free-body diagrams.</span> Up is positive. In each diagram the system is the rocket (including any water still inside it).</p>
+            <div class="fbd-grid">
+                <figure>
+                    <svg viewBox="0 0 240 230" role="img" aria-label="Free-body diagram before release: launcher force up, weight down, equal size">
+                        <polygon points="68,85 92,85 80,62" fill="#d7ccc8" stroke="#555"/><rect x="68" y="85" width="24" height="60" fill="#d7ccc8" stroke="#555"/>
+                        <polygon points="68,135 56,152 68,148" fill="#d7ccc8" stroke="#555"/><polygon points="92,135 104,152 92,148" fill="#d7ccc8" stroke="#555"/>
+                        <line x1="80" y1="112" x2="80" y2="75" stroke="#1565c0" stroke-width="3"/><polygon points="80,65 75,76 85,76" fill="#1565c0"/>
+                        <line x1="80" y1="118" x2="80" y2="155" stroke="#c62828" stroke-width="3"/><polygon points="80,165 75,154 85,154" fill="#c62828"/>
+                        <circle cx="80" cy="115" r="3.5" fill="#222"/>
+                        <g font-size="11" font-family="Segoe UI, sans-serif"><text x="92" y="72" fill="#1565c0">Launcher on rocket</text><text x="92" y="170" fill="#c62828">Weight (Earth)</text><text x="8" y="212" fill="#333">v = 0, a = 0</text></g>
+                    </svg>
+                    <figcaption>(1) Just before release</figcaption>
+                </figure>
+                <figure>
+                    <svg viewBox="0 0 240 230" role="img" aria-label="Free-body diagram during thrust: large thrust force up, small weight down">
+                        <polygon points="68,85 92,85 80,62" fill="#d7ccc8" stroke="#555"/><rect x="68" y="85" width="24" height="60" fill="#d7ccc8" stroke="#555"/>
+                        <polygon points="68,135 56,152 68,148" fill="#d7ccc8" stroke="#555"/><polygon points="92,135 104,152 92,148" fill="#d7ccc8" stroke="#555"/>
+                        <line x1="80" y1="112" x2="80" y2="25" stroke="#2e7d32" stroke-width="3"/><polygon points="80,15 75,26 85,26" fill="#2e7d32"/>
+                        <line x1="80" y1="118" x2="80" y2="133" stroke="#c62828" stroke-width="3"/><polygon points="80,143 75,132 85,132" fill="#c62828"/>
+                        <circle cx="80" cy="115" r="3.5" fill="#222"/>
+                        <g font-size="11" font-family="Segoe UI, sans-serif"><text x="92" y="22" fill="#2e7d32">Thrust (water on rocket)</text><text x="92" y="150" fill="#c62828">Weight (Earth)</text><text x="8" y="212" fill="#333">v &#8593;  a &#8593; (large)</text></g>
+                    </svg>
+                    <figcaption>(2) During thrust</figcaption>
+                </figure>
+                <figure>
+                    <svg viewBox="0 0 240 230" role="img" aria-label="Free-body diagram while rising in the coast phase: weight down and a small air resistance force down">
+                        <polygon points="68,85 92,85 80,62" fill="#d7ccc8" stroke="#555"/><rect x="68" y="85" width="24" height="60" fill="#d7ccc8" stroke="#555"/>
+                        <polygon points="68,135 56,152 68,148" fill="#d7ccc8" stroke="#555"/><polygon points="92,135 104,152 92,148" fill="#d7ccc8" stroke="#555"/>
+                        <line x1="70" y1="118" x2="70" y2="153" stroke="#c62828" stroke-width="3"/><polygon points="70,163 65,152 75,152" fill="#c62828"/>
+                        <line x1="92" y1="118" x2="92" y2="130" stroke="#ef6c00" stroke-width="3"/><polygon points="92,140 87,129 97,129" fill="#ef6c00"/>
+                        <circle cx="80" cy="115" r="3.5" fill="#222"/>
+                        <g font-size="11" font-family="Segoe UI, sans-serif"><text x="70" y="180" fill="#c62828" text-anchor="middle">Weight (Earth)</text><text x="102" y="136" fill="#ef6c00">Air (small)</text><text x="8" y="212" fill="#333">v &#8593;  a &#8595; (about &minus;g)</text></g>
+                    </svg>
+                    <figcaption>(3) Rising, coast phase</figcaption>
+                </figure>
+                <figure>
+                    <svg viewBox="0 0 240 230" role="img" aria-label="Free-body diagram while falling: weight down and a small air resistance force up">
+                        <polygon points="68,85 92,85 80,62" fill="#d7ccc8" stroke="#555"/><rect x="68" y="85" width="24" height="60" fill="#d7ccc8" stroke="#555"/>
+                        <polygon points="68,135 56,152 68,148" fill="#d7ccc8" stroke="#555"/><polygon points="92,135 104,152 92,148" fill="#d7ccc8" stroke="#555"/>
+                        <line x1="70" y1="118" x2="70" y2="153" stroke="#c62828" stroke-width="3"/><polygon points="70,163 65,152 75,152" fill="#c62828"/>
+                        <line x1="92" y1="112" x2="92" y2="100" stroke="#ef6c00" stroke-width="3"/><polygon points="92,90 87,101 97,101" fill="#ef6c00"/>
+                        <circle cx="80" cy="115" r="3.5" fill="#222"/>
+                        <g font-size="11" font-family="Segoe UI, sans-serif"><text x="70" y="180" fill="#c62828" text-anchor="middle">Weight (Earth)</text><text x="102" y="96" fill="#ef6c00">Air (small)</text><text x="8" y="212" fill="#333">v &#8595;  a &#8595; (about &minus;g)</text></g>
+                    </svg>
+                    <figcaption>(4) Falling</figcaption>
+                </figure>
+            </div>
+            <div class="caption">Figure 3. Free-body diagrams. Arrow lengths are not to scale. Up is positive.</div>
+
+            <div class="table-scroll">
+                <table>
+                    <thead><tr><th>Moment</th><th>Forces on the rocket (type, exerted by)</th><th>Newton's second law, vertical</th></tr></thead>
+                    <tbody>
+                        <tr><td>(1) Before release</td><td class="left">Weight, by Earth (down). Contact force, by launcher (up).</td><td class="left">&Sigma;<span class="var">F</span><sub>y</sub> = <span class="var">F</span><sub>L</sub> &minus; <span class="var">m</span><span class="var">g</span> = 0, so <span class="var">F</span><sub>L</sub> = 9.31 N</td></tr>
+                        <tr><td>(2) During thrust</td><td class="left">Weight, by Earth (down). Thrust, by the escaping water (up).</td><td class="left">&Sigma;<span class="var">F</span><sub>y</sub> = <span class="var">F</span><sub>T</sub> &minus; <span class="var">m</span><span class="var">g</span> = <span class="var">m</span><span class="var">a</span></td></tr>
+                        <tr><td>(3) Rising, coast</td><td class="left">Weight, by Earth (down). Air resistance, by the air (down, small).</td><td class="left">&Sigma;<span class="var">F</span><sub>y</sub> = &minus;<span class="var">m</span><span class="var">g</span> &minus; <span class="var">F</span><sub>air</sub> = <span class="var">m</span><span class="var">a</span> &asymp; &minus;<span class="var">m</span><span class="var">g</span>, so <span class="var">a</span> &asymp; &minus;<span class="var">g</span></td></tr>
+                        <tr><td>(4) Falling</td><td class="left">Weight, by Earth (down). Air resistance, by the air (up, small).</td><td class="left">&Sigma;<span class="var">F</span><sub>y</sub> = &minus;<span class="var">m</span><span class="var">g</span> + <span class="var">F</span><sub>air</sub> = <span class="var">m</span><span class="var">a</span>, so <span class="var">a</span> is slightly smaller in size than <span class="var">g</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>In (3) and (4) the air resistance arrow is drawn small and then neglected in the calculations, consistent with our assumption. In (3) the net force points down while the velocity points up, which is why the rocket slows down without turning around until the velocity reaches zero.</p>
+
+            <p><span class="label">B4. Thrust force and thrust-to-weight ratio.</span> From the free-body diagram during thrust, &Sigma;<span class="var">F</span><sub>y</sub> = <span class="var">F</span><sub>T</sub> &minus; <span class="var">m</span><span class="var">g</span> = <span class="var">m</span><span class="var">a</span>, so <span class="var">F</span><sub>T</sub> = <span class="var">m</span>(<span class="var">a</span> + <span class="var">g</span>). The mass decreases from 0.950 kg at launch to 0.150 kg at burnout as water is ejected, so we calculate the thrust with both masses, using <span class="var">a</span> = 103.4 m/s&sup2; from A3.</p>
+            <div class="calc">
+                <div>Loaded mass: <span class="var">F</span><sub>T</sub> = (0.950 kg)(103.4 m/s&sup2; + 9.8 m/s&sup2;) = (0.950 kg)(113.2 m/s&sup2;) = <span class="ans">108 N</span></div>
+                <div>Final (empty) mass: <span class="var">F</span><sub>T</sub> = (0.150 kg)(113.2 m/s&sup2;) = <span class="ans">17.0 N</span></div>
+                <div>Thrust-to-weight ratio at launch: <span class="var">F</span><sub>T</sub>/<span class="var">W</span> = (<span class="var">a</span> + <span class="var">g</span>)/<span class="var">g</span> = 113.2 / 9.8 = <span class="ans">11.6</span></div>
+            </div>
+            <p>The two results differ by a factor of about 6 because 84% of the launch mass (0.800 kg out of 0.950 kg) is water that leaves the rocket during thrust. The loaded-mass value overestimates the average thrust because the rocket is much lighter for most of the thrust phase. The final-mass value underestimates it because the rocket carried all of that water at the start. Neither is exact, so we consider the true average thrust to be between 17 N and 108 N, and we think a value near the middle is the better estimate. Using the average mass, 0.55 kg, gives (0.55 kg)(113.2 m/s&sup2;) = 62 N. A thrust-to-weight ratio of 11.6 means the net force on the rocket at launch is more than 10 times its weight, so the rocket accelerates upward at over 10<span class="var">g</span>.</p>
+
+            <p><span class="label">B5. Newton's third law pairs.</span></p>
+            <ul>
+                <li><strong>Thrust:</strong> The force of the escaping water on the rocket (upward) is paired with the force of the rocket on the escaping water (downward). The rocket pushes the water down and out of the nozzle, and the water pushes the rocket up.</li>
+                <li><strong>Weight:</strong> The force of Earth on the rocket (downward) is paired with the force of the rocket on Earth (upward).</li>
+            </ul>
+            <p>The two members of a third-law pair always act on <em>different objects</em>, so they never appear together in the same free-body diagram and never cancel. The forces that are on our rocket's free-body diagram during thrust, the thrust and the weight, are not a third-law pair. They act on the same object, and they are not equal in size (108 N compared with 9.31 N at launch), which is why the rocket accelerates.</p>
+
+            <div class="note">
+                <strong class="tagline">Notice</strong>
+                Each calculation starts from a general equation, shows the substitution with units, and ends with a labeled answer. The two methods in A2 are truly independent, and the quadratic in Method 2 is derived step by step instead of just appearing. Explanations such as "why are these two answers different?" are part of the work, not an extra.
+            </div>
+
+            <!-- ============== RESULTS & DISCUSSION ============== -->
+            <h2>5. Results &amp; Discussion</h2>
+
+            <h3>Claim, Evidence, Reasoning</h3>
+            <p><strong>Claim.</strong> Our rocket did not meet the 45.0 m target. It reached a height of 39.1 m &plusmn; 1.0 m, about 6 m short.</p>
+            <p><strong>Evidence.</strong> The hang time of 5.65 s (three timers, range 5.58 s to 5.71 s) gives 39.1 m. Two independent estimates of the burnout speed (25.2 m/s and 26.5 m/s) agree within 4.8%. The area under our velocity&ndash;time graph for the rising part of the flight gives 37.4 m, within 4.5% of the hang-time height.</p>
+            <p><strong>Reasoning.</strong> Once the water is gone, only gravity acts, so the height gained while coasting depends only on the burnout speed. To reach 45.0 m with a 0.25 s thrust phase, the rocket would have needed a burnout speed of about 28.5 m/s (from the same equation as A2 Method 2, with <span class="var">H</span> = 45.0 m). We reached 25.9 m/s, so we needed about 10% more speed, which means an average acceleration of about 114 m/s&sup2; (11.6<span class="var">g</span>) instead of 103 m/s&sup2; (10.6<span class="var">g</span>). Because the net force during thrust is the thrust minus the weight, getting that extra acceleration requires either more thrust or less mass.</p>
+
+            <h3>Error Analysis</h3>
+            <ul>
+                <li><strong>Stopwatch reaction time.</strong> The spread of &plusmn;0.07 s in the three hang times produces &plusmn;1.0 m in the height (A1). Because we used three timers and averaged them, random errors partly cancel. If all three timers started or stopped late by the same amount, the error would not cancel.</li>
+                <li><strong>Thrust time from video.</strong> At 240 frames per second one frame is 0.004 s. We could be off by about two frames in locating the start and end of thrust, which is &plusmn;0.008 s. That changes the acceleration in A3 by about &plusmn;3%.</li>
+                <li><strong>Constant acceleration assumption.</strong> Real thrust drops as the air pressure falls while the water leaves. Our model uses one average acceleration. The average acceleration is still correct (burnout speed divided by thrust time), but the height gained during thrust is likely a little larger than &frac12;<span class="var">v</span><sub>b</sub><span class="var">t</span> if the acceleration was largest early on.</li>
+                <li><strong>Air resistance and the hang-time height.</strong> Our height from hang time assumes equal rise and fall times. The hang-time height (39.1 m) is 4.5% larger than the graph-area height (37.4 m), and the two burnout speeds differ by 4.8%. Air resistance would produce this kind of gap (see below).</li>
+                <li><strong>Center of mass.</strong> Balancing the loaded rocket was hard because the water moved, and we only estimated where the water's center was. This is the likely reason for the 8.3% disagreement in B2.</li>
+            </ul>
+
+            <h3>Air Resistance Discussion</h3>
+            <p>We assumed air resistance was negligible. Our data suggest it was small but not zero. Air resistance acts opposite to the motion, so on the way up it adds to gravity, and on the way down it works against gravity. That makes the fall take longer than the rise. If the fall takes more than half of the hang time, then using half the hang time in A1 does not match the true free fall from the peak, and the height we computed is probably too high. The same assumption affects the descent speed in Figure 2, which we computed as if the rocket were in free fall. The real landing speed is probably somewhat less than 27.1 m/s. The results most affected are therefore the maximum height and the landing speed, and both are probably overestimated. The burnout speed, found from a short 0.25 s phase, is less sensitive.</p>
+
+            <h3>Design Improvement</h3>
+            <p>Our results show that the rocket would need more acceleration during the thrust phase. The simplest change we can make with our own numbers is to reduce the mass. Using the thrust estimate of 62 N (average mass), removing the 0.025 kg of clay ballast lowers the average mass from 0.55 kg to 0.525 kg, and the acceleration becomes
+            <em>a</em> = <em>F</em>/<em>m</em> &minus; <em>g</em> = (62 N)/(0.525 kg) &minus; 9.8 m/s&sup2; = 109 m/s&sup2;, about 5% higher. Assuming the same thrust time, the burnout speed becomes (109 m/s&sup2;)(0.25 s) = 27.2 m/s, and the coast height becomes (27.2 m/s)&sup2;/(2 &times; 9.8 m/s&sup2;) = 37.8 m instead of 34.1 m. That gains about 3.7 m of coast height, plus roughly 0.2 m more during thrust, so about 4 m in all. The peak would reach roughly 43 m, still short of 45 m.</p>
+            <p>This change has a cost. Using the B2 method without the clay, the empty center of mass moves from 0.32 m to (0.04852 &minus; 0.0155)/0.125 = 0.26 m, closer to the fins at 0.06 m, which makes the rocket less stable. A better plan for the next version is to make several smaller changes together: remove some ballast, trim the weight of the fins and tape, and test a slightly different water volume, while checking that the center of mass stays well ahead of the fins.</p>
+
+            <h3>Summary of the Flight Using Newton's Laws</h3>
+            <p>At launch the thrust force from the escaping water is much larger than the weight, so the net force is up and the rocket accelerates upward at about 10.6<span class="var">g</span> for 0.25 s (second law). After the water is gone, the only force is weight, so the net force is down. The rocket keeps moving up because velocity does not need to match the direction of the net force, but its speed drops by 9.8 m/s every second until it stops at the peak. On the way down the same net force speeds the rocket up again. During the thrust phase, the rocket's downward push on the water is matched by the water's equal upward push on the rocket (third law).</p>
+
+        </article>
+    </div>
+
+</body>
+</html>
