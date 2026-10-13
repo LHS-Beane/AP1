@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Water Rocket Hub | AP Physics 1</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* --- GLOBAL VARIABLES --- */
         :root {
@@ -49,6 +48,7 @@
         /* --- HERO HEADER --- */
         header {
             background: linear-gradient(rgba(0, 77, 128, 0.9), rgba(0, 77, 128, 0.9)), url('https://images.unsplash.com/photo-1517976487492-5750f3195933?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-color: var(--secondary);
             background-size: cover;
             background-position: center;
             color: var(--white);
@@ -91,10 +91,10 @@
         /* --- CONTENT SECTIONS --- */
         .page-content { display: none; animation: fadeIn 0.4s ease-in-out; }
         .page-content.active { display: block; }
-        
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        h2 { color: var(--secondary); border-bottom: 3px solid var(--accent); display: inline-block; margin: 30px 0 15px 0; padding-bottom: 5px; }
+        h2 { color: var(--secondary); border-bottom: 3px solid var(--accent); display: inline-block; margin: 10px 0 15px 0; padding-bottom: 5px; }
         h3 { color: var(--primary); margin: 20px 0 10px 0; }
         ul, ol { margin-left: 20px; margin-bottom: 15px; }
         li { margin-bottom: 8px; }
@@ -111,54 +111,23 @@
         .card.warning { border-left-color: var(--danger); }
         .card.success { border-left-color: var(--success); }
 
-        /* --- FORMS & INPUTS --- */
-        .form-row { display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap; }
-        .form-group { flex: 1; min-width: 200px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem; }
-        input, select {
-            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;
-        }
-        button.action-btn {
-            background-color: var(--secondary); color: white; border: none; padding: 10px 20px;
-            border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background 0.2s;
-        }
-        button.action-btn:hover { background-color: var(--primary); }
-        button.reset-btn { background-color: #777; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
-
-        /* --- SAMPLE PAPER STYLE --- */
-        .sample-paper {
-            background: white;
-            padding: 50px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.15);
-            max-width: 850px;
-            margin: 0 auto;
-            font-family: 'Times New Roman', Times, serif;
-            color: black;
-            border: 1px solid #ddd;
-        }
-        .sample-paper h2, .sample-paper h3 { font-family: 'Times New Roman', Times, serif; color: black; border-bottom: 1px solid black; }
-        .eq-block { 
-            background: #f9f9f9; padding: 10px; border: 1px solid #ddd; display: block; 
-            font-family: 'Times New Roman', serif; font-style: italic; margin: 10px 0; text-align: center;
-        }
-
         /* --- TABLE STYLES --- */
         table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; vertical-align: top; }
         th { background-color: var(--secondary); color: white; }
         tr:nth-child(even) { background-color: #f9f9f9; }
-        
-        /* --- CHART --- */
-        .chart-container { position: relative; height: 350px; width: 100%; max-width: 700px; margin: 0 auto; }
+        tr.total td { background-color: #e8f1fa; font-weight: bold; }
+        td.pts { text-align: center; font-weight: bold; white-space: nowrap; }
+        .tag { display: inline-block; background: #e8f1fa; color: var(--secondary); font-size: 0.75rem; font-weight: bold; padding: 2px 8px; border-radius: 10px; }
+        .table-scroll { overflow-x: auto; }
+        .blank td { height: 38px; }
 
-        /* Utility for math font */
         .eq { font-family: 'Times New Roman', serif; font-style: italic; }
 
         @media (max-width: 768px) {
             .tabs-container { flex-direction: column; }
             .nav-link { text-align: center; }
-            .form-row { flex-direction: column; }
-            .sample-paper { padding: 20px; }
+            header h1 { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -171,7 +140,7 @@
 
     <header>
         <h1>AP Water Rocket Challenge</h1>
-        <p>Newton's Laws, Projectile Motion, and Aerodynamic Design.</p>
+        <p>Unit 1 Kinematics &amp; Unit 2 Force and Translational Dynamics &mdash; Design, Launch, Analyze.</p>
     </header>
 
     <div class="container">
@@ -179,211 +148,349 @@
         <div class="tabs-container">
             <div id="nav-overview" class="nav-link active" onclick="switchTab('page-overview', this)">Overview</div>
             <div id="nav-rules" class="nav-link" onclick="switchTab('page-rules', this)">Design Rules</div>
+            <div id="nav-data" class="nav-link" onclick="switchTab('page-data', this)">Data Collection</div>
             <div id="nav-report" class="nav-link" onclick="switchTab('page-report', this)">Report Guidelines</div>
-            <div id="nav-physics" class="nav-link" onclick="switchTab('page-physics', this)">Math & Hints</div>
+            <div id="nav-analysis" class="nav-link" onclick="switchTab('page-analysis', this)">Analysis Requirements</div>
             <div id="nav-rubric" class="nav-link" onclick="switchTab('page-rubric', this)">Grading Rubric</div>
         </div>
-        
+
         <main>
-            
+
+            <!-- ===================== OVERVIEW ===================== -->
             <div id="page-overview" class="page-content active">
                 <div class="card">
-                    <h2>🚀 The Challenge</h2>
-                    <p class="text-xl">The objective of this lab is to build a working rocket out of a 2.0 L bottle. The rocket must be capable of carrying a fragile payload (an egg) and achieving significant altitude.</p>
+                    <h2>The Challenge</h2>
+                    <p>Design, build, and launch a water rocket made from 2.0 L plastic bottles that reaches a height of at least <strong>45.0 m</strong>. Then act as a physicist: use what you measured during the flight to reconstruct the motion of your rocket and the forces acting on it.</p>
+                    <p style="margin-top: 10px;">This is a <strong>150-point</strong> project that pulls together everything from <strong>Unit 1 (Kinematics)</strong> and <strong>Unit 2 (Force and Translational Dynamics)</strong>. You will not be told which equation to use. Choosing the right model for each phase of the flight is part of the assignment.</p>
                 </div>
-                
+
                 <div class="card warning">
                     <h3>Success Criteria</h3>
                     <ul>
-                        <li><strong>Target Height:</strong> The rocket needs to reach a height of at least 45.0 meters.</li>
-                        <li><strong>Payload Safety:</strong> The rocket must contain an egg inside during launch without cracking it.</li>
-                        <li><strong>Propulsion:</strong> Rockets are filled with water and pressurized air (~115 psi) to force projectile motion.</li>
+                        <li><strong>Target Height:</strong> At least 45.0 m above the launch pad.</li>
+                        <li><strong>Safe, Stable Flight:</strong> The rocket must pass the pre-launch inspection and fly without breaking apart.</li>
+                        <li><strong>Evidence-Based Analysis:</strong> Every calculated quantity must be traceable to something your team measured, with units, uncertainty, and a clearly stated model.</li>
                     </ul>
                 </div>
 
                 <div class="card">
-                    <h3>Core Physics Principle</h3>
-                    <p>The operation of the rocket relies on <strong>Newton's Third Law of Motion</strong>: Actions trigger equal and opposite reactions. As pressurized water is forced out of the nozzle (Action), the rocket is propelled upward (Reaction).</p>
-                    
-                    <div style="text-align: center; margin-top: 20px;">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Water_rocket_launch.jpg/640px-Water_rocket_launch.jpg" alt="Water Rocket Launch Diagram" style="max-width: 100%; height: auto; border-radius: 8px; border: 1px solid #ddd;">
-                        <p style="font-size: 0.8rem; color: #666; font-style: italic;">Figure 1: Example launch setup.</p>
-                    </div>
+                    <h3>Core Physics</h3>
+                    <p>The rocket flight has distinct phases. Before you start your analysis, decide for yourself what each phase looks like:</p>
+                    <ol>
+                        <li><strong>Thrust phase:</strong> Pressurized air forces water out of the nozzle and the rocket accelerates upward.</li>
+                        <li><strong>Coast phase:</strong> The water is gone and the rocket continues upward to its peak.</li>
+                        <li><strong>Descent:</strong> The rocket falls back to the ground.</li>
+                    </ol>
+                    <p>For each phase, you will need to describe the motion with kinematics and explain it with forces.</p>
                 </div>
             </div>
 
+            <!-- ===================== DESIGN RULES ===================== -->
             <div id="page-rules" class="page-content">
                 <div class="card">
-                    <h2>Construction & Materials</h2>
-                    
-                    <h3>Required Materials</h3>
+                    <h2>Construction &amp; Materials</h2>
+
+                    <h3>Allowed Materials</h3>
                     <ul>
-                        <li>Two 2-liter plastic bottles (one for pressure chamber, one for nose cone/payload).</li>
-                        <li>Duct Tape.</li>
-                        <li>Cardboard (for fins/stability).</li>
-                        <li>Packaging foam (for egg protection).</li>
+                        <li>Two 2-liter plastic bottles (one for the pressure chamber, one for the nose cone or body extension).</li>
+                        <li>Duct tape and masking tape.</li>
+                        <li>Cardboard or foam board (fins, nose cone).</li>
+                        <li>Ballast for balance (clay, coins, sand) if your design needs it.</li>
                     </ul>
-                    
-                    <h3>Design Considerations</h3>
+
+                    <h3>Design Constraints</h3>
                     <ol>
-                        <li><strong>The Engine:</strong> The bottom bottle remains unaltered to serve as the pressure vessel.</li>
-                        <li><strong>The Payload:</strong> The top section should contain a hatch or "cubby" filled with foam to secure the egg.</li>
-                        <li><strong>Stability:</strong> Attach fins (e.g., 3 cardboard wings) near the bottom to ensure balance and straight flight.</li>
-                        <li><strong>Center of Mass:</strong> A weighted cone-shaped top helps the rocket land on its nose rather than its side, which aids in aerodynamic stability.</li>
-                        <li><strong>Fuel:</strong> Rockets are typically filled with ~750ml of water (approx 1/3 of the bottle).</li>
+                        <li><strong>The Engine:</strong> The bottle used as the pressure vessel must remain structurally unaltered (no cuts, holes, or heat treatment).</li>
+                        <li><strong>Stability:</strong> Your rocket must include fins and a nose cone or other mass distribution that keeps it pointing upward.</li>
+                        <li><strong>Water Volume:</strong> Your team chooses it. Record the exact volume you use and your reasoning for it.</li>
+                        <li><strong>Launch Pressure:</strong> Do not exceed 115 psi. The launch pressure is set at the launch pad by the teacher.</li>
+                        <li><strong>Documentation:</strong> You must record mass, dimensions, and the center of mass location of the finished rocket before launch day (see Data Collection).</li>
                     </ol>
+                </div>
+
+                <div class="card warning">
+                    <h3>Safety Rules</h3>
+                    <ul>
+                        <li>Safety glasses are required for everyone in the launch area.</li>
+                        <li>Stay behind the launch line until the teacher declares the pad clear. Never walk toward a pressurized rocket.</li>
+                        <li>Only the teacher operates the pump and the launch release.</li>
+                        <li>A rocket with damaged bottles, loose fins, or visible creases in the pressure vessel will not be launched.</li>
+                    </ul>
                 </div>
             </div>
 
+            <!-- ===================== DATA COLLECTION ===================== -->
+            <div id="page-data" class="page-content">
+                <div class="card">
+                    <h2>What You Need to Measure</h2>
+                    <p>Plan before launch day. A missing measurement cannot be recovered after the rocket is in the air. Assign jobs to every member of your team.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Before Launch</h3>
+                    <ul>
+                        <li>Mass of the empty rocket and mass of the rocket with water loaded (use the lab balance).</li>
+                        <li>Volume of water loaded and the nozzle (opening) diameter.</li>
+                        <li>Location of the center of mass of the empty rocket and of the loaded rocket, measured along the rocket from a defined reference point. Include a labeled sketch.</li>
+                        <li>Mass and location (along the same axis) of each major component (nose cone, bottle body, fins, tape/ballast) so you can analyze the system's center of mass.</li>
+                    </ul>
+
+                    <h3>During Launch</h3>
+                    <ul>
+                        <li><strong>Hang time:</strong> At least three team members time the entire flight independently with stopwatches. Record all values.</li>
+                        <li><strong>Slow-motion video:</strong> Record the launch at the highest frame rate your device allows, with a reference object of known length in frame. Use it to determine how long the thrust phase lasts. If you can, also record the flight near the peak to separate the time going up from the time coming down.</li>
+                        <li><strong>Angle to the peak:</strong> One team member uses a clinometer (or phone angle app) from a measured distance and records the angle to the rocket at its highest point. Measure the baseline distance with a measuring wheel or range finder, and the height of the clinometer above the ground.</li>
+                        <li><strong>Landing location:</strong> Measure the distance and compass direction (or angle relative to a reference line) from the launch pad to where the rocket lands.</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Trial Data Table (build your own in your report)</h3>
+                    <p>Your report must contain a complete data table for every launch. A starting layout is shown below; adapt it to your measurements.</p>
+                    <div class="table-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Trial</th>
+                                    <th>Water Volume</th>
+                                    <th>Launch Mass</th>
+                                    <th>Hang Time (each timer)</th>
+                                    <th>Thrust Time</th>
+                                    <th>Peak Angle &amp; Baseline</th>
+                                    <th>Landing Displacement</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="blank"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                                <tr class="blank"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p style="font-size: 0.9rem; color: #666;">Include units in the column headings and record every value to an appropriate number of significant figures.</p>
+                </div>
+            </div>
+
+            <!-- ===================== REPORT GUIDELINES ===================== -->
             <div id="page-report" class="page-content">
                 <div class="card">
                     <h2>AP Report Structure</h2>
-                    <p>Your report must document the engineering process and the physical analysis of the flight.</p>
+                    <p>Your report documents the engineering process and the physical analysis of the flight. It should be written so that another physics student could repeat your work from your report alone.</p>
 
                     <h3>Required Sections</h3>
                     <ol>
-                        <li><strong>Title Page:</strong> Student Name, Partner Name, Date, Title.</li>
-                        <li><strong>Introduction:</strong> State the objective and discuss the theory (Newton's Laws).</li>
-                        <li><strong>Procedure:</strong> Detail the design choices, materials used, and construction methods.</li>
-                        <li><strong>Data:</strong> Record flight metrics. You must include a table with:
-                            <ul>
-                                <li>Trial Number</li>
-                                <li>Altimeter Reading (if available)</li>
-                                <li>Hang Time (measured by stopwatch)</li>
-                                <li>Thrust Time (approx 0.2s - 0.3s)</li>
-                            </ul>
-                        </li>
-                        <li><strong>Calculations:</strong> See the "Math & Hints" tab for required derivations.</li>
-                        <li><strong>Results & Discussion:</strong> Discuss max height achieved, egg survival, and sources of error (e.g., thin protective layers).</li>
+                        <li><strong>Title Page:</strong> Student name, partner name(s), date, and title.</li>
+                        <li><strong>Introduction:</strong> State the objective. Explain the physics models you will use (what is assumed about each phase of the flight). Include a prediction for your rocket's peak height with your reasoning.</li>
+                        <li><strong>Procedure &amp; Design:</strong> Labeled diagram of your rocket, a materials list, an explanation of your design choices (water volume, fin shape, mass distribution) and the steps you used to collect data safely.</li>
+                        <li><strong>Data &amp; Graphs:</strong> Trial data table(s), mean values with uncertainty, and the required graphs (see Analysis Requirements).</li>
+                        <li><strong>Calculations:</strong> Every quantity in the Analysis Requirements tab, with a symbolic starting equation, substitution with units, and a final answer with units and appropriate significant figures. Show a free-body diagram where required.</li>
+                        <li><strong>Results &amp; Discussion:</strong> A claim-evidence-reasoning (CER) analysis, a quantified error analysis, and a design improvement justified by your calculations.</li>
                     </ol>
                 </div>
 
-                <div class="card">
-                    <h3>Flight Calculator</h3>
-                    <p>Estimate your rocket's height based on its total hang time (assuming launch and landing at same elevation).</p>
-                    
-                    <form id="heightCalculator" class="form-row" style="margin-top: 20px;">
-                        <div class="form-group">
-                            <label for="hangTime">Total Hang Time (seconds)</label>
-                            <input type="number" id="hangTime" step="0.01" placeholder="e.g., 7.05">
-                        </div>
-                        <div class="form-group">
-                            <label for="calculatedHeight">Estimated Height (meters)</label>
-                            <input type="text" id="calculatedHeight" readonly placeholder="Result...">
-                        </div>
-                        <button type="submit" class="action-btn">Calculate</button>
-                    </form>
-                    <p style="font-size: 0.8rem; margin-top: 10px; color: #666;">*Uses formula: y = 1/2 * g * (t/2)²</p>
+                <div class="card success">
+                    <h3>Expectations for Your Work</h3>
+                    <ul>
+                        <li>Define every variable and state the reference frame (which direction is positive, where y = 0).</li>
+                        <li>Every calculation starts from a general equation, then shows substitution with units, then the answer. Do not skip algebra steps.</li>
+                        <li>Where an assumption is made (for example, treating air resistance as negligible), state it and later check whether your data support it.</li>
+                        <li>Graphs must have titles, labeled axes with units, scale, and clearly identified key points.</li>
+                    </ul>
                 </div>
             </div>
 
-            <div id="page-physics" class="page-content">
+            <!-- ===================== ANALYSIS REQUIREMENTS ===================== -->
+            <div id="page-analysis" class="page-content">
                 <div class="card">
-                    <h2>Physics Analysis Hints</h2>
-                    <p>You must show equations, work, and answers for the following variables. Do not just copy numbers; derive them.</p>
+                    <h2>Analysis Requirements</h2>
+                    <p>The table below lists <strong>what</strong> you must determine. Deciding <strong>how</strong> to determine it, including which equations, assumptions, and measurements to use, is your job. Use your Unit 1 and Unit 2 notes.</p>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-                    
-                    <div class="card" style="border-left-color: #3b82f6;">
-                        <h3>1. Max Height (<span class="eq">y</span>)</h3>
-                        <p><strong>Goal:</strong> Determine how high the rocket went based on hang time.</p>
-                        <ul>
-                            <li><strong>Given:</strong> Total hang time (<span class="eq">t</span>). Gravity (<span class="eq">g = 9.8 m/s²</span>).</li>
-                            <li><strong>Hint:</strong> If the rocket goes up and comes down in total time <span class="eq">t</span>, how long did it take to reach the peak?</li>
-                            <li><strong>Equation:</strong> Use a kinematic equation for displacement <span class="eq">(&Delta;y)</span> where <span class="eq">v<sub>top</sub> = 0</span>.</li>
-                            <li><span class="eq-block">y = &frac12; g (t<sub>up</sub>)<sup>2</sup></span></li>
-                        </ul>
-                    </div>
-
-                    <div class="card" style="border-left-color: #8e44ad;">
-                        <h3>2. Initial Velocity (<span class="eq">v<sub>0</sub></span>)</h3>
-                        <p><strong>Goal:</strong> Find the speed of the rocket the moment it left the launch pad.</p>
-                        <ul>
-                            <li><strong>Hint:</strong> Use the time it took to reach the peak (<span class="eq">t<sub>up</sub></span>).</li>
-                            <li><strong>Equation:</strong> <span class="eq">v<sub>f</sub> = v<sub>0</sub> + at</span></li>
-                            <li>At the peak, velocity is zero. Solve for <span class="eq">v<sub>0</sub></span>.</li>
-                        </ul>
-                    </div>
-
-                    <div class="card" style="border-left-color: #e67e22;">
-                        <h3>3. Thrust Phase Analysis</h3>
-                        <p><strong>Goal:</strong> Analyze the short period (approx 0.2s) where water is ejecting.</p>
-                        <ul>
-                            <li><strong>Thrust Time (<span class="eq">t<sub>thrust</sub></span>):</strong> Usually ~0.2s to 0.3s.</li>
-                            <li><strong>Acceleration during thrust:</strong> How quickly did it go from 0 to <span class="eq">v<sub>0</sub></span> (calculated in step 2)?</li>
-                            <li><strong>Force of Thrust:</strong> Use Newton's 2nd Law (<span class="eq">F=ma</span>). Remember gravity is also acting on the rocket!</li>
-                        </ul>
-                    </div>
-
-                    <div class="card" style="border-left-color: #27ae60;">
-                        <h3>4. Final Velocity (<span class="eq">v<sub>f</sub></span>)</h3>
-                        <p><strong>Goal:</strong> How fast was it going when it hit the ground?</p>
-                        <ul>
-                            <li><strong>Hint:</strong> Symmetry of freefall. If it starts at <span class="eq">v<sub>0</sub></span> and lands at the same height, what is <span class="eq">v<sub>f</sub></span>?</li>
-                            <li>Check your signs! Velocity downward is negative.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div id="page-rubric" class="page-content">
-                <div class="card">
-                    <h2>AP Grading Rubric</h2>
+                <h3>Part A &mdash; Kinematics <span class="tag">Unit 1</span> &nbsp; (20 pts)</h3>
+                <div class="table-scroll">
                     <table>
                         <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th style="text-align: center;">Points</th>
-                                <th>Criteria</th>
-                            </tr>
+                            <tr><th style="width: 40px;">#</th><th>What you must determine</th><th style="width: 70px; text-align: center;">Pts</th></tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><strong>Working Rocket</strong></td>
-                                <td style="text-align: center; font-weight: bold; color: var(--success);">45</td>
-                                <td>Rocket launches successfully. Satisfactory flight.</td>
+                                <td>A1</td>
+                                <td><strong>Maximum height</strong> of the rocket above the launch pad, calculated from your hang time data. State the assumption you are making about the flight.</td>
+                                <td class="pts">3</td>
                             </tr>
                             <tr>
-                                <td><strong>Mathematical Calculations</strong></td>
-                                <td style="text-align: center; font-weight: bold; color: var(--primary);">23</td>
-                                <td>
-                                    Must include: Max Height, Initial Velocity, Acceleration (thrust), Final Velocity, Force (thrust). <br>
-                                    <em>Data presented in table, equations shown, sample calcs included.</em>
-                                </td>
+                                <td>A2</td>
+                                <td><strong>Speed at the end of the thrust phase</strong> (burnout speed), found using <strong>two independent kinematic approaches</strong>. Report the percent difference between the two results and comment on it.</td>
+                                <td class="pts">4</td>
                             </tr>
                             <tr>
-                                <td><strong>Results and Discussion</strong></td>
-                                <td style="text-align: center; font-weight: bold;">10</td>
-                                <td>Discuss findings, error (e.g., egg survival), and physics.</td>
+                                <td>A3</td>
+                                <td><strong>Average acceleration during the thrust phase</strong>, in m/s&sup2; and in multiples of <span class="eq">g</span>.</td>
+                                <td class="pts">3</td>
                             </tr>
                             <tr>
-                                <td><strong>Procedure</strong></td>
-                                <td style="text-align: center; font-weight: bold;">7</td>
-                                <td>Include diagrams, materials list, and design explanation.</td>
+                                <td>A4</td>
+                                <td><strong>Height gained during the thrust phase</strong> and <strong>height gained during the coast phase</strong>. These must add up to your maximum height. Show that they do.</td>
+                                <td class="pts">3</td>
                             </tr>
                             <tr>
-                                <td><strong>Working In Class</strong></td>
-                                <td style="text-align: center; font-weight: bold;">5</td>
-                                <td>Rocket ready for launch. (0 pts if cracked/broken).</td>
+                                <td>A5</td>
+                                <td><strong>Independent height measurement</strong> using your clinometer data and trigonometry. Compare it with A1 (percent difference) and explain any disagreement.</td>
+                                <td class="pts">3</td>
                             </tr>
                             <tr>
-                                <td><strong>Title Page</strong></td>
-                                <td style="text-align: center; font-weight: bold;">5</td>
-                                <td>Name, Partner, Date, Title.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Introduction</strong></td>
-                                <td style="text-align: center; font-weight: bold;">5</td>
-                                <td>Objective and Theory included.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>On Time</strong></td>
-                                <td style="text-align: center; font-weight: bold;">0</td>
-                                <td><span style="color: var(--danger);">-5 pts per day late.</span></td>
+                                <td>A6</td>
+                                <td><strong>Two-dimensional motion:</strong> the displacement vector from the pad to the landing location (magnitude and direction), the <strong>average velocity</strong> vector for the whole flight, and the <strong>average speed</strong> for the whole flight. Explain why the average velocity and average speed are different.</td>
+                                <td class="pts">4</td>
                             </tr>
                         </tbody>
                     </table>
+                </div>
+
+                <h3>Part B &mdash; Forces &amp; Dynamics <span class="tag">Unit 2</span> &nbsp; (25 pts)</h3>
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr><th style="width: 40px;">#</th><th>What you must determine</th><th style="width: 70px; text-align: center;">Pts</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>B1</td>
+                                <td><strong>Weight</strong> of the empty rocket and of the loaded rocket, and the <strong>mass of water</strong> ejected.</td>
+                                <td class="pts">2</td>
+                            </tr>
+                            <tr>
+                                <td>B2</td>
+                                <td><strong>Center of mass</strong> <span class="tag">Topic 2.1</span> &mdash; Calculate the center of mass location of your rocket from the masses and positions of its components, for both the empty and loaded cases. Compare with your measured values and discuss why the center of mass matters for stability.</td>
+                                <td class="pts">5</td>
+                            </tr>
+                            <tr>
+                                <td>B3</td>
+                                <td><strong>Free-body diagrams</strong> <span class="tag">Topic 2.2</span> &mdash; Draw a labeled FBD for the rocket at four moments: (1) just before release, (2) during thrust, (3) rising during the coast phase, (4) falling. Each force must be named by its type and the object exerting it. Write Newton's second law for the vertical direction for each one.</td>
+                                <td class="pts">4</td>
+                            </tr>
+                            <tr>
+                                <td>B4</td>
+                                <td><strong>Thrust force</strong> on the rocket during the thrust phase, using your result from A3. Because the rocket loses water while it accelerates, calculate the thrust force using <strong>both</strong> the loaded mass and the final mass. Explain why they differ and which one you consider the better estimate.</td>
+                                <td class="pts">5</td>
+                            </tr>
+                            <tr>
+                                <td>B5</td>
+                                <td><strong>Thrust-to-weight ratio</strong> at launch, and what it tells you about the rocket's motion.</td>
+                                <td class="pts">2</td>
+                            </tr>
+                            <tr>
+                                <td>B6</td>
+                                <td><strong>Newton's Third Law</strong> <span class="tag">Topic 2.3</span> &mdash; Identify the force that is the third-law partner of the thrust force and the one that is the third-law partner of the rocket's weight. State the two objects involved in each pair and explain why these pairs do not cancel each other.</td>
+                                <td class="pts">3</td>
+                            </tr>
+                            <tr>
+                                <td>B7</td>
+                                <td><strong>Testing the "no air resistance" assumption</strong> &mdash; Use your data (hang time, clinometer height, and, if available, the video times for rising and falling) to decide whether air resistance mattered. Estimate its average effect on the rocket during the descent and support your conclusion with a force analysis.</td>
+                                <td class="pts">4</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Part C &mdash; Required Graphs <span class="tag">Unit 1</span></h3>
+                <div class="card">
+                    <p>Graphs are scored in the <strong>Data &amp; Graphs</strong> category of the rubric.</p>
+                    <ul>
+                        <li>A <strong>velocity&ndash;time graph</strong> for the whole flight (launch to landing), built from your calculated values, with the thrust, coast, and descent phases labeled and key values marked.</li>
+                        <li>An <strong>acceleration&ndash;time graph</strong> for the same time interval, consistent with your velocity graph.</li>
+                        <li>On each graph, state what the <strong>slope</strong> and the <strong>area under the curve</strong> represent physically, and verify at least one area against a displacement you calculated in Part A.</li>
+                    </ul>
+                </div>
+
+                <div class="card warning">
+                    <h3>Uncertainty</h3>
+                    <p>For hang time, report the mean of all timers and trials and a measure of its uncertainty (such as range or standard deviation). Carry that uncertainty through to the maximum height (A1) by recalculating with the largest and smallest reasonable hang times. This feeds into your error analysis.</p>
+                </div>
+            </div>
+
+            <!-- ===================== RUBRIC ===================== -->
+            <div id="page-rubric" class="page-content">
+                <div class="card">
+                    <h2>AP Grading Rubric &mdash; 150 Points</h2>
+                    <div class="table-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th style="text-align: center;">Points</th>
+                                    <th>Criteria</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Launch &amp; Flight Performance</strong></td>
+                                    <td class="pts" style="color: var(--success);">30</td>
+                                    <td>
+                                        <strong>15 pts</strong> &mdash; Rocket launches and completes a stable flight.<br>
+                                        <strong>15 pts</strong> &mdash; Height performance: &ge; 45.0 m = 15; 35.0&ndash;44.9 m = 12; 25.0&ndash;34.9 m = 9; below 25.0 m = 6. Height is the measured value used in your report.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Rocket Ready &amp; Inspected</strong></td>
+                                    <td class="pts">10</td>
+                                    <td>Complete rocket passes the safety inspection on launch day with all measurements recorded in advance. (0 pts if the rocket is not ready or fails inspection.)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mathematical Calculations</strong></td>
+                                    <td class="pts" style="color: var(--primary);">45</td>
+                                    <td>
+                                        <strong>Part A, Kinematics (20 pts):</strong> A1&ndash;A6.<br>
+                                        <strong>Part B, Forces &amp; Dynamics (25 pts):</strong> B1&ndash;B7.<br>
+                                        <em>Points per item are listed on the Analysis Requirements tab. Credit requires a general equation, substitution with units, correct answer, and appropriate significant figures.</em>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Data &amp; Graphs</strong></td>
+                                    <td class="pts">15</td>
+                                    <td>
+                                        <strong>5 pts</strong> &mdash; Complete trial data table with units and individual timer values.<br>
+                                        <strong>5 pts</strong> &mdash; Mean and uncertainty for hang time carried through to maximum height.<br>
+                                        <strong>5 pts</strong> &mdash; Velocity&ndash;time and acceleration&ndash;time graphs: consistent, labeled, and interpreted.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Results &amp; Discussion</strong></td>
+                                    <td class="pts">20</td>
+                                    <td>
+                                        <strong>6 pts</strong> &mdash; Claim-evidence-reasoning response on whether the design met the target and why.<br>
+                                        <strong>6 pts</strong> &mdash; Quantified error analysis (specific sources, their direction, and their size) including comparison of the two height methods.<br>
+                                        <strong>5 pts</strong> &mdash; A specific design improvement justified using your own calculated results.<br>
+                                        <strong>3 pts</strong> &mdash; Physics explanation of the flight phases using Newton's laws.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Procedure &amp; Design</strong></td>
+                                    <td class="pts">10</td>
+                                    <td>Labeled diagram, materials list, explanation of design choices, and description of safe data collection methods.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Introduction</strong></td>
+                                    <td class="pts">10</td>
+                                    <td>Clear objective, physics models and assumptions for each phase of the flight, and a reasoned height prediction.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Title Page</strong></td>
+                                    <td class="pts">5</td>
+                                    <td>Name, partner(s), date, title.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Report Quality</strong></td>
+                                    <td class="pts">5</td>
+                                    <td>Organization, units, significant figures, and professional presentation.</td>
+                                </tr>
+                                <tr class="total">
+                                    <td>Total</td>
+                                    <td class="pts">150</td>
+                                    <td><span style="color: var(--danger);">Late reports: &minus;10 pts per day.</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -397,31 +504,12 @@
                 page.classList.remove('active');
             });
             document.getElementById(targetId).classList.add('active');
-            
+
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active');
             });
             element.classList.add('active');
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // Height Calculator Logic
-            const heightCalc = document.getElementById('heightCalculator');
-            if (heightCalc) {
-                heightCalc.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const t = parseFloat(document.getElementById('hangTime').value);
-                    if (!isNaN(t)) {
-                        // Formula: y = 1/2 * g * (t/2)^2
-                        // t/2 is time to peak
-                        const timeToPeak = t / 2;
-                        const gravity = 9.8;
-                        const height = 0.5 * gravity * Math.pow(timeToPeak, 2);
-                        document.getElementById('calculatedHeight').value = height.toFixed(2);
-                    }
-                });
-            }
-        });
     </script>
 </body>
 </html>
