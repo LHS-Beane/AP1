@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Rocket Simulator | AP Physics 1</title>
+    <style>
+        /* --- GLOBAL VARIABLES --- */
+        :root {
+            --primary: #0077da;
+            --secondary: #004d80;
+            --accent: #ffcc00;
+            --light: #f4f4f4;
+            --dark: #333;
+            --white: #fff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --danger: #e74c3c;
+            --success: #27ae60;
+            --orange: #e67e22;
+            --purple: #8e44ad;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--light); color: var(--dark); line-height: 1.6; }
+
+        /* --- TOP NAVIGATION --- */
+        nav {
+            background-color: var(--secondary);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0; z-index: 1000; box-shadow: var(--shadow);
+        }
+        .logo { font-size: 1.5rem; font-weight: bold; letter-spacing: 1px; }
+        .back-btn {
+            background-color: var(--accent);
+            color: var(--dark);
+            padding: 8px 16px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: transform 0.2s;
+        }
+        .back-btn:hover { transform: scale(1.05); }
+
+        /* --- HERO HEADER --- */
+        header {
+            background: linear-gradient(rgba(0, 77, 128, 0.9), rgba(0, 77, 128, 0.9)), url('https://images.unsplash.com/photo-1517976487492-5750f3195933?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-color: var(--secondary);
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 36px 20px;
+            text-align: center;
+        }
+        header h1 { font-size: 2.3rem; margin-bottom: 8px; }
+
+        .container { max-width: 1250px; margin: 0 auto; padding: 26px 20px 60px; }
+
+        h2 { color: var(--secondary); border-bottom: 3px solid var(--accent); display: inline-block; margin: 6px 0 14px 0; padding-bottom: 4px; font-size: 1.3rem; }
+        h3 { color: var(--primary); margin: 14px 0 8px 0; font-size: 1.05rem; }
+        ul, ol { margin-left: 20px; margin-bottom: 12px; }
+        li { margin-bottom: 6px; }
+
+        .card {
+            background: var(--white);
+            padding: 22px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary);
+            margin-bottom: 22px;
+        }
+        .card.warning { border-left-color: var(--danger); }
+        .card.success { border-left-color: var(--success); }
+        .card.note { border-left-color: var(--accent); background: #fffbea; }
+
+        /* --- PAGE LAYOUT --- */
+        .layout { display: grid; grid-template-columns: 340px 1fr; gap: 24px; align-items: start; }
+        .inputs { position: sticky; top: 84px; max-height: calc(100vh - 100px); overflow-y: auto; }
+        @media (max-width: 960px) {
+            .layout { grid-template-columns: 1fr; }
+            .inputs { position: static; max-height: none; }
+        }
+
+        /* --- INPUT CONTROLS --- */
+        .field { margin-bottom: 16px; }
+        .field label { display: block; font-weight: 600; font-size: 0.92rem; margin-bottom: 4px; }
+        .field label .unit { font-weight: 400; color: #666; }
+        .pair { display: flex; gap: 10px; align-items: center; }
+        .pair input[type="range"] { flex: 1; min-width: 0; accent-color: var(--primary); }
+        input[type="number"], select {
+            width: 92px; padding: 7px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem;
+        }
+        select { width: 100%; }
+        .hint { font-size: 0.78rem; color: #666; margin-top: 3px; line-height: 1.35; }
+        details { margin-bottom: 14px; }
+        summary { cursor: pointer; font-weight: 600; color: var(--secondary); padding: 4px 0; }
+        details[open] > summary { margin-bottom: 8px; }
+        .adv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; }
+        .adv-grid .field { margin-bottom: 0; }
+        .adv-grid input[type="number"] { width: 100%; }
+        .adv-grid .span2 { grid-column: 1 / -1; }
+
+        .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+        button.action-btn {
+            background-color: var(--secondary); color: white; border: none; padding: 9px 14px;
+            border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.9rem; transition: background 0.2s;
+        }
+        button.action-btn:hover { background-color: var(--primary); }
+        button.reset-btn { background-color: #777; color: white; border: none; padding: 9px 14px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+        button.reset-btn:hover { background-color: #555; }
+        .check { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; margin: 8px 0; }
+
+        /* --- MESSAGES --- */
+        .msg { border-radius: 6px; padding: 10px 14px; font-size: 0.9rem; margin-bottom: 10px; }
+        .msg.warn { background: #fdecea; border-left: 4px solid var(--danger); }
+        .msg.info { background: #e8f1fa; border-left: 4px solid var(--primary); }
+        .msg.ok { background: #e8f6ee; border-left: 4px solid var(--success); }
+
+        /* --- RESULT TILES --- */
+        .group-title { display: flex; align-items: center; gap: 8px; margin: 18px 0 8px; font-weight: 700; color: var(--secondary); }
+        .tag { display: inline-block; background: #e8f1fa; color: var(--secondary); font-size: 0.72rem; font-weight: bold; padding: 2px 8px; border-radius: 10px; }
+        .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+        .tile { background: var(--white); border-radius: 8px; box-shadow: var(--shadow); padding: 12px 14px; border-top: 4px solid var(--primary); }
+        .tile.big { border-top-color: var(--success); }
+        .tile .lbl { font-size: 0.78rem; color: #555; line-height: 1.3; min-height: 2.1em; }
+        .tile .val { font-size: 1.55rem; font-weight: 700; color: var(--secondary); line-height: 1.2; margin-top: 2px; }
+        .tile .val .u { font-size: 0.85rem; font-weight: 500; color: #666; margin-left: 3px; }
+        .tile .sub { font-size: 0.76rem; color: #666; margin-top: 2px; }
+
+        /* --- CHARTS --- */
+        .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 18px; }
+        @media (max-width: 520px) { .chart-grid { grid-template-columns: 1fr; } }
+        .chart-card { background: var(--white); border-radius: 8px; box-shadow: var(--shadow); padding: 14px 14px 10px; }
+        .chart-card h3 { margin: 0 0 6px 0; }
+        .chart-card canvas, #c-sweep { width: 100%; display: block; }
+        .chart-card figcaption, .caption { font-size: 0.8rem; color: #666; margin-top: 4px; }
+
+        /* --- TABLE --- */
+        .table-scroll { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; background: white; font-size: 0.85rem; }
+        th, td { border: 1px solid #ddd; padding: 7px 9px; text-align: center; }
+        th { background-color: var(--secondary); color: white; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .empty { color: #777; font-style: italic; padding: 8px 0; }
+
+        code { font-family: Consolas, monospace; background: #eef2f5; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; }
+        .eq { font-family: 'Times New Roman', serif; font-style: italic; }
+        .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">AP Physics Hub</div>
+        <a href="water-rocket.html" class="back-btn">&#8592; Back to Water Rocket Lab</a>
+    </nav>
+
+    <header>
+        <h1>Water Rocket Simulator</h1>
+        <p>Change the design, launch it on the screen, and see what the physics predicts.</p>
+    </header>
+
+    <div class="container">
+
+        <div class="card note">
+            <strong>This is a model, not your data.</strong> The simulator is for making predictions, comparing design choices, and checking your reasoning. Your lab report must use the measurements from your own rocket's flight. When your real results differ from the simulation, that difference is something to explain in your discussion.
+        </div>
+
+        <div class="layout">
+
+            <!-- ===================== INPUTS ===================== -->
+            <aside class="card inputs" aria-label="Rocket design inputs">
+                <h2>Design Inputs</h2>
+
+                <div class="field">
+                    <label for="water">Water volume <span class="unit">(mL)</span></label>
+                    <div class="pair"><input type="range" id="water_r" min="0" max="1800" step="10" aria-label="Water volume slider"><input type="number" id="water" min="0" step="10"></div>
+                    <div class="hint">Volume of water poured into the pressure bottle before launch.</div>
+                </div>
+
+                <div class="field">
+                    <label for="psi">Launch pressure <span class="unit">(psi, gauge)</span></label>
+                    <div class="pair"><input type="range" id="psi_r" min="0" max="150" step="1" aria-label="Launch pressure slider"><input type="number" id="psi" min="0" step="1"></div>
+                    <div class="hint">Gauge pressure shown on the pump. The lab limit is 115 psi.</div>
+                </div>
+
+                <div class="field">
+                    <label for="nozzle">Nozzle diameter <span class="unit">(mm)</span></label>
+                    <div class="pair"><input type="range" id="nozzle_r" min="3" max="25" step="0.5" aria-label="Nozzle diameter slider"><input type="number" id="nozzle" min="3" step="0.5"></div>
+                    <div class="hint">Use the opening diameter you measure on your launcher and bottle.</div>
+                </div>
+
+                <div class="field">
+                    <label for="dry">Empty rocket mass <span class="unit">(g)</span></label>
+                    <div class="pair"><input type="range" id="dry_r" min="50" max="600" step="5" aria-label="Empty rocket mass slider"><input type="number" id="dry" min="50" step="5"></div>
+                    <div class="hint">Bottles, fins, nose cone, tape, ballast &mdash; everything except the water.</div>
+                </div>
+
+                <details>
+                    <summary>More options</summary>
+                    <div class="adv-grid">
+                        <div class="field">
+                            <label for="cdBody">Drag coefficient</label>
+                            <input type="number" id="cdBody" min="0" max="2" step="0.05">
+                            <div class="hint">0 turns air resistance off.</div>
+                        </div>
+                        <div class="field">
+                            <label for="angle">Launch angle <span class="unit">(&deg;)</span></label>
+                            <input type="number" id="angle" min="20" max="90" step="1">
+                            <div class="hint">Lab launches are vertical (90&deg;).</div>
+                        </div>
+                        <div class="field">
+                            <label for="bottle">Bottle volume <span class="unit">(mL)</span></label>
+                            <input type="number" id="bottle" min="500" max="3000" step="50">
+                        </div>
+                        <div class="field">
+                            <label for="body">Body diameter <span class="unit">(mm)</span></label>
+                            <input type="number" id="body" min="40" max="200" step="1">
+                        </div>
+                        <div class="field span2">
+                            <label for="cdNoz">Nozzle flow coefficient</label>
+                            <input type="number" id="cdNoz" min="0.4" max="1" step="0.05">
+                            <div class="hint">How efficiently the nozzle passes the water (1 is ideal, real launchers are lower).</div>
+                        </div>
+                    </div>
+                </details>
+
+                <div class="check"><input type="checkbox" id="compare"><label for="compare">Show the no-air-resistance version on the graphs</label></div>
+
+                <div class="btn-row">
+                    <button type="button" class="action-btn" id="saveRun">Save this run</button>
+                    <button type="button" class="reset-btn" id="reset">Reset inputs</button>
+                </div>
+            </aside>
+
+            <!-- ===================== RESULTS ===================== -->
+            <main>
+                <div id="messages" aria-live="polite"></div>
+
+                <section aria-label="Results">
+                    <div id="tiles"></div>
+                </section>
+
+                <h2 style="margin-top: 26px;">Graphs of the Flight</h2>
+                <div class="chart-grid">
+                    <figure class="chart-card">
+                        <h3>Height vs. time</h3>
+                        <canvas id="c-height" role="img" aria-label="Height versus time graph"></canvas>
+                        <figcaption>Slope is velocity. Hover or touch the graph to read values.</figcaption>
+                    </figure>
+                    <figure class="chart-card">
+                        <h3>Vertical velocity vs. time</h3>
+                        <canvas id="c-vel" role="img" aria-label="Vertical velocity versus time graph"></canvas>
+                        <figcaption>Slope is acceleration. Area between the line and the axis is displacement.</figcaption>
+                    </figure>
+                    <figure class="chart-card">
+                        <h3>Vertical acceleration vs. time</h3>
+                        <canvas id="c-acc" role="img" aria-label="Vertical acceleration versus time graph"></canvas>
+                        <figcaption>The acceleration of the rocket (not the net force). Compare it with &minus;9.8 m/s&sup2; in the coast phase.</figcaption>
+                    </figure>
+                    <figure class="chart-card" id="trajCard" style="display:none;">
+                        <h3>Path of the rocket</h3>
+                        <canvas id="c-traj" role="img" aria-label="Path of the rocket, height versus horizontal distance"></canvas>
+                        <figcaption>Both axes use the same scale.</figcaption>
+                    </figure>
+                </div>
+
+                <div class="card" style="margin-top: 22px;">
+                    <h2>Design Explorer</h2>
+                    <p>See how the peak height changes as you vary <strong>one</strong> input while everything else stays the same. The dot marks your current design.</p>
+                    <div class="field" style="max-width: 320px; margin-top: 10px;">
+                        <label for="sweepVar">Vary this input</label>
+                        <select id="sweepVar">
+                            <option value="water">Water volume</option>
+                            <option value="psi">Launch pressure</option>
+                            <option value="nozzle">Nozzle diameter</option>
+                            <option value="dry">Empty rocket mass</option>
+                            <option value="cd">Drag coefficient</option>
+                        </select>
+                    </div>
+                    <canvas id="c-sweep" role="img" aria-label="Peak height as one input is varied"></canvas>
+                    <div class="caption" id="sweepNote"></div>
+                </div>
+
+                <div class="card">
+                    <h2>Saved Runs</h2>
+                    <p>Use <em>Save this run</em> to keep a record of the designs you try. The table can be downloaded as a spreadsheet file.</p>
+                    <div class="table-scroll" id="runsWrap"></div>
+                    <div class="btn-row">
+                        <button type="button" class="action-btn" id="dlCsv">Download CSV</button>
+                        <button type="button" class="reset-btn" id="clearRuns">Clear table</button>
+                    </div>
+                </div>
+
+                <div class="card success">
+                    <h2>Ideas for Using the Simulator</h2>
+                    <ul>
+                        <li><strong>Before you build:</strong> Use it to decide on a water volume and to write a reasoned height prediction for your introduction. Explain your prediction with the models in your report, not just the number from the screen.</li>
+                        <li><strong>Change one thing at a time:</strong> The Design Explorer is a graph you can interpret. Why does the height go up and then down as you add water?</li>
+                        <li><strong>Turn air resistance off:</strong> Set the drag coefficient to 0. This is the constant-acceleration model from Unit 1. How far off is it? Look at the rise time and the fall time.</li>
+                        <li><strong>After launch day:</strong> Enter your rocket's measurements and compare the simulated hang time with your measured one. Then adjust the drag coefficient and the nozzle flow coefficient until they agree. What does that suggest about your real rocket?</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h2>What the Numbers Mean</h2>
+                    <ul>
+                        <li><strong>Thrust phase:</strong> The time while water is leaving the nozzle. This is the phase you time on slow-motion video. After the water is gone, the compressed air left in the bottle escapes for a short time and gives a smaller extra push (&ldquo;total thrust time&rdquo;).</li>
+                        <li><strong>Average acceleration:</strong> The speed at the end of the thrust phase divided by the thrust time.</li>
+                        <li><strong>Thrust-to-weight ratio:</strong> The thrust force at the start divided by the weight of the loaded rocket.</li>
+                        <li><strong>Height from hang time:</strong> The value you get by assuming the rise and fall take equal times, <span class="eq">y</span> = &frac12;<span class="eq">g</span>(<span class="eq">t</span>/2)&sup2;. Compare it with the simulated height to see how much that assumption matters.</li>
+                        <li><strong>Terminal speed:</strong> The speed at which air resistance would equal the weight of the empty rocket. A falling rocket gets close to it.</li>
+                    </ul>
+                </div>
+
+                <div class="card warning">
+                    <h2>How the Model Works &amp; Its Limits</h2>
+                    <details>
+                        <summary>Show the physics</summary>
+                        <ul>
+                            <li><strong>Water phase:</strong> The air above the water expands without exchanging heat (<span class="eq">PV</span><sup>1.4</sup> = constant). The water leaves at the speed set by the pressure difference, so the thrust is about 2 &times; (nozzle area) &times; (pressure above the outside air), scaled by the flow coefficient.</li>
+                            <li><strong>Air phase:</strong> After the water is gone, the remaining compressed air escapes through the nozzle as a gas (choked flow at higher pressures).</li>
+                            <li><strong>Motion:</strong> The rocket's mass changes as water leaves. At every 0.2 ms time step the program finds the net force (thrust minus weight minus air drag), calculates the acceleration, and updates the velocity and position. Air drag is <sup>1</sup>&frasl;<sub>2</sub>&rho;<span class="eq">C</span><sub>d</sub><span class="eq">A</span><span class="eq">v</span>&sup2;.</li>
+                            <li><strong>Launch guide:</strong> The rocket is held along the launch angle for the first 0.3 m of travel, then the thrust follows the direction of motion.</li>
+                        </ul>
+                    </details>
+                    <h3>Limitations</h3>
+                    <ul>
+                        <li>The rocket is treated as a single object that always points where it is moving. Wobble, tumbling, and fin flutter are not modeled.</li>
+                        <li>Losses in your launcher (valves, hoses, tight fittings), foaming of the water, and sloshing are not modeled directly. They are part of why real rockets often fall short of a simulation. The flow coefficient and drag coefficient are how you can include them.</li>
+                        <li>Wind is ignored. Air density is fixed at 1.2 kg/m&sup3; and the air starts at 20&nbsp;&deg;C.</li>
+                        <li>Never use the simulator to decide a real launch pressure. Follow the pressure limit and safety rules set by your teacher.</li>
+                    </ul>
+                </div>
+            </main>
+        </div>
+    </div>
+
+<script>
+/* ======================================================================
+   PHYSICS MODEL  (no DOM access; tested separately)
+   ====================================================================== */
+// <SIM>
+const C = { Patm: 101325, rho_w: 1000, rho_air: 1.2, gamma: 1.4, R: 287, g: 9.8, psi: 6894.757, railLen: 0.3, T0: 293.15 };
+
+function simulate(inp, o) {
+    o = o || {};
+    const dt = o.dt || 2e-4;
+    const recEvery = (o.recEvery === undefined) ? 10 : o.recEvery;
+    const tMax = o.tMax || 40;
+    const g = C.g, gam = C.gamma, R = C.R, Patm = C.Patm, rho_w = C.rho_w;
+
+    const Vb = inp.bottle_mL * 1e-6;
+    const Vw0 = inp.water_mL * 1e-6;
+    const P0 = Patm + inp.psi * C.psi;
+    const An = Math.PI * Math.pow(inp.nozzle_mm * 1e-3 / 2, 2);
+    const Cn = inp.cdNoz;
+    const md = inp.dry_g * 1e-3;
+    const Aref = Math.PI * Math.pow(inp.body_mm * 1e-3 / 2, 2);
+    const Cb = inp.cdBody;
+    const th = inp.angle * Math.PI / 180;
+    const cth = Math.cos(th), sth = Math.sin(th);
+    const T0 = C.T0;
+
+    const Va0 = Vb - Vw0;
+    const ma0 = P0 * Va0 / (R * T0);
+    // tank state when the water has just run out (or at the start if there is no water)
+    const fr = Vw0 > 0 ? (Va0 / Vb) : 1;
+    const P1 = P0 * Math.pow(fr, gam);
+    const T1 = T0 * Math.pow(fr, gam - 1);
+
+    let phase = Vw0 > 0 ? 'water' : 'air';
+    let Vw = Vw0, mt = ma0;
+    let t = 0, x = 0, y = 0, vx = 0, vy = 0, s = 0, vpar = 0;
+    let onRail = true;
+    let status = 'ok';
+    let thrust0 = null, peakThrust = 0, sumThWater = 0;
+    let t_w = null, v_w = null, mass_after_w = null;
+    let t_thr = null, v_thr = null;
+    let apogee = 0, t_apogee = 0, x_apogee = 0, vmax = 0;
+    let tLand = null, xLand = 0, vLand = 0;
+    const m0 = md + rho_w * Vw0 + ma0;
+    const arr = (recEvery > 0) ? { t: [], x: [], y: [], vy: [], vx: [], ay: [], th: [] } : null;
+    let step = 0;
+
+    while (t < tMax) {
+        // ----- thrust and mass flow -----
+        let Th = 0, mdotW = 0, mdotA = 0;
+        if (phase === 'water') {
+            const P = P0 * Math.pow(Va0 / (Vb - Vw), gam);
+            const dP = Math.max(P - Patm, 0);
+            Th = 2 * Cn * An * dP;
+            mdotW = rho_w * Cn * An * Math.sqrt(2 * dP / rho_w);
+        } else if (phase === 'air') {
+            const r = mt / ma0;
+            const P = P1 * Math.pow(r, gam);
+            const Tk = T1 * Math.pow(r, gam - 1);
+            if (P <= Patm * 1.001 || r < 1e-3) {
+                phase = 'done';
+            } else if (P / Patm >= Math.pow((gam + 1) / 2, gam / (gam - 1))) {
+                mdotA = Cn * An * P * Math.sqrt(gam / (R * Tk)) * Math.pow(2 / (gam + 1), (gam + 1) / (2 * (gam - 1)));
+                const Te = Tk * 2 / (gam + 1);
+                const ve = Math.sqrt(gam * R * Te);
+                const Pe = P * Math.pow(2 / (gam + 1), gam / (gam - 1));
+                Th = mdotA * ve + (Pe - Patm) * An;
+            } else {
+                const q = Patm / P;
+                mdotA = Cn * An * P * Math.sqrt(2 * gam / ((gam - 1) * R * Tk) * (Math.pow(q, 2 / gam) - Math.pow(q, (gam + 1) / gam)));
+                const ve = Math.sqrt(2 * gam * R * Tk / (gam - 1) * (1 - Math.pow(q, (gam - 1) / gam)));
+                Th = mdotA * ve;
+            }
+        }
+        if (phase === 'done' && t_thr === null) { t_thr = t; v_thr = Math.hypot(vx, vy); }
+        if (thrust0 === null) thrust0 = Th;
+        if (Th > peakThrust) peakThrust = Th;
+        if (phase === 'water') sumThWater += Th * dt;
+
+        const m = md + rho_w * Vw + mt;
+        const speed = Math.hypot(vx, vy);
+        const D = 0.5 * C.rho_air * Cb * Aref * speed * speed;
+        let ax = 0, ay = 0;
+        const wasOnRail = onRail;
+
+        if (wasOnRail) {
+            const apar = (Th - D) / m - g * sth;
+            if (vpar <= 0 && s <= 1e-12 && apar <= 0) {
+                // thrust is not enough to lift the rocket yet
+                vpar = 0; vx = 0; vy = 0;
+                if (phase === 'done' || (phase === 'water' && mdotW === 0)) { status = 'no-liftoff'; break; }
+            } else {
+                vpar += apar * dt;
+                if (vpar < 0) { status = 'fell-back'; break; }
+                s += vpar * dt;
+                x = s * cth; y = s * sth; vx = vpar * cth; vy = vpar * sth;
+                ax = apar * cth; ay = apar * sth;
+                if (s >= C.railLen) onRail = false;
+            }
+        }
+        const xPrev = x, yPrev = y;
+        if (!onRail && !wasOnRail) {
+            // free flight: the thrust points along the direction of motion
+            const ux = speed > 1e-9 ? vx / speed : cth, uy = speed > 1e-9 ? vy / speed : sth;
+            ax = (Th - D) * ux / m;
+            ay = (Th - D) * uy / m - g;
+            vx += ax * dt; vy += ay * dt;
+            x += vx * dt; y += vy * dt;
+        }
+
+        // ----- record -----
+        const sp = Math.hypot(vx, vy);
+        if (sp > vmax) vmax = sp;
+        if (y > apogee) { apogee = y; t_apogee = t; x_apogee = x; }
+        if (arr && step % recEvery === 0) {
+            arr.t.push(t); arr.x.push(x); arr.y.push(y); arr.vy.push(vy); arr.vx.push(vx); arr.ay.push(ay);
+        }
+
+        // ----- update tank -----
+        if (phase === 'water') {
+            Vw -= mdotW / rho_w * dt;
+            if (Vw <= 0) {
+                Vw = 0; phase = 'air';
+                t_w = t + dt; v_w = Math.hypot(vx, vy);
+                mass_after_w = md + mt;
+            }
+        } else if (phase === 'air') {
+            mt -= mdotA * dt;
+        }
+
+        t += dt; step++;
+
+        // ----- landing -----
+        if (!onRail && y < 0 && vy < 0) {
+            const frac = yPrev / (yPrev - y);
+            tLand = (t - dt) + dt * frac;
+            xLand = xPrev + (x - xPrev) * frac;
+            vLand = Math.hypot(vx, vy);
+            y = 0; x = xLand;
+            if (arr) { arr.t.push(tLand); arr.x.push(xLand); arr.y.push(0); arr.vy.push(vy); arr.vx.push(vx); arr.ay.push(ay); }
+            break;
+        }
+    }
+    if (status === 'ok' && tLand === null) status = (s <= 1e-9 && onRail) ? 'no-liftoff' : 'timeout';
+
+    const T = tLand === null ? t : tLand;
+    const waterPhase = t_w !== null;
+    const tBurn = waterPhase ? t_w : t_thr;
+    const vBurn = waterPhase ? v_w : v_thr;
+    const aStart = (thrust0 / m0) - g * sth;   // acceleration along the launch direction at t = 0
+
+    return {
+        status: status, arr: arr,
+        m0: m0, thrust0: thrust0, peakThrust: peakThrust, a0: aStart,
+        avgThrustWater: waterPhase && t_w > 0 ? sumThWater / t_w : null,
+        t_w: t_w, v_w: v_w, mass_after_w: mass_after_w,
+        t_thr: t_thr, v_thr: v_thr,
+        tBurn: tBurn, vBurn: vBurn,
+        H: apogee, t_apogee: t_apogee, x_apogee: x_apogee,
+        T: T, vmax: vmax, vLand: vLand, range: xLand,
+        tLand: tLand,
+        Hhang: 0.5 * g * Math.pow(T / 2, 2),
+        vTerm: Cb > 0 ? Math.sqrt(2 * md * g / (C.rho_air * Cb * Aref)) : null,
+        md: md, Vw0: Vw0
+    };
+}
+// </SIM>
+
+/* ======================================================================
+   USER INTERFACE
+   ====================================================================== */
+const DEFAULTS = { water_mL: 500, psi: 90, nozzle_mm: 10, dry_g: 250, cdBody: 0.8, angle: 90, bottle_mL: 2000, body_mm: 105, cdNoz: 0.8 };
+const LIMITS = {
+    water_mL: [0, 1900], psi: [0, 150], nozzle_mm: [3, 25], dry_g: [50, 600],
+    cdBody: [0, 2], angle: [20, 90], bottle_mL: [500, 3000], body_mm: [40, 200], cdNoz: [0.4, 1]
+};
+const IDMAP = { water_mL: 'water', psi: 'psi', nozzle_mm: 'nozzle', dry_g: 'dry', cdBody: 'cdBody', angle: 'angle', bottle_mL: 'bottle', body_mm: 'body', cdNoz: 'cdNoz' };
+const PAIRED = ['water_mL', 'psi', 'nozzle_mm', 'dry_g'];
+const $ = function (id) { return document.getElementById(id); };
+const TARGET_H = 45.0;
+const LAB_PSI = 115;
+
+function fmt(v, d) {
+    if (v === null || v === undefined || !isFinite(v)) return '—';
+    return v.toFixed(d === undefined ? 2 : d);
+}
+
+function readInputs() {
+    const inp = {}; const notes = [];
+    Object.keys(DEFAULTS).forEach(function (k) {
+        let v = parseFloat($(IDMAP[k]).value);
+        if (!isFinite(v)) { v = DEFAULTS[k]; notes.push('A box was empty or not a number, so the default was used.'); }
+        const lim = LIMITS[k];
+        if (v < lim[0]) { v = lim[0]; notes.push('One value was below its allowed range and was set to the minimum.'); }
+        if (v > lim[1]) { v = lim[1]; notes.push('One value was above its allowed range and was set to the maximum.'); }
+        inp[k] = v;
+    });
+    // keep some air in the bottle
+    const maxW = 0.95 * inp.bottle_mL;
+    if (inp.water_mL > maxW) { inp.water_mL = maxW; notes.push('Water volume was limited to 95% of the bottle volume.'); }
+    return { inp: inp, notes: Array.from(new Set(notes)) };
+}
+
+function setInputs(inp) {
+    Object.keys(DEFAULTS).forEach(function (k) {
+        $(IDMAP[k]).value = inp[k];
+        if (PAIRED.indexOf(k) >= 0) $(IDMAP[k] + '_r').value = inp[k];
+    });
+    $('water_r').max = Math.round(0.95 * inp.bottle_mL);
+}
+
+/* ---------- charts ---------- */
+function niceNum(range, round) {
+    const exp = Math.floor(Math.log10(range));
+    const f = range / Math.pow(10, exp);
+    let nf;
+    if (round) nf = f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10;
+    else nf = f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10;
+    return nf * Math.pow(10, exp);
+}
+function niceTicks(lo, hi, n) {
+    if (!(hi > lo)) { hi = lo + 1; }
+    const step = niceNum(niceNum(hi - lo, false) / (n - 1), true);
+    const start = Math.floor(lo / step) * step, end = Math.ceil(hi / step) * step;
+    const out = [];
+    for (let v = start; v <= end + step * 0.5; v += step) out.push(Math.abs(v) < step * 1e-9 ? 0 : v);
+    return { ticks: out, step: step };
+}
+function tickLabel(v, step) {
+    const d = step >= 1 ? 0 : Math.min(3, Math.ceil(-Math.log10(step)));
+    return v.toFixed(d);
+}
+
+function drawChart(canvas, cfg, hoverPx) {
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = canvas.clientWidth || 500, cssH = cfg.height || 260;
+    if (canvas.width !== Math.round(cssW * dpr) || canvas.height !== Math.round(cssH * dpr)) {
+        canvas.width = Math.round(cssW * dpr); canvas.height = Math.round(cssH * dpr);
+    }
+    canvas.style.height = cssH + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    ctx.font = '12px "Segoe UI", sans-serif';
+
+    const mg = { l: 56, r: 14, t: 24, b: 42 };
+    const pw = cssW - mg.l - mg.r, ph = cssH - mg.t - mg.b;
+
+    // data ranges
+    let xmin = 0, xmax = 0, ymin = 0, ymax = 0;
+    cfg.series.forEach(function (s) {
+        for (let i = 0; i < s.x.length; i++) {
+            if (s.x[i] > xmax) xmax = s.x[i];
+            if (s.x[i] < xmin) xmin = s.x[i];
+            if (s.y[i] > ymax) ymax = s.y[i];
+            if (s.y[i] < ymin) ymin = s.y[i];
+        }
+    });
+    if (cfg.xmin !== undefined) xmin = cfg.xmin;
+    if (cfg.xmax !== undefined) xmax = cfg.xmax;
+    if (cfg.ymin !== undefined) ymin = cfg.ymin;
+    if (cfg.ymax !== undefined) ymax = cfg.ymax;
+    if (!(xmax > xmin)) xmax = xmin + 1;
+    if (!(ymax > ymin)) ymax = ymin + 1;
+    if (cfg.equal) {
+        const xr = xmax - xmin, yr = ymax - ymin;
+        if (xr / pw > yr / ph) { const nyr = xr * ph / pw; ymax = ymin + nyr; }
+        else { const nxr = yr * pw / ph; xmax = xmin + nxr; }
+    }
+    const padY = (ymax - ymin) * 0.06;
+    if (ymax > 0) ymax += padY;
+    if (ymin < 0) ymin -= padY;
+    const xt = niceTicks(xmin, xmax, 7), yt = niceTicks(ymin, ymax, 6);
+    const X0 = cfg.equal ? xmin : xt.ticks[0], X1 = cfg.equal ? xmax : xt.ticks[xt.ticks.length - 1];
+    const Y0 = cfg.equal ? ymin : yt.ticks[0], Y1 = cfg.equal ? ymax : yt.ticks[yt.ticks.length - 1];
+    const px = function (v) { return mg.l + (v - X0) / (X1 - X0) * pw; };
+    const py = function (v) { return mg.t + ph - (v - Y0) / (Y1 - Y0) * ph; };
+    cfg._map = { px: px, py: py, X0: X0, X1: X1, mg: mg, pw: pw, ph: ph };
+
+    // phase shading
+    (cfg.phases || []).forEach(function (p) {
+        if (p.t1 > p.t0) {
+            const a = px(Math.max(p.t0, X0)), b = px(Math.min(p.t1, X1));
+            if (b > a) {
+                ctx.fillStyle = p.color; ctx.fillRect(a, mg.t, b - a, ph);
+                ctx.fillStyle = '#546e7a'; ctx.textAlign = 'center';
+                if (b - a > 36) ctx.fillText(p.label, (a + b) / 2, mg.t - 8);
+            }
+        }
+    });
+
+    // grid + ticks
+    ctx.strokeStyle = '#e0e6ea'; ctx.lineWidth = 1; ctx.fillStyle = '#444';
+    ctx.textAlign = 'right';
+    yt.ticks.forEach(function (v) {
+        if (v < Y0 - 1e-9 || v > Y1 + 1e-9) return;
+        const yy = py(v);
+        ctx.beginPath(); ctx.moveTo(mg.l, yy); ctx.lineTo(mg.l + pw, yy); ctx.stroke();
+        ctx.fillText(tickLabel(v, yt.step), mg.l - 6, yy + 4);
+    });
+    ctx.textAlign = 'center';
+    xt.ticks.forEach(function (v) {
+        if (v < X0 - 1e-9 || v > X1 + 1e-9) return;
+        const xx = px(v);
+        ctx.beginPath(); ctx.moveTo(xx, mg.t); ctx.lineTo(xx, mg.t + ph); ctx.stroke();
+        ctx.fillText(tickLabel(v, xt.step), xx, mg.t + ph + 16);
+    });
+
+    // axes (zero lines)
+    ctx.strokeStyle = '#222'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(mg.l, mg.t); ctx.lineTo(mg.l, mg.t + ph); ctx.stroke();
+    const yz = (0 >= Y0 && 0 <= Y1) ? py(0) : mg.t + ph;
+    ctx.beginPath(); ctx.moveTo(mg.l, yz); ctx.lineTo(mg.l + pw, yz); ctx.stroke();
+
+    // axis labels
+    ctx.fillStyle = '#333'; ctx.textAlign = 'center';
+    ctx.fillText(cfg.xLabel, mg.l + pw / 2, cssH - 6);
+    ctx.save(); ctx.translate(14, mg.t + ph / 2); ctx.rotate(-Math.PI / 2); ctx.fillText(cfg.yLabel, 0, 0); ctx.restore();
+
+    // reference lines
+    (cfg.hlines || []).forEach(function (h) {
+        if (h.y >= Y0 && h.y <= Y1) {
+            ctx.save(); ctx.strokeStyle = h.color; ctx.setLineDash([6, 4]); ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(mg.l, py(h.y)); ctx.lineTo(mg.l + pw, py(h.y)); ctx.stroke(); ctx.restore();
+            ctx.fillStyle = h.color; ctx.textAlign = 'right'; ctx.fillText(h.label, mg.l + pw - 4, py(h.y) - 5);
+        }
+    });
+
+    // series
+    ctx.save();
+    ctx.beginPath(); ctx.rect(mg.l, mg.t, pw, ph); ctx.clip();
+    cfg.series.forEach(function (s) {
+        ctx.strokeStyle = s.color; ctx.lineWidth = s.width || 2.2; ctx.lineJoin = 'round';
+        ctx.setLineDash(s.dash || []);
+        ctx.beginPath();
+        for (let i = 0; i < s.x.length; i++) {
+            const xx = px(s.x[i]), yy = py(s.y[i]);
+            if (i === 0) ctx.moveTo(xx, yy); else ctx.lineTo(xx, yy);
+        }
+        ctx.stroke();
+    });
+    ctx.restore(); ctx.setLineDash([]);
+
+    // markers
+    (cfg.markers || []).forEach(function (m) {
+        ctx.fillStyle = m.color || '#c62828';
+        ctx.beginPath(); ctx.arc(px(m.x), py(m.y), 5, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
+    });
+
+    // legend
+    const named = cfg.series.filter(function (s) { return s.name; });
+    if (named.length > 1) {
+        let lx = mg.l + pw - 4;
+        ctx.textAlign = 'right';
+        named.slice().reverse().forEach(function (s) {
+            const w = ctx.measureText(s.name).width;
+            ctx.fillStyle = '#333'; ctx.fillText(s.name, lx, mg.t + ph - 8);
+            ctx.strokeStyle = s.color; ctx.lineWidth = 2.5; ctx.setLineDash(s.dash || []);
+            ctx.beginPath(); ctx.moveTo(lx - w - 28, mg.t + ph - 12); ctx.lineTo(lx - w - 6, mg.t + ph - 12); ctx.stroke(); ctx.setLineDash([]);
+            lx -= w + 40;
+        });
+    }
+
+    // hover read-out
+    if (hoverPx !== undefined && hoverPx >= mg.l && hoverPx <= mg.l + pw && cfg.series.length && cfg.series[0].x.length) {
+        const xv = X0 + (hoverPx - mg.l) / pw * (X1 - X0);
+        const lines = [];
+        const first = cfg.series[0];
+        let idx = 0, best = Infinity;
+        for (let i = 0; i < first.x.length; i++) { const d = Math.abs(first.x[i] - xv); if (d < best) { best = d; idx = i; } }
+        lines.push(cfg.xName + ' = ' + first.x[idx].toFixed(cfg.xDigits === undefined ? 2 : cfg.xDigits));
+        cfg.series.forEach(function (s) {
+            let j = 0, bd = Infinity;
+            for (let i = 0; i < s.x.length; i++) { const d = Math.abs(s.x[i] - first.x[idx]); if (d < bd) { bd = d; j = i; } }
+            lines.push((s.name ? s.name + ': ' : cfg.yName + ' = ') + s.y[j].toFixed(cfg.yDigits === undefined ? 1 : cfg.yDigits) + ' ' + cfg.yUnit);
+        });
+        const xx = px(first.x[idx]);
+        ctx.strokeStyle = '#555'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+        ctx.beginPath(); ctx.moveTo(xx, mg.t); ctx.lineTo(xx, mg.t + ph); ctx.stroke(); ctx.setLineDash([]);
+        cfg.series.forEach(function (s) {
+            let j = 0, bd = Infinity;
+            for (let i = 0; i < s.x.length; i++) { const d = Math.abs(s.x[i] - first.x[idx]); if (d < bd) { bd = d; j = i; } }
+            ctx.fillStyle = s.color; ctx.beginPath(); ctx.arc(px(s.x[j]), py(s.y[j]), 4, 0, Math.PI * 2); ctx.fill();
+        });
+        let wBox = 0; lines.forEach(function (l) { wBox = Math.max(wBox, ctx.measureText(l).width); });
+        wBox += 14; const hBox = lines.length * 16 + 8;
+        let bx = xx + 10; if (bx + wBox > mg.l + pw) bx = xx - 10 - wBox;
+        const by = mg.t + 6;
+        ctx.fillStyle = 'rgba(255,255,255,0.95)'; ctx.strokeStyle = '#999'; ctx.lineWidth = 1;
+        ctx.fillRect(bx, by, wBox, hBox); ctx.strokeRect(bx, by, wBox, hBox);
+        ctx.fillStyle = '#222'; ctx.textAlign = 'left';
+        lines.forEach(function (l, i) { ctx.fillText(l, bx + 7, by + 16 + i * 16 - 3); });
+    }
+}
+
+function setChart(canvasId, cfg) {
+    const canvas = $(canvasId);
+    canvas._cfg = cfg;
+    drawChart(canvas, cfg);
+    if (!canvas._wired) {
+        canvas._wired = true;
+        const move = function (clientX) {
+            const r = canvas.getBoundingClientRect();
+            drawChart(canvas, canvas._cfg, clientX - r.left);
+        };
+        canvas.addEventListener('mousemove', function (e) { move(e.clientX); });
+        canvas.addEventListener('mouseleave', function () { drawChart(canvas, canvas._cfg); });
+        canvas.addEventListener('touchstart', function (e) { move(e.touches[0].clientX); }, { passive: true });
+        canvas.addEventListener('touchmove', function (e) { move(e.touches[0].clientX); }, { passive: true });
+    }
+}
+
+/* ---------- results ---------- */
+function tile(label, value, unit, sub, cls) {
+    return '<div class="tile ' + (cls || '') + '"><div class="lbl">' + label + '</div><div class="val">' + value +
+        (unit ? '<span class="u">' + unit + '</span>' : '') + '</div>' + (sub ? '<div class="sub">' + sub + '</div>' : '') + '</div>';
+}
+function group(title, tag, tiles) {
+    return '<div class="group-title">' + title + ' <span class="tag">' + tag + '</span></div><div class="tiles">' + tiles.join('') + '</div>';
+}
+
+let current = null; // last simulation, for saving runs
+const g = C.g;
+
+function render() {
+    const rd = readInputs(), inp = rd.inp;
+    const res = simulate(inp);
+    const msgs = [];
+    rd.notes.forEach(function (n) { msgs.push('<div class="msg info">' + n + '</div>'); });
+    if (inp.psi > LAB_PSI) msgs.push('<div class="msg warn"><strong>Above the lab limit.</strong> Your teacher\'s limit is ' + LAB_PSI + ' psi. This is only a simulation. Never pressurize a real rocket beyond the limit set at the launch pad.</div>');
+    if (inp.water_mL > 0.85 * inp.bottle_mL) msgs.push('<div class="msg info">There is very little air left in the bottle, so the results are less trustworthy.</div>');
+    if (inp.nozzle_mm > 22) msgs.push('<div class="msg info">A bare 2 L bottle neck is about 22 mm across, so check that this diameter makes sense for your launcher.</div>');
+    if (inp.angle < 90) msgs.push('<div class="msg info">Lab launches are vertical. Angled launches are here so you can explore two-dimensional motion.</div>');
+    if (res.status === 'no-liftoff') msgs.push('<div class="msg warn"><strong>The rocket does not lift off.</strong> The thrust never gets larger than the weight. Try more pressure, a larger nozzle, less water, or less mass.</div>');
+    if (res.status === 'fell-back') msgs.push('<div class="msg warn"><strong>The rocket does not clear the launch guide.</strong> It starts to rise and then slides back down. Try more pressure, a larger nozzle, or less mass.</div>');
+    $('messages').innerHTML = msgs.join('');
+
+    const lifted = (res.status === 'ok' || res.status === 'timeout');
+    const sinT = Math.sin(inp.angle * Math.PI / 180);
+    const tiles = [];
+
+    // --- launch (Unit 2)
+    const W0 = res.m0 * g;
+    tiles.push(group('Launch', 'Unit 2 &middot; Forces', [
+        tile('Launch mass (rocket + water)', fmt(res.m0 * 1000, 0), 'g', 'Weight: ' + fmt(W0, 2) + ' N'),
+        tile('Thrust force at launch', fmt(res.thrust0, 1), 'N', 'Peak thrust: ' + fmt(res.peakThrust, 1) + ' N'),
+        tile('Thrust-to-weight ratio', fmt(res.thrust0 / W0, 1), '', 'thrust &divide; weight at launch'),
+        tile('Acceleration at launch', fmt(res.a0, 1), 'm/s&sup2;', fmt(res.a0 / g, 1) + ' g')
+    ]));
+
+    // --- thrust phase
+    const hasW = res.t_w !== null;
+    const aAvg = (res.tBurn && res.vBurn !== null) ? res.vBurn / res.tBurn : null;
+    tiles.push(group('Thrust phase', 'Unit 1 &amp; 2', [
+        tile(hasW ? 'Thrust time (water leaving)' : 'Thrust time (air only)', fmt(res.tBurn, 3), 's', hasW ? 'Total including air blowdown: ' + fmt(res.t_thr, 3) + ' s' : ''),
+        tile('Mass after the water is gone', fmt((hasW ? res.mass_after_w : res.md) * 1000, 0), 'g', 'Empty rocket + a little air'),
+        tile('Speed at the end of thrust', fmt(res.vBurn, 1), 'm/s', 'Includes the effects of gravity and drag'),
+        tile('Average acceleration during thrust', fmt(aAvg, 1), 'm/s&sup2;', fmt(aAvg === null ? null : aAvg / g, 1) + ' g'),
+        tile('Average thrust force', fmt(res.avgThrustWater, 1), 'N', hasW ? 'averaged over the water phase' : '')
+    ]));
+
+    // --- flight
+    const diff = res.H > 0 ? (res.Hhang - res.H) / res.H * 100 : null;
+    const tDown = res.T - res.t_apogee;
+    const margin = res.H - TARGET_H;
+    const targetSub = lifted ? (margin >= 0 ? 'Meets the ' + TARGET_H.toFixed(0) + ' m target by ' + fmt(margin, 1) + ' m' : 'Short of the ' + TARGET_H.toFixed(0) + ' m target by ' + fmt(-margin, 1) + ' m') : '';
+    const flight = [
+        tile('Maximum height', fmt(res.H, 1), 'm', targetSub, 'big'),
+        tile('Time to reach the peak', fmt(res.t_apogee, 2), 's', 'Falling time: ' + fmt(tDown, 2) + ' s'),
+        tile('Total hang time', fmt(res.T, 2), 's', 'launch to landing'),
+        tile('Fastest speed', fmt(res.vmax, 1), 'm/s', ''),
+        tile('Speed at landing', fmt(res.vLand, 1), 'm/s', res.vTerm ? 'Terminal speed of the empty rocket: ' + fmt(res.vTerm, 1) + ' m/s' : 'No air resistance')
+    ];
+    if (inp.angle < 90) flight.push(tile('Horizontal range', fmt(res.range, 1), 'm', 'distance from the pad to the landing spot'));
+    tiles.push(group('Flight', 'Unit 1 &middot; Kinematics', flight));
+
+    // --- hang-time shortcut
+    tiles.push(group('Check the hang-time shortcut', 'Unit 1', [
+        tile('Height from hang time, &frac12;g(t/2)&sup2;', fmt(res.Hhang, 1), 'm', 'assumes equal rise and fall times'),
+        tile('Difference from simulated height', diff === null ? '—' : (diff >= 0 ? '+' : '') + fmt(diff, 1), '%', diff === null ? '' : (Math.abs(diff) < 1 ? 'The shortcut works well here' : (diff > 0 ? 'The shortcut overestimates the height' : 'The shortcut underestimates the height')))
+    ]));
+    $('tiles').innerHTML = tiles.join('');
+    current = { inp: inp, res: res };
+
+    // ---------- graphs ----------
+    const a = res.arr;
+    const tEnd = res.tLand !== null ? res.tLand : (a && a.t.length ? a.t[a.t.length - 1] : 1);
+    const tThr = res.t_thr !== null ? res.t_thr : (res.t_w !== null ? res.t_w : 0);
+    const phases = lifted ? [
+        { t0: 0, t1: tThr, color: 'rgba(39,174,96,0.13)', label: 'Thrust' },
+        { t0: tThr, t1: res.t_apogee, color: 'rgba(0,119,218,0.10)', label: 'Coast' },
+        { t0: res.t_apogee, t1: tEnd, color: 'rgba(230,126,34,0.12)', label: 'Descent' }
+    ] : [];
+    let ideal = null;
+    if ($('compare').checked && inp.cdBody > 0 && lifted) {
+        ideal = simulate(Object.assign({}, inp, { cdBody: 0 }));
+    }
+    const mkSeries = function (key, color) {
+        const s = [{ x: a.t, y: a[key], color: color, name: ideal ? 'With air resistance' : null }];
+        if (ideal && ideal.arr) s.push({ x: ideal.arr.t, y: ideal.arr[key], color: '#7f8c8d', dash: [6, 4], width: 2, name: 'No air resistance' });
+        return s;
+    };
+    const xmaxAll = ideal && ideal.arr && ideal.tLand ? Math.max(tEnd, ideal.tLand) : undefined;
+    const base = { xLabel: 'time (s)', xName: 't', xDigits: 2, phases: phases, xmax: xmaxAll, height: 270 };
+    if (a && a.t.length) {
+        setChart('c-height', Object.assign({}, base, { yLabel: 'height (m)', yName: 'height', yUnit: 'm', series: mkSeries('y', '#0077da'),
+            hlines: [{ y: TARGET_H, color: '#c0392b', label: TARGET_H.toFixed(0) + ' m target' }] }));
+        setChart('c-vel', Object.assign({}, base, { yLabel: 'vertical velocity (m/s)', yName: 'v', yUnit: 'm/s', series: mkSeries('vy', '#8e44ad') }));
+        setChart('c-acc', Object.assign({}, base, { yLabel: 'vertical acceleration (m/s²)', yName: 'a', yUnit: 'm/s²', series: mkSeries('ay', '#e67e22') }));
+    } else {
+        ['c-height', 'c-vel', 'c-acc'].forEach(function (id) {
+            setChart(id, { xLabel: 'time (s)', yLabel: '', xName: 't', yName: '', yUnit: '', series: [{ x: [0, 1], y: [0, 0], color: '#999' }], height: 270 });
+        });
+    }
+    const showTraj = inp.angle < 90 && lifted && a && a.t.length;
+    $('trajCard').style.display = showTraj ? '' : 'none';
+    if (showTraj) {
+        setChart('c-traj', { xLabel: 'horizontal distance (m)', yLabel: 'height (m)', xName: 'x', yName: 'height', yUnit: 'm', xDigits: 1, equal: true, height: 270,
+            series: [{ x: a.x, y: a.y, color: '#0077da' }] });
+    }
+    // describe the graphs for screen readers
+    if (lifted) {
+        $('c-height').setAttribute('aria-label', 'Height versus time. Peak ' + fmt(res.H, 1) + ' meters at ' + fmt(res.t_apogee, 2) + ' seconds. Lands at ' + fmt(res.T, 2) + ' seconds.');
+        $('c-vel').setAttribute('aria-label', 'Vertical velocity versus time. Speed at the end of thrust is ' + fmt(res.vBurn, 1) + ' meters per second.');
+    }
+    renderSweep(inp);
+}
+
+/* ---------- design explorer (sweep) ---------- */
+const SWEEPS = {
+    water: { label: 'Water volume (mL)', key: 'water_mL', range: function (i) { return [0, 0.9 * i.bottle_mL]; }, digits: 0 },
+    psi: { label: 'Launch pressure (psi)', key: 'psi', range: function () { return [10, 115]; }, digits: 0 },
+    nozzle: { label: 'Nozzle diameter (mm)', key: 'nozzle_mm', range: function () { return [3, 22]; }, digits: 1 },
+    dry: { label: 'Empty rocket mass (g)', key: 'dry_g', range: function () { return [50, 500]; }, digits: 0 },
+    cd: { label: 'Drag coefficient', key: 'cdBody', range: function () { return [0.1, 1.4]; }, digits: 2 }
+};
+let sweepToken = 0;
+function renderSweep(inp) {
+    const which = $('sweepVar').value, sw = SWEEPS[which];
+    const token = ++sweepToken;
+    window.setTimeout(function () {
+        if (token !== sweepToken) return;
+        let r = sw.range(inp);
+        const cur = inp[sw.key];
+        const lo = Math.min(r[0], cur), hi = Math.max(r[1], cur);
+        const n = 41, xs = [], ys = [];
+        for (let i = 0; i < n; i++) {
+            const v = lo + (hi - lo) * i / (n - 1);
+            const p = Object.assign({}, inp); p[sw.key] = v;
+            const res = simulate(p, { dt: 5e-4, recEvery: 0, tMax: 25 });
+            xs.push(v); ys.push(res.status === 'ok' || res.status === 'timeout' ? res.H : 0);
+        }
+        const curRes = simulate(inp, { dt: 5e-4, recEvery: 0, tMax: 25 });
+        let bi = 0; for (let i = 1; i < n; i++) if (ys[i] > ys[bi]) bi = i;
+        setChart('c-sweep', { xLabel: sw.label, yLabel: 'maximum height (m)', xName: sw.label.split(' (')[0], yName: 'height', yUnit: 'm', xDigits: sw.digits,
+            series: [{ x: xs, y: ys, color: '#0077da' }], markers: [{ x: cur, y: curRes.H }], height: 280, xmin: lo, xmax: hi, ymin: 0,
+            hlines: [{ y: TARGET_H, color: '#c0392b', label: TARGET_H.toFixed(0) + ' m target' }] });
+        const peak = ys[bi];
+        $('sweepNote').textContent = peak > 0
+            ? 'In this range, the highest point on the curve is about ' + peak.toFixed(1) + ' m, at ' + xs[bi].toFixed(sw.digits) + '. Your current design is the dot.'
+            : 'The rocket does not leave the pad anywhere in this range for the other inputs you chose.';
+    }, 0);
+}
+
+/* ---------- saved runs ---------- */
+let runs = [];
+function renderRuns() {
+    if (!runs.length) { $('runsWrap').innerHTML = '<div class="empty">No runs saved yet.</div>'; return; }
+    let h = '<table><thead><tr><th>#</th><th>Water (mL)</th><th>Pressure (psi)</th><th>Nozzle (mm)</th><th>Empty mass (g)</th><th>Drag coeff.</th><th>Angle (&deg;)</th><th>Max height (m)</th><th>Thrust time (s)</th><th>Speed at end of thrust (m/s)</th><th>Hang time (s)</th></tr></thead><tbody>';
+    runs.forEach(function (r, i) {
+        h += '<tr><td>' + (i + 1) + '</td><td>' + r.water + '</td><td>' + r.psi + '</td><td>' + r.nozzle + '</td><td>' + r.dry + '</td><td>' + r.cd + '</td><td>' + r.angle + '</td><td>' + r.H + '</td><td>' + r.tb + '</td><td>' + r.vb + '</td><td>' + r.T + '</td></tr>';
+    });
+    $('runsWrap').innerHTML = h + '</tbody></table>';
+}
+function saveRun() {
+    if (!current) return;
+    const i = current.inp, r = current.res;
+    if (runs.length >= 30) runs.shift();
+    runs.push({ water: i.water_mL, psi: i.psi, nozzle: i.nozzle_mm, dry: i.dry_g, cd: i.cdBody, angle: i.angle,
+        H: fmt(r.H, 1), tb: fmt(r.tBurn, 3), vb: fmt(r.vBurn, 1), T: fmt(r.T, 2) });
+    renderRuns();
+}
+function downloadCsv() {
+    if (!runs.length) return;
+    const head = ['Run', 'Water (mL)', 'Pressure (psi)', 'Nozzle (mm)', 'Empty mass (g)', 'Drag coefficient', 'Angle (deg)', 'Max height (m)', 'Thrust time (s)', 'Speed at end of thrust (m/s)', 'Hang time (s)'];
+    const lines = [head.join(',')];
+    runs.forEach(function (r, k) { lines.push([k + 1, r.water, r.psi, r.nozzle, r.dry, r.cd, r.angle, r.H, r.tb, r.vb, r.T].join(',')); });
+    const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'water-rocket-simulator-runs.csv';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+}
+
+/* ---------- wiring ---------- */
+let pending = false;
+function schedule() {
+    if (pending) return; pending = true;
+    window.requestAnimationFrame(function () { pending = false; render(); });
+}
+function init() {
+    setInputs(DEFAULTS);
+    PAIRED.forEach(function (k) {
+        const num = $(IDMAP[k]), rng = $(IDMAP[k] + '_r');
+        rng.addEventListener('input', function () { num.value = rng.value; schedule(); });
+        num.addEventListener('input', function () { const v = parseFloat(num.value); if (isFinite(v)) rng.value = v; schedule(); });
+    });
+    ['cdBody', 'angle', 'bottle', 'body', 'cdNoz'].forEach(function (id) {
+        $(id).addEventListener('input', function () {
+            if (id === 'bottle') { const b = parseFloat($('bottle').value); if (isFinite(b)) $('water_r').max = Math.round(0.95 * b); }
+            schedule();
+        });
+    });
+    $('compare').addEventListener('change', schedule);
+    $('sweepVar').addEventListener('change', schedule);
+    $('reset').addEventListener('click', function () { setInputs(DEFAULTS); schedule(); });
+    $('saveRun').addEventListener('click', saveRun);
+    $('dlCsv').addEventListener('click', downloadCsv);
+    $('clearRuns').addEventListener('click', function () { runs = []; renderRuns(); });
+    window.addEventListener('resize', function () {
+        ['c-height', 'c-vel', 'c-acc', 'c-traj', 'c-sweep'].forEach(function (id) { const c = $(id); if (c._cfg) drawChart(c, c._cfg); });
+    });
+    renderRuns();
+    render();
+}
+init();
+</script>
+</body>
+</html>
