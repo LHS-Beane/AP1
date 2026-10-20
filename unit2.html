@@ -861,6 +861,106 @@
         </ol>
         <details><summary>Reveal solution</summary><p>Forces: normal force up, weight down. Upward is positive. $F_N-mg=ma$. $F_N=m(g+a)=60(10+2)=720\,\text{N}$. The scale reads $720\,\text{N}$.</p></details>
       </div>
+
+<!-- New Unit 2 problems by Physics: inclines with friction, pulleys, Atwood machines.
+     Matches the existing .problem format in unit2.html and continues numbering after Problem 8.
+     All use g = 10 m/s^2 like the rest of the page. Every answer was checked both ways (system and each object). -->
+
+      <div class="problem">
+        <span class="level">Level 9 • Incline with Friction</span>
+        <h3>Problem 9: Sliding Down a Rough Ramp</h3>
+        <p>A $5.0\,\text{kg}$ box slides down a $37^\circ$ incline. The coefficient of kinetic friction is $\mu_k=0.25$. Use $g=10\,\text{m/s}^2$, $\sin37^\circ=0.60$, and $\cos37^\circ=0.80$.</p>
+        <ol>
+          <li>Draw the FBD with axes parallel and perpendicular to the ramp.</li>
+          <li>Find the normal force and the friction force.</li>
+          <li>Find the box's acceleration.</li>
+        </ol>
+        <details><summary>Reveal scaffold</summary><p>The normal force is not $mg$ on a ramp. Nothing accelerates perpendicular to the surface, so $F_N=mg\cos\theta$. Friction points up the ramp because the box slides down.</p></details>
+        <details><summary>Reveal solution</summary><p>$F_N=mg\cos37^\circ=(5)(10)(0.80)=40\,\text{N}$. $f_k=\mu_kF_N=(0.25)(40)=10\,\text{N}$. $F_{g,\parallel}=mg\sin37^\circ=30\,\text{N}$. $a=(30-10)/5=4.0\,\text{m/s}^2$ down the ramp.</p></details>
+      </div>
+
+      <div class="problem">
+        <span class="level">Level 10 • Static vs. Kinetic on a Ramp</span>
+        <h3>Problem 10: Will It Slide?</h3>
+        <p>A $2.0\,\text{kg}$ block is placed at rest on a $30^\circ$ incline. The coefficients of friction are $\mu_s=0.40$ and $\mu_k=0.30$. Use $g=10\,\text{m/s}^2$.</p>
+        <ol>
+          <li>Find the maximum static friction the ramp can provide.</li>
+          <li>Does the block stay at rest? Justify with a force comparison.</li>
+          <li>If it slides, find its acceleration.</li>
+        </ol>
+        <details><summary>Reveal scaffold</summary><p>Compare the force trying to move the block, $mg\sin\theta$, with the most static friction can do, $\mu_sF_N$. Once it slides, switch to $\mu_k$.</p></details>
+        <details><summary>Reveal solution</summary><p>$F_N=(2)(10)(0.866)=17.3\,\text{N}$, so $f_{s,max}=(0.40)(17.3)=6.9\,\text{N}$. $F_{g,\parallel}=(2)(10)(0.5)=10\,\text{N}$. Since $10\,\text{N}>6.9\,\text{N}$, static friction can't hold it, and it slides. $f_k=(0.30)(17.3)=5.2\,\text{N}$, so $a=(10-5.2)/2=2.4\,\text{m/s}^2$ down the ramp.</p></details>
+      </div>
+
+      <div class="problem">
+        <span class="level">Level 11 • Constant Velocity on a Ramp</span>
+        <h3>Problem 11: Pushing a Crate Up a Ramp</h3>
+        <p>A worker pushes a $10\,\text{kg}$ crate up a $37^\circ$ ramp at constant speed, pushing parallel to the ramp. The coefficient of kinetic friction is $0.20$. Use $g=10\,\text{m/s}^2$, $\sin37^\circ=0.60$, and $\cos37^\circ=0.80$.</p>
+        <ol>
+          <li>Which way does friction point? Why?</li>
+          <li>What is the net force on the crate?</li>
+          <li>How hard must the worker push?</li>
+        </ol>
+        <details><summary>Reveal scaffold</summary><p>Constant velocity means $\Sigma F=0$. Friction opposes the motion, so it points down the ramp, on the same side as the gravity component.</p></details>
+        <details><summary>Reveal solution</summary><p>Friction points down the ramp, opposite the motion. Net force is zero. $F_N=(10)(10)(0.80)=80\,\text{N}$, so $f_k=(0.20)(80)=16\,\text{N}$. $F_{g,\parallel}=(10)(10)(0.60)=60\,\text{N}$. $F_{push}=60+16=76\,\text{N}$.</p></details>
+      </div>
+
+      <div class="problem">
+        <span class="level">Level 12 • Atwood Machine</span>
+        <h3>Problem 12: Two Hanging Masses</h3>
+        <p>A $3.0\,\text{kg}$ mass and a $5.0\,\text{kg}$ mass hang on opposite sides of a light string over a light, frictionless pulley. They're released from rest. Use $g=10\,\text{m/s}^2$.</p>
+        <ol>
+          <li>Find the acceleration of the masses.</li>
+          <li>Find the tension in the string.</li>
+          <li>Is the tension greater than, less than, or equal to the weight of each mass? Explain why that makes sense.</li>
+        </ol>
+        <details><summary>Reveal scaffold</summary><p>Treat both masses as one system. The net external force is the difference in weights, and the total mass is $8.0\,\text{kg}$. Then use one mass's FBD to find $T$.</p></details>
+        <details><summary>Reveal solution</summary><p>$a=\dfrac{(5-3)(10)}{8}=2.5\,\text{m/s}^2$. For the $3.0\,\text{kg}$ mass accelerating up: $T-30=3(2.5)$, so $T=37.5\,\text{N}$. Check with the $5.0\,\text{kg}$ mass: $50-T=5(2.5)$ gives $T=37.5\,\text{N}$. The tension sits between the two weights ($30\,\text{N}$ and $50\,\text{N}$). It must be more than $30\,\text{N}$ to accelerate the light mass up and less than $50\,\text{N}$ so the heavy mass accelerates down.</p></details>
+      </div>
+
+      <div class="problem">
+        <span class="level">Level 13 • Connected Objects with Friction</span>
+        <h3>Problem 13: Rough Table and Hanging Mass</h3>
+        <p>A $6.0\,\text{kg}$ block on a horizontal table is connected by a light string over a pulley to a hanging $4.0\,\text{kg}$ mass. The coefficient of kinetic friction between the block and the table is $0.20$. Use $g=10\,\text{m/s}^2$.</p>
+        <ol>
+          <li>Identify the external forces on the two-block system along the direction of motion.</li>
+          <li>Find the acceleration.</li>
+          <li>Find the tension, then check it using the other block.</li>
+        </ol>
+        <details><summary>Reveal solution</summary><p>Driving force is the hanging weight, $40\,\text{N}$. Friction on the table block is $(0.20)(6)(10)=12\,\text{N}$. $a=(40-12)/10=2.8\,\text{m/s}^2$. Hanging mass: $40-T=4(2.8)$, so $T=28.8\,\text{N}$. Check with the table block: $T-12=6(2.8)$ gives $T=28.8\,\text{N}$.</p></details>
+      </div>
+
+      <div class="problem">
+        <span class="level">Level 14 • Incline + Pulley</span>
+        <h3>Problem 14: Ramp Block and Hanging Mass</h3>
+        <p>A $4.0\,\text{kg}$ block sits on a frictionless $30^\circ$ incline. A string tied to it runs over a pulley at the top of the incline to a hanging $3.0\,\text{kg}$ mass. Use $g=10\,\text{m/s}^2$.</p>
+        <ol>
+          <li>Which way does the system accelerate? Decide by comparing forces before calculating anything.</li>
+          <li>Find the acceleration.</li>
+          <li>Find the tension.</li>
+        </ol>
+        <details><summary>Reveal scaffold</summary><p>Compare the hanging weight with the component of the ramp block's weight along the incline, $m_1g\sin\theta$. Whichever is bigger wins.</p></details>
+        <details><summary>Reveal solution</summary><p>Hanging weight is $30\,\text{N}$, and the ramp component is $(4)(10)(0.5)=20\,\text{N}$, so the hanging mass goes down and the block goes up the ramp. $a=(30-20)/7=1.4\,\text{m/s}^2$. $T=3(10-1.43)=25.7\,\text{N}$. Check: $T-20=4(1.43)$ gives $T=25.7\,\text{N}$.</p></details>
+      </div>
+
+      <div class="problem">
+        <span class="level">Level 15 • Challenge: Balanced Forces in Motion</span>
+        <h3>Problem 15: The Ramp That Doesn't Speed Up</h3>
+        <p>A $5.0\,\text{kg}$ block on a $37^\circ$ incline ($\mu_k=0.25$) is connected over a pulley at the top to a hanging $2.0\,\text{kg}$ mass. A student gives the block a quick shove down the ramp and lets go. Use $g=10\,\text{m/s}^2$, $\sin37^\circ=0.60$, and $\cos37^\circ=0.80$.</p>
+        <ol>
+          <li>Once the block is sliding down the ramp, which way does friction act?</li>
+          <li>Find the net force on the system while it slides.</li>
+          <li>Describe the motion after the shove.</li>
+        </ol>
+        <details><summary>Reveal solution</summary><p>The block slides down, so friction points up the ramp. Down-ramp force is $mg\sin37^\circ=30\,\text{N}$. Opposing it are the hanging weight, $20\,\text{N}$, and friction, $(0.25)(40)=10\,\text{N}$. Net force is $30-20-10=0$, so the system moves at constant velocity. This is Newton's 1st law: motion doesn't need a net force.</p></details>
+      </div>
+
+      <div class="problem">
+        <span class="level">Level 16 • AP Qualitative Reasoning</span>
+        <h3>Problem 16: Adding Mass to Both Sides</h3>
+        <p>In the Atwood machine from Problem 12, a student adds $1.0\,\text{kg}$ to each side. Does the acceleration increase, decrease, or stay the same? Answer in a short paragraph using Newton's 2nd law for the system <em>before</em> doing any calculation, then confirm with numbers.</p>
+        <details><summary>Reveal solution</summary><p>It decreases. The net external force is the difference in weights, $(m_2-m_1)g$, which doesn't change because both sides gained the same mass. The total mass being accelerated goes up, so $a=\Sigma F/m_{total}$ gets smaller. Numbers: $a=20/10=2.0\,\text{m/s}^2$, down from $2.5\,\text{m/s}^2$.</p></details>
+      </div>
     </section>
 
     <section id="apstyle">
