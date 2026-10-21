@@ -800,6 +800,17 @@
           <div class="commit-msg feedback" aria-live="polite"></div>
         </div>
       </div>
+      <div class="block quick-check extra-check" id="more-forces">
+        <div class="section-title"><h3 class="block-title">More Paragraph Practice</h3></div>
+        <div class="card">
+          <span class="level">AP Paragraph</span>
+          <p>A book rests on a table. A student says, “The two forces on the book are its weight and the force the book exerts on the table.”</p>
+          <p><strong>In a short paragraph, explain what’s wrong with the student’s FBD and draw the correct one.</strong></p>
+          <textarea placeholder="Write your answer first, then reveal..." aria-label="Your response"></textarea>
+          <details class="needs-commit"><summary>Reveal model answer</summary><p>An FBD shows only forces exerted <em>on</em> the book. The force the book exerts on the table acts on the table, so it doesn’t belong on the book’s FBD. The correct forces on the book are Earth’s gravitational force (weight) pointing down and the table’s normal force pointing up. They’re equal in magnitude because the book’s acceleration is zero, but they aren’t a Newton’s 3rd law pair, because they act on the same object and come from different interactions.</p></details>
+          <div class="commit-msg feedback" aria-live="polite"></div>
+        </div>
+      </div>
       <div class="pager"></div>
     </section>
 
@@ -1057,6 +1068,17 @@
           <div class="commit-msg feedback" aria-live="polite"></div>
         </div>
       </div>
+      <div class="block quick-check extra-check" id="more-friction-springs">
+        <div class="section-title"><h3 class="block-title">More Paragraph Practice</h3></div>
+        <div class="card">
+          <span class="level">AP Paragraph</span>
+          <p>A student pushes on a heavy crate with a gradually increasing force, but the crate doesn’t move. A classmate says, “The friction force is always $\mu_sF_N$.”</p>
+          <p><strong>In a short paragraph, explain why that’s wrong and describe how the friction force changes as the push increases.</strong></p>
+          <textarea placeholder="Write your answer first, then reveal..." aria-label="Your response"></textarea>
+          <details class="needs-commit"><summary>Reveal model answer</summary><p>$\mu_sF_N$ is the maximum static friction, not its value at all times. While the crate stays at rest, its acceleration is zero, so static friction exactly matches the push and grows as the push grows. Once the push passes $\mu_sF_N$, static friction can’t keep up, the crate starts sliding, and kinetic friction $\mu_kF_N$ takes over. That’s usually a bit smaller, so the crate speeds up.</p></details>
+          <div class="commit-msg feedback" aria-live="polite"></div>
+        </div>
+      </div>
       <div class="pager"></div>
     </section>
 
@@ -1175,6 +1197,17 @@
           <p><strong>Write a short paragraph that agrees or disagrees.</strong></p>
           <textarea placeholder="Write your answer first, then reveal..." aria-label="Your response"></textarea>
           <details class="needs-commit"><summary>Reveal strong response</summary><p>Disagree. The normal force is not $mg$ on a ramp. With axes parallel and perpendicular to the surface, nothing accelerates perpendicular to the surface, so the perpendicular forces balance and $F_N=mg\cos\theta$, which is less than $mg$ for any tilted ramp. Only on a level surface with no other vertical forces and no vertical acceleration does $F_N=mg$.</p></details>
+          <div class="commit-msg feedback" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="block quick-check extra-check" id="more-inclines">
+        <div class="section-title"><h3 class="block-title">More Paragraph Practice</h3></div>
+        <div class="card">
+          <span class="level">AP Paragraph</span>
+          <p>The same block is placed on two frictionless ramps, one at $20^\circ$ and one at $40^\circ$.</p>
+          <p><strong>Without calculating, compare the normal force and the acceleration on the two ramps, and justify both comparisons in a short paragraph.</strong></p>
+          <textarea placeholder="Write your answer first, then reveal..." aria-label="Your response"></textarea>
+          <details class="needs-commit"><summary>Reveal model answer</summary><p>On the steeper ramp the normal force is smaller and the acceleration is larger. There’s no acceleration perpendicular to the ramp, so $F_N=mg\cos\theta$, and $\cos\theta$ decreases as the angle increases. Along the ramp, the only force is $mg\sin\theta$, so $a=g\sin\theta$, which increases with the angle. Mass doesn’t affect the acceleration on either ramp.</p></details>
           <div class="commit-msg feedback" aria-live="polite"></div>
         </div>
       </div>
@@ -1851,7 +1884,7 @@
 
     // "Commit before you reveal": paragraph prompts need a written answer first
     document.querySelectorAll('details.needs-commit').forEach(d => {
-      const card = d.closest('.card');
+      const card = d.closest('.card, .problem');
       const ta = card && card.querySelector('textarea');
       const msg = card && card.querySelector('.commit-msg');
       d.querySelector('summary').addEventListener('click', e => {
