@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AP Physics 1 Dynamics Review | Interactive Study Site</title>
   <script>
+    document.documentElement.classList.add('js');
     window.MathJax = {
       tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$','$$']] },
       svg: { fontCache: 'global' }
@@ -437,54 +438,193 @@
       details { border: 1px solid #aaa; }
       details:not([open]) > *:not(summary) { display: block; }
     }
+  
+    /* ===== Lesson-by-lesson layout (one lesson per screen) ===== */
+    html { scroll-behavior: auto; }
+    body { font-size: 1.0625rem; overflow-wrap: break-word; }
+    .skip { position: absolute; left: -9999px; top: 0; }
+    .skip:focus { left: 12px; top: 12px; z-index: 50; background: white; padding: 10px 14px; border-radius: 10px; }
+    header { padding: 30px 18px 28px; }
+    h1 { font-size: clamp(2rem, 4.6vw, 3.8rem); margin: 14px 0 10px; }
+    .home-link {
+      display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; margin: 0 10px 8px 0;
+      color: white; font-weight: 850; text-decoration: none; border-radius: 12px;
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+    }
+    .home-link:hover { background: rgba(255,255,255,0.22); }
+    .btn { min-height: 44px; }
+    .btn.small { min-height: 44px; padding: 10px 14px; margin: 4px 4px 4px 0; }
+
+    nav.lesson-nav { box-shadow: 0 6px 18px rgba(15, 44, 89, 0.06); }
+    nav.lesson-nav .nav-inner { align-items: center; gap: 8px; padding: 8px 12px 4px; overflow: visible; }
+    .nav-home {
+      flex: 0 0 auto; display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 12px;
+      background: var(--secondary); color: white !important; font-size: 1.25rem; text-decoration: none; padding: 0 !important;
+    }
+    .chips {
+      display: flex; gap: 6px; overflow-x: auto; flex: 1 1 auto; min-width: 0;
+      scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; scrollbar-width: thin; padding-bottom: 2px;
+    }
+    .nav-inner .chips a {
+      flex: 0 0 auto; display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 0 14px;
+      border: 1px solid var(--border); background: #fbfdff; scroll-snap-align: start;
+    }
+    .chips a b {
+      display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 8px;
+      background: #e8f3ff; color: var(--secondary); font-size: 0.85rem;
+    }
+    .nav-inner .chips a.active { background: var(--secondary); color: white; border-color: var(--secondary); }
+    .chips a.active b { background: var(--accent); color: #102a43; }
+    .progress-row {
+      max-width: 1180px; margin: 0 auto; padding: 2px 16px 8px; display: flex; align-items: center; gap: 12px;
+      font-size: 0.85rem; font-weight: 850; color: var(--muted);
+    }
+    .progress-row span { white-space: nowrap; }
+    .progress { flex: 1; height: 6px; background: #e7edf5; border-radius: 999px; overflow: hidden; }
+    #progressFill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), #59b7ff); transition: width 0.25s ease; }
+
+    main { padding-top: 22px; outline: none; }
+    .js .lesson { display: none; }
+    .js .lesson.active { display: block; }
+    .lesson { margin: 0; }
+    .lesson-head { margin: 4px 0 14px; }
+    .kicker {
+      display: inline-block; font-size: 0.8rem; font-weight: 950; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--primary); margin-bottom: 4px;
+    }
+    .goals { padding: 16px 20px; margin-bottom: 12px; }
+    .goals ul { margin: 6px 0 0; padding-left: 22px; }
+    .big-idea { font-size: 1.05rem; }
+    .block { margin: 30px 0; scroll-margin-top: 120px; }
+    .problem, .lesson { scroll-margin-top: 120px; }
+    .block-title { font-size: clamp(1.3rem, 2.4vw, 1.75rem); margin: 0; color: var(--secondary); }
+    .block .section-title { border-bottom: 2px solid #e1e9f5; padding-bottom: 8px; }
+    .hint { color: var(--muted); font-weight: 700; margin: 6px 0 10px; }
+    .problem.mixed { border-style: dashed; }
+    .problem:target { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0,119,218,0.15); }
+
+    /* Tap targets and touch */
+    .quiz-option { min-height: 48px; }
+    summary { min-height: 44px; display: flex; align-items: center; list-style-position: inside; }
+    summary::before { content: "▸"; margin-right: 8px; transition: transform .15s ease; }
+    details[open] > summary::before { transform: rotate(90deg); }
+    summary::-webkit-details-marker { display: none; }
+    summary { list-style: none; }
+    .pill { min-height: 44px; padding: 8px 12px; cursor: pointer; }
+    .pill input[type="checkbox"] { width: 22px; height: 22px; margin: 0; }
+    input, select { min-height: 44px; font-size: 1rem; }
+    button, a, label, summary { touch-action: manipulation; }
+
+    /* Keep wide content inside its own box instead of widening the page */
+    .card, .problem, details, .callout, .formula, .mini-card, .diagram-card { min-width: 0; max-width: 100%; }
+    .problem, details, .callout, .formula, .mini-card, .card > p, .card > ol { overflow-x: auto; overflow-y: hidden; }
+    mjx-container[display="true"] { display: block; max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+    .formula mjx-container[display="true"] { margin: 8px 0 !important; }
+    .diagram-card svg { width: 100%; }
+    .fbd-stage { max-width: 100%; }
+
+    /* Previous / Next */
+    .pager {
+      display: flex; gap: 12px; justify-content: space-between; align-items: stretch; flex-wrap: wrap;
+      margin: 36px 0 8px; padding-top: 18px; border-top: 2px solid #e1e9f5;
+    }
+    .pager a { flex: 1 1 240px; min-height: 56px; display: flex; flex-direction: column; justify-content: center; text-decoration: none; padding: 10px 16px; }
+    .pager a small { font-weight: 700; opacity: 0.85; font-size: 0.8rem; text-transform: uppercase; letter-spacing: .05em; }
+    .pager a.next { text-align: right; align-items: flex-end; }
+    .pager a.prev { background: white; color: var(--secondary); border: 1px solid var(--border); box-shadow: none; align-items: flex-start; }
+    .pager .spacer { flex: 1 1 240px; }
+
+    @media (min-width: 900px) {
+      .chips { flex-wrap: wrap; overflow: visible; }
+      .nav-inner .chips a { padding: 0 11px; font-size: 0.95rem; }
+    }
+    @media (max-width: 840px) {
+      .two, .three, .four { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      header { padding: 18px 14px 18px; }
+      header::after { width: 260px; height: 260px; right: -120px; top: -120px; }
+      .hero p { font-size: 1rem; margin-bottom: 8px; }
+      .badge { font-size: 0.75rem; }
+      .hero-actions { margin-top: 12px; gap: 8px; }
+      .hero-actions .btn { flex: 1 1 140px; }
+      main { padding: 16px 12px 60px; }
+      .card { padding: 16px; }
+      .problem { padding: 14px; }
+      .goals { padding: 14px 16px; }
+      .fbd-stage { height: 280px; }
+      .canvas-wrap, .diagram-card { min-height: 0; }
+      .input-row label { display: grid; grid-template-columns: minmax(0, 1fr) 130px 2.2em; align-items: center; gap: 8px; width: 100%; }
+      input[type="number"] { width: 130px; }
+      .progress-row { padding: 2px 12px 8px; }
+      .pager a { flex-basis: 100%; }
+    }
+
+    @media print {
+      nav.lesson-nav, .pager, .skip, .home-link, .commit-msg { display: none !important; }
+      .js .lesson, .lesson { display: block !important; break-before: page; }
+      .lesson:first-of-type { break-before: auto; }
+      .problem, details, .callout, .formula, .mini-card, .card > p, .card > ol { overflow: visible !important; }
+      textarea { display: none; }
+    }
   </style>
 </head>
 <body>
+  <a class="skip" href="#main">Skip to lesson</a>
   <header>
     <div class="hero">
+      <a class="home-link" href="index.html">← All units</a>
       <span class="badge">🚀 AP Physics 1 Review • Forces & Translational Dynamics</span>
       <h1>Dynamics Master Review</h1>
-      <p>An interactive review built around free-body diagrams, Newton's laws, friction, ramps, tension, and AP-style reasoning.</p>
+      <p>An interactive review built around free-body diagrams, Newton's laws, friction, ramps, tension, and AP-style reasoning. Six short lessons and a unit review, one screen at a time.</p>
       <div class="hero-actions">
-        <a class="btn secondary" href="#diagnostic">Start Diagnostic</a>
-        <a class="btn ghost" href="#fbd-builder">Build FBDs</a>
-        <a class="btn ghost" href="#problems">Jump to Problems</a>
+        <a class="btn secondary" href="#lesson-forces">Start Lesson 1</a>
+        <a class="btn ghost" href="#review">Jump to Unit Review</a>
         <button class="btn ghost" onclick="window.print()">Print / Save PDF</button>
       </div>
     </div>
   </header>
 
-  <nav>
+  <nav class="lesson-nav" aria-label="Unit 2 lessons">
     <div class="nav-inner">
-      <a href="#roadmap">Roadmap</a>
-      <a href="#diagnostic">Diagnostic</a>
-      <a href="#laws">Newton's Laws</a>
-      <a href="#forces">Force Types</a>
-      <a href="#fbd-builder">FBD Builder</a>
-      <a href="#netforce">Net Force Simulator</a>
-      <a href="#friction">Friction</a>
-      <a href="#ramps">Ramps</a>
-      <a href="#problems">Problems</a>
-      <a href="#apstyle">AP Style</a>
+      <a class="nav-home" href="index.html" aria-label="Back to all units">⌂</a>
+      <div class="chips" role="list">
+        <a role="listitem" href="#lesson-forces"><b>1</b> Forces &amp; FBDs</a>
+        <a role="listitem" href="#lesson-newton"><b>2</b> Newton's Laws</a>
+        <a role="listitem" href="#lesson-friction-springs"><b>3</b> Friction &amp; Springs</a>
+        <a role="listitem" href="#lesson-inclines"><b>4</b> Inclines</a>
+        <a role="listitem" href="#lesson-pulleys"><b>5</b> Pulleys</a>
+        <a role="listitem" href="#lesson-gravity-circular"><b>6</b> Gravity &amp; Circles</a>
+        <a role="listitem" href="#review"><b>★</b> Review</a>
+      </div>
+    </div>
+    <div class="progress-row">
+      <span id="progressText" aria-live="polite">Lesson 1 of 6</span>
+      <div class="progress" aria-hidden="true"><div id="progressFill"></div></div>
     </div>
   </nav>
 
-  <main>
-    <section id="roadmap">
-      <div class="section-title"><span class="num">1</span><h2>Dynamics Roadmap</h2></div>
-      <div class="grid four">
-        <div class="card"><h3>1. Identify the Object</h3><p>Only draw forces acting on the object you are analyzing. Do not draw forces the object exerts on other things.</p></div>
-        <div class="card"><h3>2. Draw the FBD</h3><p>Represent every force as an arrow starting from the object. Label force types clearly.</p></div>
-        <div class="card"><h3>3. Choose Axes</h3><p>Use horizontal/vertical for flat surfaces and rotated axes for ramps.</p></div>
-        <div class="card"><h3>4. Apply $\Sigma F = ma$</h3><p>Use Newton's second law separately in each direction.</p></div>
+  <main id="main" tabindex="-1">
+    <section class="lesson" id="lesson-forces" data-title="Forces and Free-Body Diagrams" aria-labelledby="lesson-forces-h">
+      <div class="lesson-head">
+        <span class="kicker">Lesson 1 of 6</span>
+        <h2 id="lesson-forces-h">Forces and Free-Body Diagrams</h2>
       </div>
-      <div class="callout blue"><strong>AP Exam Mindset:</strong> Dynamics questions usually reward correct representations and reasoning before final numbers. A strong FBD is often half the solution.</div>
-    </section>
-
-    <section id="diagnostic">
-      <div class="section-title"><span class="num">2</span><h2>Quick Diagnostic: Catch the Misconceptions</h2></div>
+      <div class="card goals">
+        <h3>You should be able to…</h3>
+        <ul class="checklist">
+          <li>Identify the object or system you are analyzing.</li>
+          <li>Draw an FBD with every force labeled by type and the object exerting it.</li>
+          <li>Tell internal forces from external ones.</li>
+        </ul>
+      </div>
+      <div class="callout blue big-idea"><strong>Big idea:</strong> Forces come from interactions. Dynamics questions usually reward correct representations and reasoning before final numbers. A strong FBD is often half the solution.</div>
+      <div class="callout danger-note"><strong>Common mistake:</strong> Do not invent a “force of motion.” If an object is moving right, that does not automatically mean there is a rightward force.</div>
+      <div class="block" id="diagnostic">
+      <div class="section-title"><h3 class="block-title">Pre-Check: Catch the Misconceptions</h3></div>
       <div class="card">
-        <div class="problem quiz" data-answer="c">
+        <p class="hint">Ungraded pre-check: answer before you start. You will retake these same questions in the Unit Review to see your growth.</p>
+        <div class="problem quiz" data-phase="pre" data-q="1" data-answer="c">
           <h3>Question 1: Constant Velocity</h3>
           <p>A box slides to the right at constant velocity. What must be true about the net force?</p>
           <button class="quiz-option" data-choice="a">A. The net force points right because the box is moving right.</button>
@@ -495,7 +635,7 @@
           <details><summary>Explanation</summary><p>Constant velocity means acceleration is zero. Since $\Sigma F = ma$, the net force must be zero.</p></details>
         </div>
 
-        <div class="problem quiz" data-answer="b">
+        <div class="problem quiz" data-phase="pre" data-q="2" data-answer="b">
           <h3>Question 2: Normal Force</h3>
           <p>A box rests on a horizontal table with no vertical acceleration. Which statement is true?</p>
           <button class="quiz-option" data-choice="a">A. The normal force is always equal to mass.</button>
@@ -506,7 +646,7 @@
           <details><summary>Explanation</summary><p>The normal force is a contact force. On a level surface with no other vertical forces and no vertical acceleration, $F_N=mg$.</p></details>
         </div>
 
-        <div class="problem quiz" data-answer="d">
+        <div class="problem quiz" data-phase="pre" data-q="3" data-answer="d">
           <h3>Question 3: Action-Reaction Pair</h3>
           <p>A student pushes a wall. The wall pushes back on the student with...</p>
           <button class="quiz-option" data-choice="a">A. less force because the wall does not move.</button>
@@ -517,32 +657,26 @@
           <details><summary>Explanation</summary><p>Newton's third law pairs are equal in magnitude, opposite in direction, and act on different objects.</p></details>
         </div>
       </div>
-    </section>
-
-    <section id="laws">
-      <div class="section-title"><span class="num">3</span><h2>Newton's Laws: Student-Friendly Meaning</h2></div>
-      <div class="grid three">
-        <div class="card">
-          <h3>Newton's 1st Law</h3>
-          <p>If net force is zero, velocity stays constant. That includes staying at rest.</p>
-          <div class="callout">No net force does <strong>not</strong> mean no motion. It means no change in motion.</div>
-        </div>
-        <div class="card">
-          <h3>Newton's 2nd Law</h3>
-          <p>The net force determines the acceleration.</p>
-          <p>$$\Sigma \vec{F}=m\vec{a}$$</p>
-          <div class="callout success">Acceleration points in the direction of the net force.</div>
-        </div>
-        <div class="card">
-          <h3>Newton's 3rd Law</h3>
-          <p>Forces come in interaction pairs: A on B and B on A.</p>
-          <div class="callout danger-note">Third-law forces do not cancel because they act on different objects.</div>
+      </div>
+      <div class="block" id="roadmap">
+      <div class="section-title"><h3 class="block-title">Dynamics Roadmap</h3></div>
+      <div class="grid four">
+        <div class="card"><h3>1. Identify the Object</h3><p>Only draw forces acting on the object you are analyzing. Do not draw forces the object exerts on other things.</p></div>
+        <div class="card"><h3>2. Draw the FBD</h3><p>Represent every force as an arrow starting from the object. Label force types clearly.</p></div>
+        <div class="card"><h3>3. Choose Axes</h3><p>Use horizontal/vertical for flat surfaces and rotated axes for ramps.</p></div>
+        <div class="card"><h3>4. Apply $\Sigma F = ma$</h3><p>Use Newton's second law separately in each direction.</p></div>
+      </div>
+      <div class="callout blue"><strong>AP Exam Mindset:</strong> Dynamics questions usually reward correct representations and reasoning before final numbers. A strong FBD is often half the solution.</div>
+      </div>
+      <div class="block" id="systems">
+        <div class="section-title"><h3 class="block-title">Systems: Internal vs. External Forces</h3></div>
+        <div class="grid two">
+          <div class="card"><h3>Choose the System</h3><p>Decide what you are analyzing: one object, or several objects treated together. Only draw forces acting on the object or system you chose.</p></div>
+          <div class="card"><h3>Internal Forces Cancel</h3><p>When objects are treated as one system, the forces between them (such as the contact force between two pushed blocks, or the rope tension between connected blocks) are internal and cancel. Only external forces change the motion of the system.</p></div>
         </div>
       </div>
-    </section>
-
-    <section id="forces">
-      <div class="section-title"><span class="num">4</span><h2>Force Types You Must Recognize</h2></div>
+      <div class="block" id="forces">
+      <div class="section-title"><h3 class="block-title">Force Types You Must Recognize</h3></div>
       <div class="grid three">
         <div class="formula"><strong>Weight</strong>$$F_g=mg$$<small>Gravity's force on an object. Direction: down toward Earth.</small></div>
         <div class="formula"><strong>Normal Force</strong>$$F_N$$<small>Contact force perpendicular to a surface. Not always equal to $mg$.</small></div>
@@ -552,10 +686,9 @@
         <div class="formula"><strong>Spring Force</strong>$$F_s=kx$$<small>Restoring force from a stretched or compressed spring.</small></div>
       </div>
       <div class="callout blue"><strong>Common trap:</strong> Do not invent a “force of motion.” If an object is moving right, that does not automatically mean there is a rightward force.</div>
-    </section>
-
-    <section id="diagrams">
-      <div class="section-title"><span class="num">5</span><h2>Visual Force Situations</h2></div>
+      </div>
+      <div class="block" id="diagrams">
+      <div class="section-title"><h3 class="block-title">Visual Force Situations</h3></div>
       <div class="grid two">
         <div class="card">
           <h3>Box on Level Surface</h3>
@@ -571,13 +704,13 @@
               <rect x="205" y="145" width="110" height="70" rx="8" fill="#0077da"/>
               <text x="232" y="185" fill="white" font-weight="900">box</text>
               <line class="arrow-green" x1="260" y1="145" x2="260" y2="70"/>
-              <text class="svg-label" x="273" y="95">$F_N$</text>
+              <text class="svg-label" x="273" y="95">F<tspan baseline-shift="sub" font-size="11">N</tspan></text>
               <line class="arrow-red" x1="260" y1="215" x2="260" y2="270"/>
-              <text class="svg-label" x="275" y="256">$F_g$</text>
+              <text class="svg-label" x="275" y="256">F<tspan baseline-shift="sub" font-size="11">g</tspan></text>
               <line class="arrow" x1="315" y1="180" x2="425" y2="180"/>
-              <text class="svg-label" x="360" y="166">$F_{app}$</text>
+              <text class="svg-label" x="360" y="166">F<tspan baseline-shift="sub" font-size="11">app</tspan></text>
               <line class="arrow-purple" x1="205" y1="180" x2="105" y2="180"/>
-              <text class="svg-label" x="115" y="166">$f$</text>
+              <text class="svg-label" x="115" y="166"><tspan font-style="italic">f</tspan></text>
             </svg>
           </div>
           <p>Use when practicing applied force, kinetic friction, and equilibrium versus acceleration.</p>
@@ -599,23 +732,22 @@
                 <text x="-18" y="5" fill="white" font-weight="900">box</text>
               </g>
               <line x1="250" y1="165" x2="250" y2="255" stroke="#d93025" stroke-width="4" marker-end="url(#r2)"/>
-              <text class="svg-label" x="263" y="237">$F_g$</text>
+              <text class="svg-label" x="263" y="237">F<tspan baseline-shift="sub" font-size="11">g</tspan></text>
               <line x1="250" y1="165" x2="285" y2="82" stroke="#18a058" stroke-width="4" marker-end="url(#g2)"/>
-              <text class="svg-label" x="292" y="100">$F_N$</text>
+              <text class="svg-label" x="292" y="100">F<tspan baseline-shift="sub" font-size="11">N</tspan></text>
               <line x1="250" y1="165" x2="150" y2="211" stroke="#7b61ff" stroke-width="4" marker-end="url(#p2)"/>
-              <text class="svg-label" x="143" y="197">$f$ if sliding down</text>
+              <text class="svg-label" x="143" y="197"><tspan font-style="italic">f</tspan> if sliding down</text>
               <line x1="250" y1="165" x2="345" y2="208" stroke="#0077da" stroke-width="4" marker-end="url(#a2)"/>
-              <text class="svg-label" x="330" y="230">$mg\sin\theta$</text>
-              <text class="svg-small" x="366" y="248">$\theta$</text>
+              <text class="svg-label" x="330" y="230">mg sin θ</text>
+              <text class="svg-small" x="366" y="248">θ</text>
             </svg>
           </div>
           <p>For ramps, rotate axes so one axis is parallel to the surface and one axis is perpendicular.</p>
         </div>
       </div>
-    </section>
-
-    <section id="fbd-builder">
-      <div class="section-title"><span class="num">6</span><h2>Interactive Free-Body Diagram Builder</h2></div>
+      </div>
+      <div class="block" id="fbd-builder">
+      <div class="section-title"><h3 class="block-title">Interactive Free-Body Diagram Builder</h3></div>
       <div class="grid two">
         <div class="card">
           <h3>Select the Forces</h3>
@@ -641,10 +773,85 @@
           </div>
         </div>
       </div>
+      </div>
+      <div class="block practice" id="practice-forces">
+        <div class="section-title"><h3 class="block-title">Practice</h3></div>
+        <p class="hint">Commit to a prediction or a first step before you reveal a scaffold or solution. Problems go from easier to harder.</p>
+      <div class="problem" id="problem-1-1">
+        <span class="level">Force Identification</span>
+        <h3>Problem 1.1: Book on a Table</h3>
+        <p>A book rests on a table. It is not moving.</p>
+        <ol>
+          <li>Draw or describe the forces on the book.</li>
+          <li>What is the net force?</li>
+          <li>Does the book exert a force on the table?</li>
+        </ol>
+        <details><summary>Reveal solution</summary><p>Forces on book: weight downward and normal force upward. Since acceleration is zero, $F_N=F_g$ and net force is zero. The book exerts a downward contact force on the table; the table exerts an upward normal force on the book.</p></details>
+      </div>
+      </div>
+      <div class="block quick-check" id="check-forces">
+        <div class="section-title"><h3 class="block-title">Quick Check</h3></div>
+        <div class="card">
+          <span class="level">AP Paragraph</span>
+          <p>A block is pulled to the right across a rough horizontal floor and accelerates to the right. A student adds a “force of motion” pointing right to the free-body diagram.</p>
+          <p><strong>Write a short paragraph that agrees or disagrees with including it.</strong></p>
+          <textarea placeholder="Write your answer first, then reveal..." aria-label="Your response"></textarea>
+          <details class="needs-commit"><summary>Reveal strong response</summary><p>Disagree. The correct forces are weight down, normal up, applied force right, and friction left. There is no separate “force of motion.” Motion describes what the object is doing; force describes interactions. Every arrow on an FBD needs an object that exerts it, and nothing exerts a “force of motion.”</p></details>
+          <div class="commit-msg feedback" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="block quick-check extra-check" id="more-forces">
+        <div class="section-title"><h3 class="block-title">More Paragraph Practice</h3></div>
+        <div class="card">
+          <span class="level">AP Paragraph</span>
+          <p>A book rests on a table. A student says, “The two forces on the book are its weight and the force the book exerts on the table.”</p>
+          <p><strong>In a short paragraph, explain what’s wrong with the student’s FBD and draw the correct one.</strong></p>
+          <textarea placeholder="Write your answer first, then reveal..." aria-label="Your response"></textarea>
+          <details class="needs-commit"><summary>Reveal model answer</summary><p>An FBD shows only forces exerted <em>on</em> the book. The force the book exerts on the table acts on the table, so it doesn’t belong on the book’s FBD. The correct forces on the book are Earth’s gravitational force (weight) pointing down and the table’s normal force pointing up. They’re equal in magnitude because the book’s acceleration is zero, but they aren’t a Newton’s 3rd law pair, because they act on the same object and come from different interactions.</p></details>
+          <div class="commit-msg feedback" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="pager"></div>
     </section>
 
-    <section id="netforce">
-      <div class="section-title"><span class="num">7</span><h2>Net Force & Acceleration Simulator</h2></div>
+    <section class="lesson" id="lesson-newton" data-title="Newton's Laws and Net Force" aria-labelledby="lesson-newton-h">
+      <div class="lesson-head">
+        <span class="kicker">Lesson 2 of 6</span>
+        <h2 id="lesson-newton-h">Newton's Laws and Net Force</h2>
+      </div>
+      <div class="card goals">
+        <h3>You should be able to…</h3>
+        <ul class="checklist">
+          <li>Connect net force to acceleration, not velocity.</li>
+          <li>Apply the 2nd law to one object and to a system.</li>
+          <li>Identify Newton's 3rd law pairs and explain why they never cancel.</li>
+        </ul>
+      </div>
+      <div class="callout blue big-idea"><strong>Big idea:</strong> The net force determines the acceleration. If the net force is zero, velocity stays constant (including staying at rest). Forces come in interaction pairs: A on B and B on A.</div>
+      <div class="callout danger-note"><strong>Common mistake:</strong> Third-law forces do not cancel because they act on different objects.</div>
+      <div class="block" id="laws">
+      <div class="section-title"><h3 class="block-title">Newton's Laws: Student-Friendly Meaning</h3></div>
+      <div class="grid three">
+        <div class="card">
+          <h3>Newton's 1st Law</h3>
+          <p>If net force is zero, velocity stays constant. That includes staying at rest.</p>
+          <div class="callout">No net force does <strong>not</strong> mean no motion. It means no change in motion.</div>
+        </div>
+        <div class="card">
+          <h3>Newton's 2nd Law</h3>
+          <p>The net force determines the acceleration.</p>
+          <p>$$\Sigma \vec{F}=m\vec{a}$$</p>
+          <div class="callout success">Acceleration points in the direction of the net force.</div>
+        </div>
+        <div class="card">
+          <h3>Newton's 3rd Law</h3>
+          <p>Forces come in interaction pairs: A on B and B on A.</p>
+          <div class="callout danger-note">Third-law forces do not cancel because they act on different objects.</div>
+        </div>
+      </div>
+      </div>
+      <div class="block" id="netforce">
+      <div class="section-title"><h3 class="block-title">Net Force & Acceleration Simulator</h3></div>
       <div class="grid two">
         <div class="card">
           <h3>Calculate Acceleration</h3>
@@ -681,10 +888,85 @@
           </div>
         </div>
       </div>
+      </div>
+      <div class="block practice" id="practice-newton">
+        <div class="section-title"><h3 class="block-title">Practice</h3></div>
+        <p class="hint">Commit to a prediction or a first step before you reveal a scaffold or solution. Problems go from easier to harder.</p>
+      <div class="problem" id="problem-2-1">
+        <span class="level">Net Force</span>
+        <h3>Problem 2.1: Horizontal Push</h3>
+        <p>A $6.0\,\text{kg}$ cart is pushed right with $36\,\text{N}$. Friction is negligible.</p>
+        <ol>
+          <li>What is the net force?</li>
+          <li>What is the acceleration?</li>
+        </ol>
+        <details><summary>Reveal solution</summary><p>$\Sigma F=36\,\text{N}$ right. $a=\Sigma F/m=36/6=6.0\,\text{m/s}^2$ right.</p></details>
+      </div>
+      <div class="problem" id="problem-2-2">
+        <span class="level">Elevator / Apparent Weight</span>
+        <h3>Problem 2.2: Scale in an Elevator</h3>
+        <p>A $60\,\text{kg}$ student stands on a scale in an elevator accelerating upward at $2.0\,\text{m/s}^2$. Use $g=10\,\text{m/s}^2$.</p>
+        <ol>
+          <li>Draw the FBD.</li>
+          <li>What does the scale read?</li>
+        </ol>
+        <details><summary>Reveal solution</summary><p>Forces: normal force up, weight down. Upward is positive. $F_N-mg=ma$. $F_N=m(g+a)=60(10+2)=720\,\text{N}$. The scale reads $720\,\text{N}$.</p></details>
+      </div>
+      <div class="problem" id="problem-2-3">
+        <span class="level">Systems and Internal Forces</span>
+        <h3>Problem 2.3: Pushing Two Blocks</h3>
+        <p>Two blocks touch on a frictionless floor: a $3.0\,\text{kg}$ block on the left and a $2.0\,\text{kg}$ block on the right. A $20\,\text{N}$ horizontal push is applied to the left side of the $3.0\,\text{kg}$ block.</p>
+        <ol>
+          <li>Find the acceleration of the blocks.</li>
+          <li>Find the force the $3.0\,\text{kg}$ block exerts on the $2.0\,\text{kg}$ block.</li>
+          <li>The same $20\,\text{N}$ push is applied to the right side of the $2.0\,\text{kg}$ block instead. Does the contact force between the blocks change? Explain.</li>
+        </ol>
+        <details><summary>Reveal scaffold</summary><p>Use the whole system for the acceleration, since the contact forces are internal and cancel. Then draw the FBD of only the block that's being pushed by the other one.</p></details>
+        <details><summary>Reveal solution</summary><p>$a=20/5=4.0\,\text{m/s}^2$. The only horizontal force on the $2.0\,\text{kg}$ block is the contact force, so $F=(2)(4)=8.0\,\text{N}$. Pushing from the other side, the contact force now has to accelerate the $3.0\,\text{kg}$ block: $F=(3)(4)=12\,\text{N}$. It changes because the contact force accelerates whichever block isn't being pushed directly.</p></details>
+      </div>
+      <div class="problem" id="problem-2-4">
+        <span class="level">Newton's 3rd Law and Gravity</span>
+        <h3>Problem 2.4: Earth and Moon</h3>
+        <p>Earth's mass is about 81 times the Moon's mass.</p>
+        <ol>
+          <li>Compare the force Earth exerts on the Moon with the force the Moon exerts on Earth.</li>
+          <li>Compare the accelerations those forces cause.</li>
+        </ol>
+        <details><summary>Reveal solution</summary><p>The forces are equal in magnitude and opposite in direction, a Newton's 3rd law pair. The accelerations aren't equal. Since $a=F/m$, the Moon's acceleration is 81 times Earth's.</p></details>
+      </div>
+      </div>
+      <div class="block quick-check" id="check-newton">
+        <div class="section-title"><h3 class="block-title">Quick Check</h3></div>
+        <div class="card">
+          <span class="level">AP Paragraph</span>
+          <h3>Paragraph Response Prompt</h3>
+          <p>A student says: “If an object is moving to the right, there must be a net force to the right.”</p>
+          <p><strong>Write a paragraph that agrees or disagrees. Use Newton's laws and an example.</strong></p>
+          <textarea placeholder="Write your answer first, then reveal..." aria-label="Your response"></textarea>
+          <details class="needs-commit"><summary>Reveal strong response</summary><p>The statement is not always correct. Newton's second law says that net force determines acceleration, not velocity. An object moving to the right at constant velocity has zero acceleration, so the net force on it is zero. A net force to the right would mean the object is accelerating to the right, so its rightward velocity would be increasing or its leftward velocity would be decreasing.</p></details>
+          <div class="commit-msg feedback" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="pager"></div>
     </section>
 
-    <section id="friction">
-      <div class="section-title"><span class="num">8</span><h2>Friction: Static vs. Kinetic</h2></div>
+    <section class="lesson" id="lesson-friction-springs" data-title="Friction and Springs" aria-labelledby="lesson-friction-springs-h">
+      <div class="lesson-head">
+        <span class="kicker">Lesson 3 of 6</span>
+        <h2 id="lesson-friction-springs-h">Friction and Springs</h2>
+      </div>
+      <div class="card goals">
+        <h3>You should be able to…</h3>
+        <ul class="checklist">
+          <li>Decide whether friction is static or kinetic.</li>
+          <li>Use the fact that static friction is at most $\mu_sF_N$.</li>
+          <li>Use $F=kx$ with the direction toward equilibrium.</li>
+        </ul>
+      </div>
+      <div class="callout blue big-idea"><strong>Big idea:</strong> Static friction adjusts as needed, up to a maximum value; once something slides, kinetic friction $f_k=\mu_kF_N$ opposes the sliding. A spring exerts a restoring force that grows with the stretch or compression.</div>
+      <div class="callout danger-note"><strong>Common mistake:</strong> $f_s$ is not automatically equal to $\mu_sF_N$. That is only the maximum possible value.</div>
+      <div class="block" id="friction">
+      <div class="section-title"><h3 class="block-title">Friction: Static vs. Kinetic</h3></div>
       <div class="grid two">
         <div class="card">
           <h3>Friction Decision Tree</h3>
@@ -708,10 +990,115 @@
           <div class="meter"><div id="frMeter" class="meter-fill"></div></div>
         </div>
       </div>
+      </div>
+      <div class="block" id="springs">
+        <div class="section-title"><h3 class="block-title">Springs: Hooke's Law</h3></div>
+        <div class="grid two">
+          <div class="formula"><strong>Spring Force</strong>$$F_s=kx$$<small>Restoring force from a stretched or compressed spring.</small></div>
+          <div class="card"><h3>Direction Matters</h3><p>The spring force points toward equilibrium. The stretch is proportional to the force. At equilibrium $x=0$, so the spring force (and the acceleration it causes) is zero.</p></div>
+        </div>
+      </div>
+      <div class="block practice" id="practice-friction-springs">
+        <div class="section-title"><h3 class="block-title">Practice</h3></div>
+        <p class="hint">Commit to a prediction or a first step before you reveal a scaffold or solution. Problems go from easier to harder.</p>
+      <div class="problem" id="problem-3-1">
+        <span class="level">Friction Included</span>
+        <h3>Problem 3.1: Push with Friction</h3>
+        <p>A $10\,\text{kg}$ box is pushed right with $70\,\text{N}$ across a floor. Kinetic friction is $25\,\text{N}$ left.</p>
+        <ol>
+          <li>Draw the FBD.</li>
+          <li>Calculate the net force.</li>
+          <li>Calculate the acceleration.</li>
+        </ol>
+        <details><summary>Reveal solution</summary><p>Horizontal forces: applied force right and friction left. Vertical forces balance. $\Sigma F_x=70-25=45\,\text{N}$. $a=45/10=4.5\,\text{m/s}^2$ right.</p></details>
+      </div>
+      <div class="problem" id="problem-3-2">
+        <span class="level">Kinetic Friction</span>
+        <h3>Problem 3.2: Coefficient of Friction</h3>
+        <p>A $5.0\,\text{kg}$ block slides across a horizontal surface with $\mu_k=0.30$. Use $g=10\,\text{m/s}^2$.</p>
+        <ol>
+          <li>Find the normal force.</li>
+          <li>Find the kinetic friction force.</li>
+          <li>If no other horizontal force acts, what is the acceleration?</li>
+        </ol>
+        <details><summary>Reveal solution</summary><p>$F_N=mg=(5)(10)=50\,\text{N}$. $f_k=\mu_kF_N=(0.30)(50)=15\,\text{N}$. If friction is the only horizontal force, $a=15/5=3.0\,\text{m/s}^2$ opposite the motion.</p></details>
+      </div>
+      <div class="problem" id="problem-3-3">
+        <span class="level">Static Friction</span>
+        <h3>Problem 3.3: Will It Move?</h3>
+        <p>A $20\,\text{kg}$ crate rests on the floor. The coefficient of static friction is $0.50$. A student pushes horizontally with $80\,\text{N}$.</p>
+        <ol>
+          <li>Find $f_{s,max}$.</li>
+          <li>Does the crate move?</li>
+          <li>What is the actual static friction force?</li>
+        </ol>
+        <details><summary>Reveal solution</summary><p>$F_N=mg=(20)(10)=200\,\text{N}$. $f_{s,max}=\mu_sF_N=(0.50)(200)=100\,\text{N}$. Since the applied force is only $80\,\text{N}$, the crate does not move. Actual static friction is $80\,\text{N}$ opposite the push.</p></details>
+      </div>
+      <div class="problem" id="problem-3-4">
+        <span class="level">Spring Force</span>
+        <h3>Problem 3.4: Hanging Spring</h3>
+        <p>A $2.0\,\text{kg}$ mass hangs at rest from a vertical spring with spring constant $k=200\,\text{N/m}$. Use $g=10\,\text{m/s}^2$.</p>
+        <ol>
+          <li>Draw the FBD of the mass.</li>
+          <li>How far is the spring stretched?</li>
+          <li>If the mass were doubled, how would the stretch change?</li>
+        </ol>
+        <details><summary>Reveal solution</summary><p>At rest, $kx=mg$, so $x=\dfrac{(2)(10)}{200}=0.10\,\text{m}$. The stretch is proportional to the force, so doubling the mass doubles the stretch to $0.20\,\text{m}$.</p></details>
+      </div>
+      <div class="problem" id="problem-3-5">
+        <span class="level">Spring Force and Acceleration</span>
+        <h3>Problem 3.5: Released Spring</h3>
+        <p>A $0.50\,\text{kg}$ block on a frictionless horizontal surface is attached to a spring with $k=80\,\text{N/m}$. The block is pulled $0.050\,\text{m}$ to the right of equilibrium and released.</p>
+        <ol>
+          <li>Find the magnitude and direction of the spring force just after release.</li>
+          <li>Find the block's acceleration at that moment.</li>
+          <li>What is the block's acceleration as it passes through equilibrium? Explain.</li>
+        </ol>
+        <details><summary>Reveal solution</summary><p>$F=kx=(80)(0.050)=4.0\,\text{N}$ to the left, toward equilibrium. $a=4.0/0.50=8.0\,\text{m/s}^2$ to the left. At equilibrium $x=0$, so the spring force and the acceleration are zero, even though the block is moving at its fastest there.</p></details>
+      </div>
+      </div>
+      <div class="block quick-check" id="check-friction-springs">
+        <div class="section-title"><h3 class="block-title">Quick Check</h3></div>
+        <div class="card">
+          <span class="level">AP Paragraph</span>
+          <p>A student pushes horizontally on a heavy crate, but it does not move. A classmate says the static friction force on the crate must equal $\mu_sF_N$.</p>
+          <p><strong>Write a short paragraph that agrees or disagrees. Use the friction decision tree.</strong></p>
+          <textarea placeholder="Write your answer first, then reveal..." aria-label="Your response"></textarea>
+          <details class="needs-commit"><summary>Reveal strong response</summary><p>Disagree. $f_s$ is not automatically equal to $\mu_sF_N$; that is only the maximum possible value, $f_{s,max}=\mu_sF_N$. The crate is not sliding, so static friction adjusts as needed: it is equal to the push and opposite in direction, so the net force is zero. Only if the needed force exceeds $f_{s,max}$ does the crate start sliding, and then friction becomes kinetic, $f_k=\mu_kF_N$.</p></details>
+          <div class="commit-msg feedback" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="block quick-check extra-check" id="more-friction-springs">
+        <div class="section-title"><h3 class="block-title">More Paragraph Practice</h3></div>
+        <div class="card">
+          <span class="level">AP Paragraph</span>
+          <p>A student pushes on a heavy crate with a gradually increasing force, but the crate doesn’t move. A classmate says, “The friction force is always $\mu_sF_N$.”</p>
+          <p><strong>In a short paragraph, explain why that’s wrong and describe how the friction force changes as the push increases.</strong></p>
+          <textarea placeholder="Write your answer first, then reveal..." aria-label="Your response"></textarea>
+          <details class="needs-commit"><summary>Reveal model answer</summary><p>$\mu_sF_N$ is the maximum static friction, not its value at all times. While the crate stays at rest, its acceleration is zero, so static friction exactly matches the push and grows as the push grows. Once the push passes $\mu_sF_N$, static friction can’t keep up, the crate starts sliding, and kinetic friction $\mu_kF_N$ takes over. That’s usually a bit smaller, so the crate speeds up.</p></details>
+          <div class="commit-msg feedback" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="pager"></div>
     </section>
 
-    <section id="ramps">
-      <div class="section-title"><span class="num">9</span><h2>Ramp Components Simulator</h2></div>
+    <section class="lesson" id="lesson-inclines" data-title="Inclines" aria-labelledby="lesson-inclines-h">
+      <div class="lesson-head">
+        <span class="kicker">Lesson 4 of 6</span>
+        <h2 id="lesson-inclines-h">Inclines</h2>
+      </div>
+      <div class="card goals">
+        <h3>You should be able to…</h3>
+        <ul class="checklist">
+          <li>Resolve weight into components along and perpendicular to the ramp.</li>
+          <li>Explain why $F_N=mg\cos\theta$.</li>
+          <li>Solve ramps with and without friction.</li>
+        </ul>
+      </div>
+      <div class="callout blue big-idea"><strong>Big idea:</strong> For ramps, rotate axes so one axis is parallel to the surface and one axis is perpendicular. Then gravity splits into $mg\sin\theta$ along the ramp and $mg\cos\theta$ into the ramp.</div>
+      <div class="callout danger-note"><strong>Common mistake:</strong> The normal force isn't always $mg$. On a ramp it is less than $mg$.</div>
+      <div class="block" id="ramps">
+      <div class="section-title"><h3 class="block-title">Ramp Components Simulator</h3></div>
       <div class="grid two">
         <div class="card">
           <h3>Ramp Without Friction</h3>
@@ -741,94 +1128,22 @@
                 <text x="-18" y="5" fill="white" font-weight="900">box</text>
               </g>
               <line id="rampWeight" x1="260" y1="170" x2="260" y2="255" stroke="#d93025" stroke-width="4" marker-end="url(#rampRed)"/>
-              <text class="svg-label" x="272" y="240">$mg$</text>
+              <text class="svg-label" x="272" y="240">mg</text>
               <line id="rampParallel" x1="260" y1="170" x2="350" y2="205" stroke="#0077da" stroke-width="5" marker-end="url(#rampArrow)"/>
-              <text id="rampParLabel" class="svg-label" x="333" y="227">$mg\sin\theta$</text>
+              <text id="rampParLabel" class="svg-label" x="333" y="227">mg sin θ</text>
               <line id="rampNormal" x1="260" y1="170" x2="292" y2="95" stroke="#18a058" stroke-width="5" marker-end="url(#rampGreen)"/>
-              <text id="rampNLabel" class="svg-label" x="297" y="106">$F_N$</text>
+              <text id="rampNLabel" class="svg-label" x="297" y="106">F<tspan baseline-shift="sub" font-size="11">N</tspan></text>
             </svg>
           </div>
         </div>
       </div>
-    </section>
-
-    <section id="equations">
-      <div class="section-title"><span class="num">10</span><h2>Equation Toolbox</h2></div>
-      <div class="grid three">
-        <div class="formula"><strong>Newton's 2nd Law</strong>$$\Sigma F=ma$$<small>Use separately in each direction.</small></div>
-        <div class="formula"><strong>Weight</strong>$$F_g=mg$$<small>Mass times gravitational field strength.</small></div>
-        <div class="formula"><strong>Kinetic Friction</strong>$$f_k=\mu_kF_N$$<small>Opposes sliding motion.</small></div>
-        <div class="formula"><strong>Static Friction</strong>$$f_s\leq\mu_sF_N$$<small>Adjusts up to a maximum.</small></div>
-        <div class="formula"><strong>Incline Parallel</strong>$$F_{g,\parallel}=mg\sin\theta$$<small>Pulls object down the ramp.</small></div>
-        <div class="formula"><strong>Incline Perpendicular</strong>$$F_{g,\perp}=mg\cos\theta$$<small>Controls normal force on a simple ramp.</small></div>
       </div>
-    </section>
-
-    <section id="problems">
-      <div class="section-title"><span class="num">11</span><h2>Scaffolded Dynamics Problems</h2></div>
-
-      <div class="problem">
-        <span class="level">Level 1 • Force Identification</span>
-        <h3>Problem 1: Book on a Table</h3>
-        <p>A book rests on a table. It is not moving.</p>
-        <ol>
-          <li>Draw or describe the forces on the book.</li>
-          <li>What is the net force?</li>
-          <li>Does the book exert a force on the table?</li>
-        </ol>
-        <details><summary>Reveal solution</summary><p>Forces on book: weight downward and normal force upward. Since acceleration is zero, $F_N=F_g$ and net force is zero. The book exerts a downward contact force on the table; the table exerts an upward normal force on the book.</p></details>
-      </div>
-
-      <div class="problem">
-        <span class="level">Level 2 • Net Force</span>
-        <h3>Problem 2: Horizontal Push</h3>
-        <p>A $6.0\,\text{kg}$ cart is pushed right with $36\,\text{N}$. Friction is negligible.</p>
-        <ol>
-          <li>What is the net force?</li>
-          <li>What is the acceleration?</li>
-        </ol>
-        <details><summary>Reveal solution</summary><p>$\Sigma F=36\,\text{N}$ right. $a=\Sigma F/m=36/6=6.0\,\text{m/s}^2$ right.</p></details>
-      </div>
-
-      <div class="problem">
-        <span class="level">Level 3 • Friction Included</span>
-        <h3>Problem 3: Push with Friction</h3>
-        <p>A $10\,\text{kg}$ box is pushed right with $70\,\text{N}$ across a floor. Kinetic friction is $25\,\text{N}$ left.</p>
-        <ol>
-          <li>Draw the FBD.</li>
-          <li>Calculate the net force.</li>
-          <li>Calculate the acceleration.</li>
-        </ol>
-        <details><summary>Reveal solution</summary><p>Horizontal forces: applied force right and friction left. Vertical forces balance. $\Sigma F_x=70-25=45\,\text{N}$. $a=45/10=4.5\,\text{m/s}^2$ right.</p></details>
-      </div>
-
-      <div class="problem">
-        <span class="level">Level 4 • Kinetic Friction</span>
-        <h3>Problem 4: Coefficient of Friction</h3>
-        <p>A $5.0\,\text{kg}$ block slides across a horizontal surface with $\mu_k=0.30$. Use $g=10\,\text{m/s}^2$.</p>
-        <ol>
-          <li>Find the normal force.</li>
-          <li>Find the kinetic friction force.</li>
-          <li>If no other horizontal force acts, what is the acceleration?</li>
-        </ol>
-        <details><summary>Reveal solution</summary><p>$F_N=mg=(5)(10)=50\,\text{N}$. $f_k=\mu_kF_N=(0.30)(50)=15\,\text{N}$. If friction is the only horizontal force, $a=15/5=3.0\,\text{m/s}^2$ opposite the motion.</p></details>
-      </div>
-
-      <div class="problem">
-        <span class="level">Level 5 • Static Friction</span>
-        <h3>Problem 5: Will It Move?</h3>
-        <p>A $20\,\text{kg}$ crate rests on the floor. The coefficient of static friction is $0.50$. A student pushes horizontally with $80\,\text{N}$.</p>
-        <ol>
-          <li>Find $f_{s,max}$.</li>
-          <li>Does the crate move?</li>
-          <li>What is the actual static friction force?</li>
-        </ol>
-        <details><summary>Reveal solution</summary><p>$F_N=mg=(20)(10)=200\,\text{N}$. $f_{s,max}=\mu_sF_N=(0.50)(200)=100\,\text{N}$. Since the applied force is only $80\,\text{N}$, the crate does not move. Actual static friction is $80\,\text{N}$ opposite the push.</p></details>
-      </div>
-
-      <div class="problem">
-        <span class="level">Level 6 • Inclined Plane</span>
-        <h3>Problem 6: Frictionless Ramp</h3>
+      <div class="block practice" id="practice-inclines">
+        <div class="section-title"><h3 class="block-title">Practice</h3></div>
+        <p class="hint">Commit to a prediction or a first step before you reveal a scaffold or solution. Problems go from easier to harder.</p>
+      <div class="problem" id="problem-4-1">
+        <span class="level">Inclined Plane</span>
+        <h3>Problem 4.1: Frictionless Ramp</h3>
         <p>A $4.0\,\text{kg}$ block slides down a frictionless $30^\circ$ incline. Use $g=10\,\text{m/s}^2$.</p>
         <ol>
           <li>Find the component of gravity parallel to the ramp.</li>
@@ -837,38 +1152,9 @@
         </ol>
         <details><summary>Reveal solution</summary><p>$F_{g,\parallel}=mg\sin\theta=(4)(10)(0.5)=20\,\text{N}$. $a=F_{net}/m=20/4=5.0\,\text{m/s}^2$. $F_N=mg\cos30^\circ=(4)(10)(0.866)=34.6\,\text{N}$.</p></details>
       </div>
-
-      <div class="problem">
-        <span class="level">Level 7 • Connected Objects</span>
-        <h3>Problem 7: Two Blocks and a Rope</h3>
-        <p>A $3.0\,\text{kg}$ block on a frictionless table is connected over a pulley to a hanging $2.0\,\text{kg}$ mass. Use $g=10\,\text{m/s}^2$.</p>
-        <ol>
-          <li>What external force accelerates the two-block system?</li>
-          <li>What is the acceleration of the system?</li>
-          <li>What is the tension in the rope?</li>
-        </ol>
-        <details><summary>Reveal scaffold</summary><p>Treat both masses together first. The hanging weight is the unbalanced external force on the system.</p></details>
-        <details><summary>Reveal solution</summary><p>Total mass is $5.0\,\text{kg}$. External driving force is hanging weight: $F_g=(2)(10)=20\,\text{N}$. $a=20/5=4.0\,\text{m/s}^2$. For the table block, $T=ma=(3)(4)=12\,\text{N}$.</p></details>
-      </div>
-
-      <div class="problem">
-        <span class="level">Level 8 • Elevator / Apparent Weight</span>
-        <h3>Problem 8: Scale in an Elevator</h3>
-        <p>A $60\,\text{kg}$ student stands on a scale in an elevator accelerating upward at $2.0\,\text{m/s}^2$. Use $g=10\,\text{m/s}^2$.</p>
-        <ol>
-          <li>Draw the FBD.</li>
-          <li>What does the scale read?</li>
-        </ol>
-        <details><summary>Reveal solution</summary><p>Forces: normal force up, weight down. Upward is positive. $F_N-mg=ma$. $F_N=m(g+a)=60(10+2)=720\,\text{N}$. The scale reads $720\,\text{N}$.</p></details>
-      </div>
-
-<!-- New Unit 2 problems by Physics: inclines with friction, pulleys, Atwood machines.
-     Matches the existing .problem format in unit2.html and continues numbering after Problem 8.
-     All use g = 10 m/s^2 like the rest of the page. Every answer was checked both ways (system and each object). -->
-
-      <div class="problem">
-        <span class="level">Level 9 • Incline with Friction</span>
-        <h3>Problem 9: Sliding Down a Rough Ramp</h3>
+      <div class="problem" id="problem-4-2">
+        <span class="level">Incline with Friction</span>
+        <h3>Problem 4.2: Sliding Down a Rough Ramp</h3>
         <p>A $5.0\,\text{kg}$ box slides down a $37^\circ$ incline. The coefficient of kinetic friction is $\mu_k=0.25$. Use $g=10\,\text{m/s}^2$, $\sin37^\circ=0.60$, and $\cos37^\circ=0.80$.</p>
         <ol>
           <li>Draw the FBD with axes parallel and perpendicular to the ramp.</li>
@@ -878,10 +1164,9 @@
         <details><summary>Reveal scaffold</summary><p>The normal force is not $mg$ on a ramp. Nothing accelerates perpendicular to the surface, so $F_N=mg\cos\theta$. Friction points up the ramp because the box slides down.</p></details>
         <details><summary>Reveal solution</summary><p>$F_N=mg\cos37^\circ=(5)(10)(0.80)=40\,\text{N}$. $f_k=\mu_kF_N=(0.25)(40)=10\,\text{N}$. $F_{g,\parallel}=mg\sin37^\circ=30\,\text{N}$. $a=(30-10)/5=4.0\,\text{m/s}^2$ down the ramp.</p></details>
       </div>
-
-      <div class="problem">
-        <span class="level">Level 10 • Static vs. Kinetic on a Ramp</span>
-        <h3>Problem 10: Will It Slide?</h3>
+      <div class="problem" id="problem-4-3">
+        <span class="level">Static vs. Kinetic on a Ramp</span>
+        <h3>Problem 4.3: Will It Slide?</h3>
         <p>A $2.0\,\text{kg}$ block is placed at rest on a $30^\circ$ incline. The coefficients of friction are $\mu_s=0.40$ and $\mu_k=0.30$. Use $g=10\,\text{m/s}^2$.</p>
         <ol>
           <li>Find the maximum static friction the ramp can provide.</li>
@@ -891,10 +1176,9 @@
         <details><summary>Reveal scaffold</summary><p>Compare the force trying to move the block, $mg\sin\theta$, with the most static friction can do, $\mu_sF_N$. Once it slides, switch to $\mu_k$.</p></details>
         <details><summary>Reveal solution</summary><p>$F_N=(2)(10)(0.866)=17.3\,\text{N}$, so $f_{s,max}=(0.40)(17.3)=6.9\,\text{N}$. $F_{g,\parallel}=(2)(10)(0.5)=10\,\text{N}$. Since $10\,\text{N}>6.9\,\text{N}$, static friction can't hold it, and it slides. $f_k=(0.30)(17.3)=5.2\,\text{N}$, so $a=(10-5.2)/2=2.4\,\text{m/s}^2$ down the ramp.</p></details>
       </div>
-
-      <div class="problem">
-        <span class="level">Level 11 • Constant Velocity on a Ramp</span>
-        <h3>Problem 11: Pushing a Crate Up a Ramp</h3>
+      <div class="problem" id="problem-4-4">
+        <span class="level">Constant Velocity on a Ramp</span>
+        <h3>Problem 4.4: Pushing a Crate Up a Ramp</h3>
         <p>A worker pushes a $10\,\text{kg}$ crate up a $37^\circ$ ramp at constant speed, pushing parallel to the ramp. The coefficient of kinetic friction is $0.20$. Use $g=10\,\text{m/s}^2$, $\sin37^\circ=0.60$, and $\cos37^\circ=0.80$.</p>
         <ol>
           <li>Which way does friction point? Why?</li>
@@ -904,10 +1188,94 @@
         <details><summary>Reveal scaffold</summary><p>Constant velocity means $\Sigma F=0$. Friction opposes the motion, so it points down the ramp, on the same side as the gravity component.</p></details>
         <details><summary>Reveal solution</summary><p>Friction points down the ramp, opposite the motion. Net force is zero. $F_N=(10)(10)(0.80)=80\,\text{N}$, so $f_k=(0.20)(80)=16\,\text{N}$. $F_{g,\parallel}=(10)(10)(0.60)=60\,\text{N}$. $F_{push}=60+16=76\,\text{N}$.</p></details>
       </div>
+      </div>
+      <div class="block quick-check" id="check-inclines">
+        <div class="section-title"><h3 class="block-title">Quick Check</h3></div>
+        <div class="card">
+          <span class="level">AP Paragraph</span>
+          <p>A student says the normal force on a block resting on a ramp is $mg$, just like on a level table.</p>
+          <p><strong>Write a short paragraph that agrees or disagrees.</strong></p>
+          <textarea placeholder="Write your answer first, then reveal..." aria-label="Your response"></textarea>
+          <details class="needs-commit"><summary>Reveal strong response</summary><p>Disagree. The normal force is not $mg$ on a ramp. With axes parallel and perpendicular to the surface, nothing accelerates perpendicular to the surface, so the perpendicular forces balance and $F_N=mg\cos\theta$, which is less than $mg$ for any tilted ramp. Only on a level surface with no other vertical forces and no vertical acceleration does $F_N=mg$.</p></details>
+          <div class="commit-msg feedback" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="block quick-check extra-check" id="more-inclines">
+        <div class="section-title"><h3 class="block-title">More Paragraph Practice</h3></div>
+        <div class="card">
+          <span class="level">AP Paragraph</span>
+          <p>The same block is placed on two frictionless ramps, one at $20^\circ$ and one at $40^\circ$.</p>
+          <p><strong>Without calculating, compare the normal force and the acceleration on the two ramps, and justify both comparisons in a short paragraph.</strong></p>
+          <textarea placeholder="Write your answer first, then reveal..." aria-label="Your response"></textarea>
+          <details class="needs-commit"><summary>Reveal model answer</summary><p>On the steeper ramp the normal force is smaller and the acceleration is larger. There’s no acceleration perpendicular to the ramp, so $F_N=mg\cos\theta$, and $\cos\theta$ decreases as the angle increases. Along the ramp, the only force is $mg\sin\theta$, so $a=g\sin\theta$, which increases with the angle. Mass doesn’t affect the acceleration on either ramp.</p></details>
+          <div class="commit-msg feedback" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="pager"></div>
+    </section>
 
-      <div class="problem">
-        <span class="level">Level 12 • Atwood Machine</span>
-        <h3>Problem 12: Two Hanging Masses</h3>
+    <section class="lesson" id="lesson-pulleys" data-title="Connected Objects and Pulleys" aria-labelledby="lesson-pulleys-h">
+      <div class="lesson-head">
+        <span class="kicker">Lesson 5 of 6</span>
+        <h2 id="lesson-pulleys-h">Connected Objects and Pulleys</h2>
+      </div>
+      <div class="card goals">
+        <h3>You should be able to…</h3>
+        <ul class="checklist">
+          <li>Find acceleration by treating connected objects as one system.</li>
+          <li>Find tension from one object's FBD.</li>
+          <li>Predict direction before calculating.</li>
+        </ul>
+      </div>
+      <div class="callout blue big-idea"><strong>Big idea:</strong> Treat connected objects as one system first: the unbalanced external force accelerates the total mass. Then look at one object by itself to find the tension, and check with the other.</div>
+      <div class="callout danger-note"><strong>Common mistake:</strong> Tension isn't equal to the hanging weight when things accelerate.</div>
+      <div class="block" id="system-strategy">
+        <div class="section-title"><h3 class="block-title">System-First Strategy</h3></div>
+        <div class="grid two">
+          <div class="card">
+            <h3>Step by Step</h3>
+            <ol class="checklist">
+              <li><strong>Predict the direction.</strong> Compare the forces pulling each way (for example, the hanging weight versus friction or $m_1g\sin\theta$). Whichever is bigger wins.</li>
+              <li><strong>Treat both masses together first.</strong> The unbalanced external force accelerates the total mass: $a=\Sigma F_{ext}/m_{total}$.</li>
+              <li><strong>Use one object's FBD</strong> to find the tension $T$.</li>
+              <li><strong>Check with the other object.</strong> Both FBDs must give the same $T$.</li>
+            </ol>
+          </div>
+          <div class="card">
+            <h3>Why It Works</h3>
+            <p>The rope tension between connected objects is an internal force for the system, so it cancels when you treat them together. To find it, you have to look at one object by itself.</p>
+          </div>
+        </div>
+      </div>
+      <div class="block practice" id="practice-pulleys">
+        <div class="section-title"><h3 class="block-title">Practice</h3></div>
+        <p class="hint">Commit to a prediction or a first step before you reveal a scaffold or solution. Problems go from easier to harder.</p>
+      <div class="problem" id="problem-5-1">
+        <span class="level">Connected Objects</span>
+        <h3>Problem 5.1: Two Blocks and a Rope</h3>
+        <p>A $3.0\,\text{kg}$ block on a frictionless table is connected over a pulley to a hanging $2.0\,\text{kg}$ mass. Use $g=10\,\text{m/s}^2$.</p>
+        <ol>
+          <li>What external force accelerates the two-block system?</li>
+          <li>What is the acceleration of the system?</li>
+          <li>What is the tension in the rope?</li>
+        </ol>
+        <details><summary>Reveal scaffold</summary><p>Treat both masses together first. The hanging weight is the unbalanced external force on the system.</p></details>
+        <details><summary>Reveal solution</summary><p>Total mass is $5.0\,\text{kg}$. External driving force is hanging weight: $F_g=(2)(10)=20\,\text{N}$. $a=20/5=4.0\,\text{m/s}^2$. For the table block, $T=ma=(3)(4)=12\,\text{N}$.</p></details>
+      </div>
+      <div class="problem" id="problem-5-2">
+        <span class="level">Connected Objects with Friction</span>
+        <h3>Problem 5.2: Rough Table and Hanging Mass</h3>
+        <p>A $6.0\,\text{kg}$ block on a horizontal table is connected by a light string over a pulley to a hanging $4.0\,\text{kg}$ mass. The coefficient of kinetic friction between the block and the table is $0.20$. Use $g=10\,\text{m/s}^2$.</p>
+        <ol>
+          <li>Identify the external forces on the two-block system along the direction of motion.</li>
+          <li>Find the acceleration.</li>
+          <li>Find the tension, then check it using the other block.</li>
+        </ol>
+        <details><summary>Reveal solution</summary><p>Driving force is the hanging weight, $40\,\text{N}$. Friction on the table block is $(0.20)(6)(10)=12\,\text{N}$. $a=(40-12)/10=2.8\,\text{m/s}^2$. Hanging mass: $40-T=4(2.8)$, so $T=28.8\,\text{N}$. Check with the table block: $T-12=6(2.8)$ gives $T=28.8\,\text{N}$.</p></details>
+      </div>
+      <div class="problem" id="problem-5-3">
+        <span class="level">Atwood Machine</span>
+        <h3>Problem 5.3: Two Hanging Masses</h3>
         <p>A $3.0\,\text{kg}$ mass and a $5.0\,\text{kg}$ mass hang on opposite sides of a light string over a light, frictionless pulley. They're released from rest. Use $g=10\,\text{m/s}^2$.</p>
         <ol>
           <li>Find the acceleration of the masses.</li>
@@ -917,22 +1285,9 @@
         <details><summary>Reveal scaffold</summary><p>Treat both masses as one system. The net external force is the difference in weights, and the total mass is $8.0\,\text{kg}$. Then use one mass's FBD to find $T$.</p></details>
         <details><summary>Reveal solution</summary><p>$a=\dfrac{(5-3)(10)}{8}=2.5\,\text{m/s}^2$. For the $3.0\,\text{kg}$ mass accelerating up: $T-30=3(2.5)$, so $T=37.5\,\text{N}$. Check with the $5.0\,\text{kg}$ mass: $50-T=5(2.5)$ gives $T=37.5\,\text{N}$. The tension sits between the two weights ($30\,\text{N}$ and $50\,\text{N}$). It must be more than $30\,\text{N}$ to accelerate the light mass up and less than $50\,\text{N}$ so the heavy mass accelerates down.</p></details>
       </div>
-
-      <div class="problem">
-        <span class="level">Level 13 • Connected Objects with Friction</span>
-        <h3>Problem 13: Rough Table and Hanging Mass</h3>
-        <p>A $6.0\,\text{kg}$ block on a horizontal table is connected by a light string over a pulley to a hanging $4.0\,\text{kg}$ mass. The coefficient of kinetic friction between the block and the table is $0.20$. Use $g=10\,\text{m/s}^2$.</p>
-        <ol>
-          <li>Identify the external forces on the two-block system along the direction of motion.</li>
-          <li>Find the acceleration.</li>
-          <li>Find the tension, then check it using the other block.</li>
-        </ol>
-        <details><summary>Reveal solution</summary><p>Driving force is the hanging weight, $40\,\text{N}$. Friction on the table block is $(0.20)(6)(10)=12\,\text{N}$. $a=(40-12)/10=2.8\,\text{m/s}^2$. Hanging mass: $40-T=4(2.8)$, so $T=28.8\,\text{N}$. Check with the table block: $T-12=6(2.8)$ gives $T=28.8\,\text{N}$.</p></details>
-      </div>
-
-      <div class="problem">
-        <span class="level">Level 14 • Incline + Pulley</span>
-        <h3>Problem 14: Ramp Block and Hanging Mass</h3>
+      <div class="problem" id="problem-5-4">
+        <span class="level">Incline + Pulley</span>
+        <h3>Problem 5.4: Ramp Block and Hanging Mass</h3>
         <p>A $4.0\,\text{kg}$ block sits on a frictionless $30^\circ$ incline. A string tied to it runs over a pulley at the top of the incline to a hanging $3.0\,\text{kg}$ mass. Use $g=10\,\text{m/s}^2$.</p>
         <ol>
           <li>Which way does the system accelerate? Decide by comparing forces before calculating anything.</li>
@@ -942,10 +1297,9 @@
         <details><summary>Reveal scaffold</summary><p>Compare the hanging weight with the component of the ramp block's weight along the incline, $m_1g\sin\theta$. Whichever is bigger wins.</p></details>
         <details><summary>Reveal solution</summary><p>Hanging weight is $30\,\text{N}$, and the ramp component is $(4)(10)(0.5)=20\,\text{N}$, so the hanging mass goes down and the block goes up the ramp. $a=(30-20)/7=1.4\,\text{m/s}^2$. $T=3(10-1.43)=25.7\,\text{N}$. Check: $T-20=4(1.43)$ gives $T=25.7\,\text{N}$.</p></details>
       </div>
-
-      <div class="problem">
-        <span class="level">Level 15 • Challenge: Balanced Forces in Motion</span>
-        <h3>Problem 15: The Ramp That Doesn't Speed Up</h3>
+      <div class="problem" id="problem-5-5">
+        <span class="level">Challenge: Balanced Forces in Motion</span>
+        <h3>Problem 5.5: The Ramp That Doesn't Speed Up</h3>
         <p>A $5.0\,\text{kg}$ block on a $37^\circ$ incline ($\mu_k=0.25$) is connected over a pulley at the top to a hanging $2.0\,\text{kg}$ mass. A student gives the block a quick shove down the ramp and lets go. Use $g=10\,\text{m/s}^2$, $\sin37^\circ=0.60$, and $\cos37^\circ=0.80$.</p>
         <ol>
           <li>Once the block is sliding down the ramp, which way does friction act?</li>
@@ -954,57 +1308,56 @@
         </ol>
         <details><summary>Reveal solution</summary><p>The block slides down, so friction points up the ramp. Down-ramp force is $mg\sin37^\circ=30\,\text{N}$. Opposing it are the hanging weight, $20\,\text{N}$, and friction, $(0.25)(40)=10\,\text{N}$. Net force is $30-20-10=0$, so the system moves at constant velocity. This is Newton's 1st law: motion doesn't need a net force.</p></details>
       </div>
-
-      <div class="problem">
-        <span class="level">Level 16 • AP Qualitative Reasoning</span>
-        <h3>Problem 16: Adding Mass to Both Sides</h3>
-        <p>In the Atwood machine from Problem 12, a student adds $1.0\,\text{kg}$ to each side. Does the acceleration increase, decrease, or stay the same? Answer in a short paragraph using Newton's 2nd law for the system <em>before</em> doing any calculation, then confirm with numbers.</p>
+      <div class="problem" id="problem-5-6">
+        <span class="level">AP Qualitative Reasoning</span>
+        <h3>Problem 5.6: Adding Mass to Both Sides</h3>
+        <p>In the Atwood machine from Problem 5.3, a student adds $1.0\,\text{kg}$ to each side. Does the acceleration increase, decrease, or stay the same? Answer in a short paragraph using Newton's 2nd law for the system <em>before</em> doing any calculation, then confirm with numbers.</p>
         <details><summary>Reveal solution</summary><p>It decreases. The net external force is the difference in weights, $(m_2-m_1)g$, which doesn't change because both sides gained the same mass. The total mass being accelerated goes up, so $a=\Sigma F/m_{total}$ gets smaller. Numbers: $a=20/10=2.0\,\text{m/s}^2$, down from $2.5\,\text{m/s}^2$.</p></details>
       </div>
-    
-<!-- Batch 2 by Physics: contact forces between pushed blocks, springs, gravitation, circular motion.
-     Same .problem format as unit2.html, g = 10 m/s^2, inline math in $...$. Continues after Problem 16. -->
-
-      <div class="problem">
-        <span class="level">Level 17 • Systems and Internal Forces</span>
-        <h3>Problem 17: Pushing Two Blocks</h3>
-        <p>Two blocks touch on a frictionless floor: a $3.0\,\text{kg}$ block on the left and a $2.0\,\text{kg}$ block on the right. A $20\,\text{N}$ horizontal push is applied to the left side of the $3.0\,\text{kg}$ block.</p>
-        <ol>
-          <li>Find the acceleration of the blocks.</li>
-          <li>Find the force the $3.0\,\text{kg}$ block exerts on the $2.0\,\text{kg}$ block.</li>
-          <li>The same $20\,\text{N}$ push is applied to the right side of the $2.0\,\text{kg}$ block instead. Does the contact force between the blocks change? Explain.</li>
-        </ol>
-        <details><summary>Reveal scaffold</summary><p>Use the whole system for the acceleration, since the contact forces are internal and cancel. Then draw the FBD of only the block that's being pushed by the other one.</p></details>
-        <details><summary>Reveal solution</summary><p>$a=20/5=4.0\,\text{m/s}^2$. The only horizontal force on the $2.0\,\text{kg}$ block is the contact force, so $F=(2)(4)=8.0\,\text{N}$. Pushing from the other side, the contact force now has to accelerate the $3.0\,\text{kg}$ block: $F=(3)(4)=12\,\text{N}$. It changes because the contact force accelerates whichever block isn't being pushed directly.</p></details>
       </div>
-
-      <div class="problem">
-        <span class="level">Level 18 • Spring Force</span>
-        <h3>Problem 18: Hanging Spring</h3>
-        <p>A $2.0\,\text{kg}$ mass hangs at rest from a vertical spring with spring constant $k=200\,\text{N/m}$. Use $g=10\,\text{m/s}^2$.</p>
-        <ol>
-          <li>Draw the FBD of the mass.</li>
-          <li>How far is the spring stretched?</li>
-          <li>If the mass were doubled, how would the stretch change?</li>
-        </ol>
-        <details><summary>Reveal solution</summary><p>At rest, $kx=mg$, so $x=\dfrac{(2)(10)}{200}=0.10\,\text{m}$. The stretch is proportional to the force, so doubling the mass doubles the stretch to $0.20\,\text{m}$.</p></details>
+      <div class="block quick-check" id="check-pulleys">
+        <div class="section-title"><h3 class="block-title">Quick Check</h3></div>
+        <div class="card">
+          <span class="level">AP Paragraph</span>
+          <p>Two masses hang on opposite sides of a light string over a frictionless pulley and accelerate after they are released. A student says the tension in the string equals the weight of the heavier mass.</p>
+          <p><strong>Write a short paragraph that agrees or disagrees, using Newton's 2nd law for each mass.</strong></p>
+          <textarea placeholder="Write your answer first, then reveal..." aria-label="Your response"></textarea>
+          <details class="needs-commit"><summary>Reveal strong response</summary><p>Disagree. Tension isn't equal to the hanging weight when things accelerate. The heavy mass accelerates down, so the net force on it points down and its weight must be bigger than $T$. The light mass accelerates up, so $T$ must be bigger than its weight. The tension sits between the two weights.</p></details>
+          <div class="commit-msg feedback" aria-live="polite"></div>
+        </div>
       </div>
+      <div class="pager"></div>
+    </section>
 
-      <div class="problem">
-        <span class="level">Level 19 • Spring Force and Acceleration</span>
-        <h3>Problem 19: Released Spring</h3>
-        <p>A $0.50\,\text{kg}$ block on a frictionless horizontal surface is attached to a spring with $k=80\,\text{N/m}$. The block is pulled $0.050\,\text{m}$ to the right of equilibrium and released.</p>
-        <ol>
-          <li>Find the magnitude and direction of the spring force just after release.</li>
-          <li>Find the block's acceleration at that moment.</li>
-          <li>What is the block's acceleration as it passes through equilibrium? Explain.</li>
-        </ol>
-        <details><summary>Reveal solution</summary><p>$F=kx=(80)(0.050)=4.0\,\text{N}$ to the left, toward equilibrium. $a=4.0/0.50=8.0\,\text{m/s}^2$ to the left. At equilibrium $x=0$, so the spring force and the acceleration are zero, even though the block is moving at its fastest there.</p></details>
+    <section class="lesson" id="lesson-gravity-circular" data-title="Gravity and Circular Motion" aria-labelledby="lesson-gravity-circular-h">
+      <div class="lesson-head">
+        <span class="kicker">Lesson 6 of 6</span>
+        <h2 id="lesson-gravity-circular-h">Gravity and Circular Motion</h2>
       </div>
-
-      <div class="problem">
-        <span class="level">Level 20 • Universal Gravitation</span>
-        <h3>Problem 20: Weight Far from Earth</h3>
+      <div class="card goals">
+        <h3>You should be able to…</h3>
+        <ul class="checklist">
+          <li>Scale gravitational force with mass and distance.</li>
+          <li>Identify which real force provides the centripetal force.</li>
+          <li>Solve horizontal and vertical circles.</li>
+        </ul>
+      </div>
+      <div class="callout blue big-idea"><strong>Big idea:</strong> Gravitational force depends on both masses and the distance between their centers. An object moving in a circle needs a net force toward the center, and a real force (tension, friction, the normal force, or gravity) has to provide it.</div>
+      <div class="callout danger-note"><strong>Common mistake:</strong> There is no centrifugal force. Nothing pushes an object outward; the net force points toward the center.</div>
+      <div class="block" id="gravity-circular">
+        <div class="section-title"><h3 class="block-title">Key Equations: Gravity and Circular Motion</h3></div>
+        <div class="grid three">
+          <div class="formula"><strong>Universal Gravitation</strong>$$F_g=\frac{Gm_1m_2}{r^2}$$<small>Distance $r$ is measured from the planet's center, not the surface. Doubling $r$ divides the force by $2^2$.</small></div>
+          <div class="formula"><strong>Field Strength</strong>$$g=\frac{GM}{R^2}=\frac{F_g}{m}$$<small>Surface gravity depends on both mass and the distance to the center.</small></div>
+          <div class="formula"><strong>Centripetal Acceleration</strong>$$a_c=\frac{v^2}{r}$$<small>Points toward the center. A real force (tension, friction, normal, gravity) must provide $\Sigma F=\frac{mv^2}{r}$.</small></div>
+        </div>
+      </div>
+      <div class="block practice" id="practice-gravity-circular">
+        <div class="section-title"><h3 class="block-title">Practice</h3></div>
+        <p class="hint">Commit to a prediction or a first step before you reveal a scaffold or solution. Problems go from easier to harder.</p>
+      <div class="problem" id="problem-6-1">
+        <span class="level">Universal Gravitation</span>
+        <h3>Problem 6.1: Weight Far from Earth</h3>
         <p>An $80\,\text{kg}$ astronaut weighs $800\,\text{N}$ on Earth's surface. Earth's radius is $R_E$.</p>
         <ol>
           <li>What is the gravitational force on the astronaut at a distance $2R_E$ from Earth's center?</li>
@@ -1014,10 +1367,9 @@
         <details><summary>Reveal scaffold</summary><p>$F_g=\dfrac{Gm_1m_2}{r^2}$, so doubling $r$ divides the force by $2^2$. Distance is measured from Earth's center, not the surface.</p></details>
         <details><summary>Reveal solution</summary><p>$F_g=800/4=200\,\text{N}$. $g=F_g/m=200/80=2.5\,\text{N/kg}$. The astronaut isn't weightless, since gravity is still $200\,\text{N}$. Feeling weightless in orbit happens because the astronaut and spacecraft are in free fall together, not because gravity is gone.</p></details>
       </div>
-
-      <div class="problem">
-        <span class="level">Level 21 • Gravitational Field Reasoning</span>
-        <h3>Problem 21: A Bigger Planet</h3>
+      <div class="problem" id="problem-6-2">
+        <span class="level">Gravitational Field Reasoning</span>
+        <h3>Problem 6.2: A Bigger Planet</h3>
         <p>Planet X has twice Earth's mass and twice Earth's radius. Earth's surface field is $10\,\text{N/kg}$.</p>
         <ol>
           <li>Without plugging in $G$, find the gravitational field strength at Planet X's surface.</li>
@@ -1025,21 +1377,9 @@
         </ol>
         <details><summary>Reveal solution</summary><p>$g=\dfrac{GM}{R^2}$. Doubling $M$ doubles $g$, and doubling $R$ divides it by 4, so $g_X=10\times\dfrac{2}{4}=5.0\,\text{N/kg}$. The student ignored the radius. Surface gravity depends on both mass and the distance to the center, and here the larger radius matters more.</p></details>
       </div>
-
-      <div class="problem">
-        <span class="level">Level 22 • Newton's 3rd Law and Gravity</span>
-        <h3>Problem 22: Earth and Moon</h3>
-        <p>Earth's mass is about 81 times the Moon's mass.</p>
-        <ol>
-          <li>Compare the force Earth exerts on the Moon with the force the Moon exerts on Earth.</li>
-          <li>Compare the accelerations those forces cause.</li>
-        </ol>
-        <details><summary>Reveal solution</summary><p>The forces are equal in magnitude and opposite in direction, a Newton's 3rd law pair. The accelerations aren't equal. Since $a=F/m$, the Moon's acceleration is 81 times Earth's.</p></details>
-      </div>
-
-      <div class="problem">
-        <span class="level">Level 23 • Horizontal Circular Motion</span>
-        <h3>Problem 23: Ball on a String</h3>
+      <div class="problem" id="problem-6-3">
+        <span class="level">Horizontal Circular Motion</span>
+        <h3>Problem 6.3: Ball on a String</h3>
         <p>A $1.2\,\text{kg}$ puck on a frictionless table moves in a horizontal circle of radius $0.50\,\text{m}$, tied to a string fixed at the center. Its speed is $3.0\,\text{m/s}$.</p>
         <ol>
           <li>What force provides the centripetal force?</li>
@@ -1048,10 +1388,9 @@
         </ol>
         <details><summary>Reveal solution</summary><p>The string's tension provides it. $a_c=\dfrac{v^2}{r}=\dfrac{9.0}{0.50}=18\,\text{m/s}^2$ toward the center, and $T=ma_c=(1.2)(18)=21.6\,\text{N}$. Once the string breaks, no net horizontal force acts, so the puck moves in a straight line tangent to the circle at the point where it broke, not outward.</p></details>
       </div>
-
-      <div class="problem">
-        <span class="level">Level 24 • Friction as Centripetal Force</span>
-        <h3>Problem 24: Car on a Flat Curve</h3>
+      <div class="problem" id="problem-6-4">
+        <span class="level">Friction as Centripetal Force</span>
+        <h3>Problem 6.4: Car on a Flat Curve</h3>
         <p>A $1000\,\text{kg}$ car rounds a flat curve of radius $50\,\text{m}$. The coefficient of static friction between the tires and road is $0.80$. Use $g=10\,\text{m/s}^2$.</p>
         <ol>
           <li>Why is it static friction and not kinetic friction?</li>
@@ -1060,10 +1399,9 @@
         </ol>
         <details><summary>Reveal solution</summary><p>The tires don't slide across the road sideways, so friction is static. $\mu_smg=\dfrac{mv^2}{r}$ gives $v=\sqrt{\mu_sgr}=\sqrt{(0.80)(10)(50)}=20\,\text{m/s}$. Mass cancels, so the truck has the same maximum speed (assuming the same tires and road).</p></details>
       </div>
-
-      <div class="problem">
-        <span class="level">Level 25 • Vertical Circular Motion</span>
-        <h3>Problem 25: Over the Top of a Hill</h3>
+      <div class="problem" id="problem-6-5">
+        <span class="level">Vertical Circular Motion</span>
+        <h3>Problem 6.5: Over the Top of a Hill</h3>
         <p>A $1000\,\text{kg}$ car drives over the top of a hill shaped like a circular arc of radius $40\,\text{m}$. Use $g=10\,\text{m/s}^2$.</p>
         <ol>
           <li>Draw the FBD at the top of the hill. Which way is the acceleration?</li>
@@ -1073,10 +1411,9 @@
         <details><summary>Reveal scaffold</summary><p>At the top, the center of the circle is below the car, so take down as positive: $mg-F_N=\dfrac{mv^2}{r}$.</p></details>
         <details><summary>Reveal solution</summary><p>Weight points down and the normal force points up. The acceleration points down, toward the center. $F_N=m\left(g-\dfrac{v^2}{r}\right)=1000\left(10-\dfrac{100}{40}\right)=7500\,\text{N}$. Setting $F_N=0$ gives $v=\sqrt{gr}=\sqrt{400}=20\,\text{m/s}$. Above that speed the car leaves the road.</p></details>
       </div>
-
-      <div class="problem">
-        <span class="level">Level 26 • Vertical Circle, Bottom</span>
-        <h3>Problem 26: Swinging Ball</h3>
+      <div class="problem" id="problem-6-6">
+        <span class="level">Vertical Circle, Bottom</span>
+        <h3>Problem 6.6: Swinging Ball</h3>
         <p>A $0.20\,\text{kg}$ ball swings on a $0.80\,\text{m}$ string in a vertical circle. At the bottom it moves at $4.0\,\text{m/s}$. Use $g=10\,\text{m/s}^2$.</p>
         <ol>
           <li>Find the tension at the bottom.</li>
@@ -1084,40 +1421,49 @@
         </ol>
         <details><summary>Reveal solution</summary><p>At the bottom the center is above, so $T-mg=\dfrac{mv^2}{r}$. $T=0.20\left(10+\dfrac{16}{0.80}\right)=0.20(30)=6.0\,\text{N}$. That's greater than the $2.0\,\text{N}$ weight, because the net force must point up toward the center.</p></details>
       </div>
-
-      <div class="problem">
-        <span class="level">Level 27 • AP Paragraph Response</span>
-        <h3>Problem 27: The "Centrifugal Force" Misconception</h3>
+      <div class="problem" id="problem-6-7">
+        <span class="level">AP Paragraph Response</span>
+        <h3>Problem 6.7: The "Centrifugal Force" Misconception</h3>
         <p>As a car turns sharply left, a passenger slides toward the right door. The passenger says, "A centrifugal force pushed me outward." In a clear paragraph, explain what actually happens, using Newton's 1st and 2nd laws and naming the real force that eventually makes the passenger turn.</p>
         <details><summary>Reveal solution</summary><p>No outward force acts on the passenger. By Newton's 1st law, the passenger tends to keep moving in a straight line while the car turns left underneath them, so relative to the car they seem to slide right. Once they reach the door, the door's normal force pushes them left, toward the center of the turn. By Newton's 2nd law, that inward net force provides the centripetal acceleration that makes them turn with the car.</p></details>
       </div>
-    </section>
-
-    <section id="apstyle">
-      <div class="section-title"><span class="num">12</span><h2>AP-Style Reasoning Practice</h2></div>
-      <div class="grid two">
+      </div>
+      <div class="block quick-check" id="check-gravity-circular">
+        <div class="section-title"><h3 class="block-title">Quick Check</h3></div>
         <div class="card">
-          <h3>Paragraph Response Prompt</h3>
-          <p>A student says: “If an object is moving to the right, there must be a net force to the right.”</p>
-          <p><strong>Write a paragraph that agrees or disagrees. Use Newton's laws and an example.</strong></p>
-          <textarea placeholder="Student response..."></textarea>
-          <details><summary>Reveal strong response</summary><p>The statement is not always correct. Newton's second law says that net force determines acceleration, not velocity. An object moving to the right at constant velocity has zero acceleration, so the net force on it is zero. A net force to the right would mean the object is accelerating to the right, so its rightward velocity would be increasing or its leftward velocity would be decreasing.</p></details>
-        </div>
-        <div class="card">
-          <h3>Translation Between Representations</h3>
-          <p>A cart has a constant net force to the right. It starts from rest.</p>
-          <ol>
-            <li>Describe the acceleration.</li>
-            <li>Describe the velocity over time.</li>
-            <li>Sketch what a velocity-time graph would look like.</li>
-          </ol>
-          <details><summary>Reveal strong response</summary><p>The acceleration is constant and to the right. Since the cart starts from rest, its velocity increases linearly in the positive direction. A velocity-time graph would be a straight line with positive slope starting at zero.</p></details>
+          <span class="level">AP Paragraph</span>
+          <p>An astronaut in an orbiting spacecraft says she is weightless because there is no gravity up there.</p>
+          <p><strong>Write a short paragraph that agrees or disagrees.</strong></p>
+          <textarea placeholder="Write your answer first, then reveal..." aria-label="Your response"></textarea>
+          <details class="needs-commit"><summary>Reveal strong response</summary><p>Disagree. Gravity is weaker far from Earth because $F_g=\dfrac{Gm_1m_2}{r^2}$ and $r$ is measured from Earth's center, but it is not zero, so the astronaut is not weightless. Feeling weightless in orbit happens because the astronaut and spacecraft are in free fall together, not because gravity is gone.</p></details>
+          <div class="commit-msg feedback" aria-live="polite"></div>
         </div>
       </div>
+      <div class="pager"></div>
     </section>
 
-    <section id="calculator">
-      <div class="section-title"><span class="num">13</span><h2>Mini Dynamics Calculator</h2></div>
+    <section class="lesson" id="review" data-title="Unit Review" aria-labelledby="review-h">
+      <div class="lesson-head">
+        <span class="kicker">Unit Review</span>
+        <h2 id="review-h">Unit Review</h2>
+      </div>
+      <div class="callout blue big-idea"><strong>Big idea:</strong> Put it all together: pick the system, draw the FBD, choose axes, and apply $\Sigma F=ma$, without being told which topic a question belongs to.</div>
+      <div class="block" id="equations">
+      <div class="section-title"><h3 class="block-title">Equation Toolbox</h3></div>
+      <div class="grid three">
+        <div class="formula"><strong>Newton's 2nd Law</strong>$$\Sigma F=ma$$<small>Use separately in each direction.</small></div>
+        <div class="formula"><strong>Weight</strong>$$F_g=mg$$<small>Mass times gravitational field strength.</small></div>
+        <div class="formula"><strong>Kinetic Friction</strong>$$f_k=\mu_kF_N$$<small>Opposes sliding motion.</small></div>
+        <div class="formula"><strong>Static Friction</strong>$$f_s\leq\mu_sF_N$$<small>Adjusts up to a maximum.</small></div>
+        <div class="formula"><strong>Incline Parallel</strong>$$F_{g,\parallel}=mg\sin\theta$$<small>Pulls object down the ramp.</small></div>
+        <div class="formula"><strong>Incline Perpendicular</strong>$$F_{g,\perp}=mg\cos\theta$$<small>Controls normal force on a simple ramp.</small></div>
+        <div class="formula"><strong>Spring Force</strong>$$F_s=kx$$<small>Points toward equilibrium.</small></div>
+        <div class="formula"><strong>Universal Gravitation</strong>$$F_g=\frac{Gm_1m_2}{r^2}$$<small>$r$ is measured center to center.</small></div>
+        <div class="formula"><strong>Centripetal Acceleration</strong>$$a_c=\frac{v^2}{r}$$<small>Toward the center of the circle.</small></div>
+      </div>
+      </div>
+      <div class="block" id="calculator">
+      <div class="section-title"><h3 class="block-title">Mini Dynamics Calculator</h3></div>
       <div class="card">
         <p>Students should reason and draw first, then use this to check calculations.</p>
         <div class="grid three">
@@ -1141,25 +1487,148 @@
           </div>
         </div>
       </div>
+      </div>
+      <div class="block" id="apstyle">
+        <div class="section-title"><h3 class="block-title">Translating Between Representations</h3></div>
+        <div class="card">
+          <h3>Translation Between Representations</h3>
+          <p>A cart has a constant net force to the right. It starts from rest.</p>
+          <ol>
+            <li>Describe the acceleration.</li>
+            <li>Describe the velocity over time.</li>
+            <li>Sketch what a velocity-time graph would look like.</li>
+          </ol>
+          <details><summary>Reveal strong response</summary><p>The acceleration is constant and to the right. Since the cart starts from rest, its velocity increases linearly in the positive direction. A velocity-time graph would be a straight line with positive slope starting at zero.</p></details>
+        </div>
+      </div>
+      <div class="block" id="mixed-set">
+        <div class="section-title"><h3 class="block-title">Mixed Set (No Topic Labels)</h3></div>
+        <p class="hint">On the AP exam, questions don't say which topic they come from. Decide for yourself which ideas apply before you start.</p>
+        <div class="problem mixed">
+          <h3>Mixed Question A</h3>
+        <p>A $2.0\,\text{kg}$ block is placed at rest on a $30^\circ$ incline. The coefficients of friction are $\mu_s=0.40$ and $\mu_k=0.30$. Use $g=10\,\text{m/s}^2$.</p>
+        <ol>
+          <li>Find the maximum static friction the ramp can provide.</li>
+          <li>Does the block stay at rest? Justify with a force comparison.</li>
+          <li>If it slides, find its acceleration.</li>
+        </ol>
+        <details><summary>Reveal scaffold</summary><p>Compare the force trying to move the block, $mg\sin\theta$, with the most static friction can do, $\mu_sF_N$. Once it slides, switch to $\mu_k$.</p></details>
+          <details><summary>Check your answer</summary><p>Work it out first. Then compare with the full solution: <a href="#problem-4-3">open the worked solution (Problem 4.3)</a> (it takes you to the lesson this question came from).</p></details>
+        </div>
+        <div class="problem mixed">
+          <h3>Mixed Question B</h3>
+        <p>A $60\,\text{kg}$ student stands on a scale in an elevator accelerating upward at $2.0\,\text{m/s}^2$. Use $g=10\,\text{m/s}^2$.</p>
+        <ol>
+          <li>Draw the FBD.</li>
+          <li>What does the scale read?</li>
+        </ol>
+          <details><summary>Check your answer</summary><p>Work it out first. Then compare with the full solution: <a href="#problem-2-2">open the worked solution (Problem 2.2)</a> (it takes you to the lesson this question came from).</p></details>
+        </div>
+        <div class="problem mixed">
+          <h3>Mixed Question C</h3>
+        <p>A $1000\,\text{kg}$ car rounds a flat curve of radius $50\,\text{m}$. The coefficient of static friction between the tires and road is $0.80$. Use $g=10\,\text{m/s}^2$.</p>
+        <ol>
+          <li>Why is it static friction and not kinetic friction?</li>
+          <li>Find the maximum speed the car can have without skidding.</li>
+          <li>Would a heavier truck have a higher, lower, or the same maximum speed? Explain.</li>
+        </ol>
+          <details><summary>Check your answer</summary><p>Work it out first. Then compare with the full solution: <a href="#problem-6-4">open the worked solution (Problem 6.4)</a> (it takes you to the lesson this question came from).</p></details>
+        </div>
+        <div class="problem mixed">
+          <h3>Mixed Question D</h3>
+        <p>A $20\,\text{kg}$ crate rests on the floor. The coefficient of static friction is $0.50$. A student pushes horizontally with $80\,\text{N}$.</p>
+        <ol>
+          <li>Find $f_{s,max}$.</li>
+          <li>Does the crate move?</li>
+          <li>What is the actual static friction force?</li>
+        </ol>
+          <details><summary>Check your answer</summary><p>Work it out first. Then compare with the full solution: <a href="#problem-3-3">open the worked solution (Problem 3.3)</a> (it takes you to the lesson this question came from).</p></details>
+        </div>
+        <div class="problem mixed">
+          <h3>Mixed Question E</h3>
+        <p>A book rests on a table. It is not moving.</p>
+        <ol>
+          <li>Draw or describe the forces on the book.</li>
+          <li>What is the net force?</li>
+          <li>Does the book exert a force on the table?</li>
+        </ol>
+          <details><summary>Check your answer</summary><p>Work it out first. Then compare with the full solution: <a href="#problem-1-1">open the worked solution (Problem 1.1)</a> (it takes you to the lesson this question came from).</p></details>
+        </div>
+        <div class="problem mixed">
+          <h3>Mixed Question F</h3>
+        <p>A $6.0\,\text{kg}$ block on a horizontal table is connected by a light string over a pulley to a hanging $4.0\,\text{kg}$ mass. The coefficient of kinetic friction between the block and the table is $0.20$. Use $g=10\,\text{m/s}^2$.</p>
+        <ol>
+          <li>Identify the external forces on the two-block system along the direction of motion.</li>
+          <li>Find the acceleration.</li>
+          <li>Find the tension, then check it using the other block.</li>
+        </ol>
+          <details><summary>Check your answer</summary><p>Work it out first. Then compare with the full solution: <a href="#problem-5-2">open the worked solution (Problem 5.2)</a> (it takes you to the lesson this question came from).</p></details>
+        </div>
+      </div>
+      <div class="block" id="diagnostic-retake">
+      <div class="section-title"><h3 class="block-title">Retake the Diagnostic</h3></div>
+      <div class="card">
+        <p class="hint">Same three questions as the Lesson 1 pre-check. Your first answer to each is compared with your pre-check below.</p>
+        <div id="diagCompare" class="callout purple" aria-live="polite"></div>
+        <div class="problem quiz" data-phase="post" data-q="1" data-answer="c">
+          <h3>Question 1: Constant Velocity</h3>
+          <p>A box slides to the right at constant velocity. What must be true about the net force?</p>
+          <button class="quiz-option" data-choice="a">A. The net force points right because the box is moving right.</button>
+          <button class="quiz-option" data-choice="b">B. The net force points left because friction opposes motion.</button>
+          <button class="quiz-option" data-choice="c">C. The net force is zero because acceleration is zero.</button>
+          <button class="quiz-option" data-choice="d">D. The net force equals the weight of the box.</button>
+          <div class="feedback"></div>
+          <details><summary>Explanation</summary><p>Constant velocity means acceleration is zero. Since $\Sigma F = ma$, the net force must be zero.</p></details>
+        </div>
+
+        <div class="problem quiz" data-phase="post" data-q="2" data-answer="b">
+          <h3>Question 2: Normal Force</h3>
+          <p>A box rests on a horizontal table with no vertical acceleration. Which statement is true?</p>
+          <button class="quiz-option" data-choice="a">A. The normal force is always equal to mass.</button>
+          <button class="quiz-option" data-choice="b">B. The normal force equals the weight if no other vertical forces act.</button>
+          <button class="quiz-option" data-choice="c">C. The normal force is always greater than weight.</button>
+          <button class="quiz-option" data-choice="d">D. The normal force is caused by gravity.</button>
+          <div class="feedback"></div>
+          <details><summary>Explanation</summary><p>The normal force is a contact force. On a level surface with no other vertical forces and no vertical acceleration, $F_N=mg$.</p></details>
+        </div>
+
+        <div class="problem quiz" data-phase="post" data-q="3" data-answer="d">
+          <h3>Question 3: Action-Reaction Pair</h3>
+          <p>A student pushes a wall. The wall pushes back on the student with...</p>
+          <button class="quiz-option" data-choice="a">A. less force because the wall does not move.</button>
+          <button class="quiz-option" data-choice="b">B. more force because the wall is stronger.</button>
+          <button class="quiz-option" data-choice="c">C. zero force because the wall is not alive.</button>
+          <button class="quiz-option" data-choice="d">D. equal magnitude and opposite direction force.</button>
+          <div class="feedback"></div>
+          <details><summary>Explanation</summary><p>Newton's third law pairs are equal in magnitude, opposite in direction, and act on different objects.</p></details>
+        </div>
+      </div>
+      </div>
+      <div class="pager"></div>
     </section>
+
   </main>
 
   <footer>
-    AP Physics 1 Dynamics Review • Student-facing, Chromebook-friendly, and GitHub Pages ready.
+    AP Physics 1 Dynamics Review • Student-facing, Chromebook-friendly, and GitHub Pages ready. • <a href="index.html">Back to all units</a>
   </footer>
 
   <script>
     function $(id) { return document.getElementById(id); }
     function val(id) { return parseFloat($(id).value) || 0; }
 
-    function typeset() {
-      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+    let mjQueue = Promise.resolve();
+    function typeset(els) {
+      if (!(window.MathJax && MathJax.typesetPromise)) return mjQueue;
+      mjQueue = mjQueue.then(() => MathJax.startup.promise).then(() => MathJax.typesetPromise(els)).catch(err => console.warn('MathJax:', err));
+      return mjQueue;
     }
 
     document.querySelectorAll('.quiz').forEach(q => {
       const answer = q.dataset.answer;
       q.querySelectorAll('.quiz-option').forEach(btn => {
         btn.addEventListener('click', () => {
+          recordDiagnostic(q, btn.dataset.choice === answer);
           q.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('correct', 'wrong'));
           if (btn.dataset.choice === answer) {
             btn.classList.add('correct');
@@ -1197,7 +1666,7 @@
         $('fbdFeedback').className = 'callout blue';
         $('fbdFeedback').innerHTML = '<strong>Keep checking:</strong> Ask what touches the block and what long-range forces act on it.';
       }
-      typeset();
+      typeset([$('fbdFeedback')]);
     }
 
     function updateNetForce() {
@@ -1235,7 +1704,7 @@
           $('netArrow').setAttribute('stroke', '#18a058');
         }
       }
-      typeset();
+      typeset([$('netOutput')]);
     }
 
     function presetNet(type) {
@@ -1260,7 +1729,7 @@
         $('frOutput').className = 'callout danger-note';
         $('frOutput').innerHTML = `<strong>It starts sliding.</strong> The applied force ${app.toFixed(1)} N is greater than $f_{s,max}=${fsMax.toFixed(1)}\\,\\text{N}$.`;
       }
-      typeset();
+      typeset([$('frOutput')]);
     }
 
     function updateRamp() {
@@ -1281,26 +1750,26 @@
       const nLen = Math.min(110, Math.max(25, perp * 1.8));
       $('rampNormal').setAttribute('x2', 260 + nLen * Math.sin(visualAngle*Math.PI/180));
       $('rampNormal').setAttribute('y2', 170 - nLen * Math.cos(visualAngle*Math.PI/180));
-      typeset();
+      typeset([$('rampOutput')]);
     }
 
     function calcAccel() {
       const a = val('calcFnet') / Math.max(0.01, val('calcMass'));
       $('calcAccelOut').innerHTML = `$a=${a.toFixed(2)}\\,\\text{m/s}^2$`;
-      typeset();
+      typeset([$('calcAccelOut')]);
     }
 
     function calcFriction() {
       const f = val('calcMu') * val('calcFn');
       $('calcFricOut').innerHTML = `$f_k=${f.toFixed(1)}\\,\\text{N}$`;
-      typeset();
+      typeset([$('calcFricOut')]);
     }
 
     function calcRampAccel() {
       const theta = val('calcTheta') * Math.PI / 180;
       const a = 10 * Math.sin(theta);
       $('calcRampOut').innerHTML = `$a=${a.toFixed(2)}\\,\\text{m/s}^2$`;
-      typeset();
+      typeset([$('calcRampOut')]);
     }
 
     window.addEventListener('load', () => {
@@ -1312,6 +1781,157 @@
       calcFriction();
       calcRampAccel();
     });
+
+    /* ===== Lesson router: one lesson per screen, hash-based, deep-linkable ===== */
+    const LESSONS = Array.from(document.querySelectorAll('.lesson'));
+    const LESSON_IDS = LESSONS.map(s => s.id);
+    const STORE_KEY = 'ap1-unit2-last-lesson';
+    const LEGACY = { problems: 'lesson-forces' }; // old anchor with no direct equivalent
+    const OLD_PROBLEM_IDS = {"problem-1": "problem-1-1", "problem-2": "problem-2-1", "problem-8": "problem-2-2", "problem-17": "problem-2-3", "problem-22": "problem-2-4", "problem-3": "problem-3-1", "problem-4": "problem-3-2", "problem-5": "problem-3-3", "problem-18": "problem-3-4", "problem-19": "problem-3-5", "problem-6": "problem-4-1", "problem-9": "problem-4-2", "problem-10": "problem-4-3", "problem-11": "problem-4-4", "problem-7": "problem-5-1", "problem-13": "problem-5-2", "problem-12": "problem-5-3", "problem-14": "problem-5-4", "problem-15": "problem-5-5", "problem-16": "problem-5-6", "problem-20": "problem-6-1", "problem-21": "problem-6-2", "problem-23": "problem-6-3", "problem-24": "problem-6-4", "problem-25": "problem-6-5", "problem-26": "problem-6-6", "problem-27": "problem-6-7"}; // #problem-12 (old numbering) -> #problem-5-3
+    const chips = Array.from(document.querySelectorAll('.chips a'));
+    let currentLesson = null;
+
+    function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+    function lessonLabel(sec) {
+      const i = LESSON_IDS.indexOf(sec.id);
+      return i < 6 ? `Lesson ${i + 1}` : 'Unit Review';
+    }
+
+    // Build Previous / Next buttons for each lesson
+    LESSONS.forEach((sec, i) => {
+      const pager = sec.querySelector('.pager');
+      const prev = LESSONS[i - 1], next = LESSONS[i + 1];
+      pager.innerHTML =
+        (prev ? `<a class="btn prev" href="#${prev.id}"><small>← Previous · ${lessonLabel(prev)}</small>${prev.dataset.title}</a>` : '<span class="spacer"></span>') +
+        (next ? `<a class="btn next" href="#${next.id}"><small>Next · ${lessonLabel(next)} →</small>${next.dataset.title}</a>`
+              : `<a class="btn next" href="index.html"><small>Done with Unit 2 →</small>Back to all units</a>`);
+    });
+
+    function resolveHash(hash) {
+      const id = decodeURIComponent((hash || '').replace(/^#/, ''));
+      if (!id) return null;
+      if (OLD_PROBLEM_IDS[id]) {
+        const newId = OLD_PROBLEM_IDS[id];
+        history.replaceState(null, '', '#' + newId);
+        return resolveHash('#' + newId);
+      }
+      if (LESSON_IDS.includes(id)) return { lesson: id, target: null };
+      if (LEGACY[id]) return { lesson: LEGACY[id], target: null };
+      const el = document.getElementById(id);
+      const sec = el && el.closest('.lesson');
+      if (sec) return { lesson: sec.id, target: el };
+      return null;
+    }
+
+    function showLesson(id, opts = {}) {
+      const sec = document.getElementById(id);
+      if (!sec) return;
+      const changed = currentLesson !== id;
+      LESSONS.forEach(s => s.classList.toggle('active', s === sec));
+      chips.forEach(a => {
+        const on = a.getAttribute('href') === '#' + id;
+        a.classList.toggle('active', on);
+        if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+        if (on) {
+          const box = a.parentElement;
+          const left = a.offsetLeft - (box.clientWidth - a.offsetWidth) / 2;
+          box.scrollTo({ left: Math.max(0, left), behavior: 'auto' });
+        }
+      });
+      const i = LESSON_IDS.indexOf(id);
+      $('progressText').textContent = i < 6 ? `Lesson ${i + 1} of 6 · ${sec.dataset.title}` : `Unit Review · Step 7 of 7`;
+      $('progressFill').style.width = `${((i + 1) / LESSONS.length) * 100}%`;
+      document.title = `${lessonLabel(sec)}: ${sec.dataset.title} | AP Physics 1 Unit 2`;
+      currentLesson = id;
+      store(STORE_KEY, id);
+      const doScroll = () => {
+        const navH = document.querySelector('nav.lesson-nav').offsetHeight;
+        const target = opts.target || sec;
+        const y = target.getBoundingClientRect().top + window.scrollY - navH - 10;
+        window.scrollTo(0, Math.max(0, y));
+      };
+      const wantScroll = opts.scroll !== false && (opts.target || changed);
+      if (wantScroll) doScroll();
+      if (opts.target && opts.target.tagName === 'DETAILS') opts.target.open = true;
+      if (wantScroll && !opts.target) $('main').focus({ preventScroll: true });
+      // Sections were hidden: re-typeset math and refresh simulators so sizes/labels are correct,
+      // then re-scroll to a deep-link target in case typesetting shifted the layout.
+      typeset([sec]).then(() => {
+        refreshSimulators(sec);
+        if (opts.target && currentLesson === id) requestAnimationFrame(doScroll);
+      });
+    }
+
+    function refreshSimulators(sec) {
+      if (sec.querySelector('#fbdN')) updateFBD();
+      if (sec.querySelector('#simMass')) updateNetForce();
+      if (sec.querySelector('#frMass')) updateFriction();
+      if (sec.querySelector('#rampMass')) updateRamp();
+    }
+
+    function route(initial) {
+      const r = resolveHash(location.hash);
+      if (r) {
+        showLesson(r.lesson, { target: r.target });
+      } else {
+        const last = load(STORE_KEY);
+        showLesson(LESSON_IDS.includes(last) ? last : LESSON_IDS[0], { scroll: false });
+      }
+    }
+
+    window.addEventListener('hashchange', () => route(false));
+
+    // Live updates on touch/keyboard input (buttons still work too)
+    [['simMass', 'simRight', 'simLeft'], updateNetForce, ['frMass', 'frMuS', 'frApp'], updateFriction, ['rampMass', 'rampTheta'], updateRamp]
+      .reduce((acc, x, i, arr) => { if (i % 2 === 0) acc.push([x, arr[i + 1]]); return acc; }, [])
+      .forEach(([ids, fn]) => ids.forEach(id => $(id) && $(id).addEventListener('input', fn)));
+
+    // "Commit before you reveal": paragraph prompts need a written answer first
+    document.querySelectorAll('details.needs-commit').forEach(d => {
+      const card = d.closest('.card, .problem');
+      const ta = card && card.querySelector('textarea');
+      const msg = card && card.querySelector('.commit-msg');
+      d.querySelector('summary').addEventListener('click', e => {
+        if (!d.open && ta && ta.value.trim().length < 10) {
+          e.preventDefault();
+          if (msg) { msg.textContent = 'Commit first: write at least a sentence, then reveal the strong response.'; msg.style.color = 'var(--warning)'; }
+          ta.focus();
+        } else if (msg) { msg.textContent = ''; }
+      });
+    });
+
+    // Diagnostic pre-check vs. retake comparison (first answer counts)
+    function recordDiagnostic(q, correct) {
+      const phase = q.dataset.phase, n = q.dataset.q;
+      if (!phase || !n) return;
+      const key = `ap1-unit2-diag-${phase}-${n}`;
+      if (load(key) === null) store(key, correct ? '1' : '0');
+      renderDiagCompare();
+    }
+    function diagScore(phase) {
+      let answered = 0, right = 0;
+      for (let n = 1; n <= 3; n++) {
+        const v = load(`ap1-unit2-diag-${phase}-${n}`);
+        if (v !== null) { answered++; if (v === '1') right++; }
+      }
+      return { answered, right };
+    }
+    function renderDiagCompare() {
+      const box = $('diagCompare');
+      if (!box) return;
+      const pre = diagScore('pre'), post = diagScore('post');
+      const fmt = s => s.answered ? `${s.right} of ${s.answered} correct on the first try` : 'not taken yet';
+      box.innerHTML = `<strong>Pre-check (Lesson 1):</strong> ${fmt(pre)}<br><strong>Retake:</strong> ${fmt(post)}` +
+        ` <button type="button" class="btn small reset" id="diagReset">Clear my scores</button>`;
+      $('diagReset').addEventListener('click', () => {
+        ['pre', 'post'].forEach(p => { for (let n = 1; n <= 3; n++) { try { localStorage.removeItem(`ap1-unit2-diag-${p}-${n}`); } catch (e) {} } });
+        renderDiagCompare();
+      });
+    }
+    renderDiagCompare();
+    route(true);
   </script>
 </body>
 </html>
